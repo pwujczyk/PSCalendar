@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="Calendar" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/PSCalendarContract.Dto" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICalendar_GetDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDate" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_GetDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_AddEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddEvent" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_AddEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_ChangeEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeEvent" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_ChangeEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_AddPeriodEveent_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddPeriodEveent" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_AddPeriodEveent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddPeriodEveentResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_GetEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetEvents" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_GetEvents_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetEventsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_GetPeriodEvents_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPeriodEvents" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_GetPeriodEvents_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPeriodEventsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_Delete_InputMessage">
+    <wsdl:part name="parameters" element="tns:Delete" />
+  </wsdl:message>
+  <wsdl:message name="ICalendar_Delete_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICalendar">
+    <wsdl:operation name="GetDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/GetDate" message="tns:ICalendar_GetDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/GetDateResponse" message="tns:ICalendar_GetDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/AddEvent" message="tns:ICalendar_AddEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/AddEventResponse" message="tns:ICalendar_AddEvent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/ChangeEvent" message="tns:ICalendar_ChangeEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/ChangeEventResponse" message="tns:ICalendar_ChangeEvent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddPeriodEveent">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/AddPeriodEveent" message="tns:ICalendar_AddPeriodEveent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/AddPeriodEveentResponse" message="tns:ICalendar_AddPeriodEveent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/GetEvents" message="tns:ICalendar_GetEvents_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/GetEventsResponse" message="tns:ICalendar_GetEvents_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPeriodEvents">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/GetPeriodEvents" message="tns:ICalendar_GetPeriodEvents_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/GetPeriodEventsResponse" message="tns:ICalendar_GetPeriodEvents_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICalendar/Delete" message="tns:ICalendar_Delete_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICalendar/DeleteResponse" message="tns:ICalendar_Delete_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ICalendar" type="tns:ICalendar">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDate">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/GetDate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddEvent">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/AddEvent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeEvent">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/ChangeEvent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddPeriodEveent">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/AddPeriodEveent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetEvents">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/GetEvents" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPeriodEvents">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/GetPeriodEvents" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap:operation soapAction="http://tempuri.org/ICalendar/Delete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Calendar">
+    <wsdl:port name="BasicHttpBinding_ICalendar" binding="tns:BasicHttpBinding_ICalendar">
+      <soap:address location="http://localhost:9004/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

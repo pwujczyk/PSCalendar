@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendar", "PSCalendar\PSCalendar.csproj", "{5776697F-DF73-4E18-92BC-CB937FFF257D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarService", "PSCalendarService\PSCalendarService.csproj", "{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarContract", "PSCalendarContract\PSCalendarContract.csproj", "{58F8A76A-D05C-4833-B43F-099A006B62C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarServer", "PSCalendarServer\PSCalendarServer.csproj", "{D062326E-79C5-46B4-BFD3-F586532C44C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5776697F-DF73-4E18-92BC-CB937FFF257D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5776697F-DF73-4E18-92BC-CB937FFF257D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5776697F-DF73-4E18-92BC-CB937FFF257D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5776697F-DF73-4E18-92BC-CB937FFF257D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F8A76A-D05C-4833-B43F-099A006B62C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F8A76A-D05C-4833-B43F-099A006B62C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F8A76A-D05C-4833-B43F-099A006B62C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F8A76A-D05C-4833-B43F-099A006B62C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

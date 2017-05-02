@@ -1,0 +1,35 @@
+﻿CREATE TABLE [gc].Events
+(
+	[EventsId] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[Name] VARCHAR(200) NOT NULL,
+	[Date] DATETIME NOT NULL,
+	[Type] VARCHAR(10) NULL,
+	[NiceId] INT NULL
+)
+GO
+
+
+CREATE TABLE [gc].PeriodicEvents
+(
+	[PeriodicEventsId] INT NOT NULL PRIMARY KEY,
+	[Name] VARCHAR(200) NOT NULL,
+	[PeriodType] INT NOT NULL
+)
+GO
+
+
+  CREATE TRIGGER gc.NiceId ON gc.[Events]
+  AFTER INSERT
+  AS
+  BEGIN
+
+  DECLARE @lastInserted INT
+  SELECT @lastInserted=inserted.[EventsId] FROM inserted
+
+  DECLARE @niceId INT
+  SELECT @niceId=ISNULL(MAX(NiceId),0) FROM [gc].[Events] 
+  SET @niceId=@niceId+1
+
+  UPDATE  [gc].[Events]  SET NiceId=@niceId WHERE [EventsId]=@lastInserted
+  PRINT @niceId
+  END
