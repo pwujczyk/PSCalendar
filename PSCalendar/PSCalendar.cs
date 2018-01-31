@@ -1,5 +1,6 @@
 ﻿
-using PSCalendar.CalendarServiceReference;
+using PSCalendarContract;
+using PSCalendarContract.Dto;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,15 +16,20 @@ namespace PSCalendar
     public class PSCalendarCmdlet : PSCmdlet
     {
 
-        private CalendarClient Client
+        private ICalendar Client
         {
             get
             {
-                Binding binding = new BasicHttpBinding();
-                EndpointAddress address = new EndpointAddress("http://localhost:9004/");
-                CalendarClient client = new CalendarClient(binding, address);
-                client.Open();
-                return client;
+                ChannelFactory<ICalendar> factory = new ChannelFactory<ICalendar>(new NetTcpBinding(), new EndpointAddress("net.tcp://localhost:9005/"));
+                ICalendar proxy = factory.CreateChannel();
+                return proxy;
+
+
+                //Binding binding = new BasicHttpBinding();
+                //EndpointAddress address = new EndpointAddress("http://localhost:9004/");
+                //CalendarClient client = new CalendarClient(binding, address);
+                //client.Open();
+                //return client;
             }
         }
 
@@ -96,13 +102,13 @@ namespace PSCalendar
         {
             DateTime dt = this.Date == null ? DateTime.MinValue : DateTime.Parse(this.Date);
             Client.ChangeEvent(new Event { EventsId = nullable.Value, Date = dt, Name = this.Add, Type = this.Type });
-            Client.Close();
+            (Client as ICommunicationObject).Close();
         }
 
         private void DeleteItem(int? nullable)
         {
             Client.Delete(nullable.Value);
-            Client.Close();
+            (Client as ICommunicationObject).Close();
         }
 
         private void ShowHelp()
@@ -124,7 +130,7 @@ namespace PSCalendar
         private void AddNewEvent(string name, DateTime date, EventType type)
         {
             Client.AddEvent(new Event { Date = date, Name = name, Type = type });
-            Client.Close();
+            (Client as ICommunicationObject).Close();
         }
 
 

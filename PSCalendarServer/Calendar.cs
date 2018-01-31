@@ -20,8 +20,7 @@ namespace PSCalendarServer
             AutoMapperConfiguration.Configure();
         }
 
-        public void GetDate()
-        { }
+        public void GetDate() { }
 
         public void AddEvent(dto.Event @event)
         {

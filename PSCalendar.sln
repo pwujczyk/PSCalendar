@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendar", "PSCalendar\PSCalendar.csproj", "{5776697F-DF73-4E18-92BC-CB937FFF257D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarService", "PSCalendarService\PSCalendarService.csproj", "{94B8304E-6A6F-4EFE-A2D3-EAE1FBE5226B}"
@@ -8,6 +10,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarContract", "PSCalendarContract\PSCalendarContract.csproj", "{58F8A76A-D05C-4833-B43F-099A006B62C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarServer", "PSCalendarServer\PSCalendarServer.csproj", "{D062326E-79C5-46B4-BFD3-F586532C44C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{9DECCCB9-77AB-4B16-BB9F-9505867B7A2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarDBScripts", "PSCalendarDBScripts\PSCalendarDBScripts.csproj", "{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nugets", "Nugets", "{36B5A40E-0376-4359-ACB6-24B1F1DD8911}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBUpHelper", "..\DBUpPT\DBUpHelper\DBUpHelper.csproj", "{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionStringHelper", "..\ConnectionStringPT\ConnectionStringHelper\ConnectionStringHelper.csproj", "{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarServiceDebugRunner", "PSCalendarServiceDebugRunner\PSCalendarServiceDebugRunner.csproj", "{44E78515-0D65-43B6-A5A6-1E6577E114F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +45,32 @@ Global
 		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D062326E-79C5-46B4-BFD3-F586532C44C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE} = {9DECCCB9-77AB-4B16-BB9F-9505867B7A2E}
+		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
+		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F13A32D5-D694-446D-B7F6-F22FCB6170AF}
 	EndGlobalSection
 EndGlobal
