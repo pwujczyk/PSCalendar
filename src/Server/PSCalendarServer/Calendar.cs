@@ -11,11 +11,11 @@ using PSCalendarContract.Dto;
 using System.ServiceModel;
 using MasterConfiguration;
 using System.Data.Entity;
-using DB;
+
 
 namespace PSCalendarServer
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults=true)]
+    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public class Calendar : ICalendar
     {
 
@@ -25,21 +25,28 @@ namespace PSCalendarServer
             {
                 string serverName = MConfiguration.Configuration["ServerName"];
                 string dbName = MConfiguration.Configuration["DatabaseName"];
-                string connString=ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
+                string connString = ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
                 return connString;
             }
         }
 
         public Calendar()
         {
-            AutoMapperConfiguration.Configure();
+
+            
         }
 
-        private CalendarEntities Entities
+        private PSCalendarDB.CalendarEntities entities;
+        private PSCalendarDB.CalendarEntities Entities
         {
             get
             {
-                return new CalendarEntities(ConnectionString);
+                if (entities == null)
+                {
+                    entities = new PSCalendarDB.CalendarEntities(ConnectionString);
+
+                }
+                return entities;
             }
         }
 
@@ -47,19 +54,18 @@ namespace PSCalendarServer
 
         public void AddEvent(dto.Event @event)
         {
-            DB.Events insert = Mapper.Map<dto.Event, DB.Events>(@event);
-            CalendarEntities entities = Entities;
 
-            entities.Events.Add(insert);
-            entities.Entry(insert).State = EntityState.Added;
-            entities.SaveChanges();
+            PSCalendarDB.Events insert = Mapper.Map<dto.Event, PSCalendarDB.Events>(@event);
+
+            Entities.Events.Add(insert);
+            Entities.Entry(insert).State = EntityState.Added;
+            Entities.SaveChanges();
         }
 
         public void ChangeEvent(dto.Event @event)
         {
-            DB.Events update = Mapper.Map<dto.Event, DB.Events>(@event);
-            CalendarEntities entities = Entities;
-            var eventUpdate = entities.Events.SingleOrDefault(x => x.EventsId == update.EventsId);
+            PSCalendarDB.Events update = Mapper.Map<dto.Event, PSCalendarDB.Events>(@event);
+            var eventUpdate = Entities.Events.SingleOrDefault(x => x.EventsId == update.EventsId);
             if (update.Date != DateTime.MinValue)
             {
                 eventUpdate.Date = update.Date;
@@ -72,8 +78,8 @@ namespace PSCalendarServer
             {
                 eventUpdate.Type = update.Type;
             }
-            entities.Entry(eventUpdate).State = EntityState.Modified;
-            entities.SaveChanges();
+            Entities.Entry(eventUpdate).State = EntityState.Modified;
+            Entities.SaveChanges();
         }
 
         public void AddPeriodEveent(dto.PeriodicEvent periodEvent)
@@ -84,11 +90,11 @@ namespace PSCalendarServer
         public List<dto.Event> GetEvents(DateTime start, DateTime end)
         {
 
-            CalendarEntities entities = Entities;
-            List<DB.Events> resultDb = (from i in entities.Events
-                                    where start <= i.Date && i.Date <= end
-                                    select i).ToList();
-            List<dto.Event> result = Mapper.Map<List<DB.Events>, List<dto.Event>>(resultDb);
+            
+            List<PSCalendarDB.Events> resultDb = (from i in Entities.Events
+                                        where start <= i.Date && i.Date <= end
+                                        select i).ToList();
+            List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Events>, List<dto.Event>>(resultDb);
             return result;
         }
 
@@ -99,11 +105,10 @@ namespace PSCalendarServer
 
         public bool Delete(int id)
         {
-            CalendarEntities entities = Entities;
 
             var c = new Event() { EventsId = id };
-            entities.Entry(c).State = EntityState.Deleted;
-            entities.SaveChanges();
+            Entities.Entry(c).State = EntityState.Deleted;
+            Entities.SaveChanges();
             return true;
         }
     }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DB
+namespace PSCalendarDB
 {
     using System;
     using System.Data.Entity;

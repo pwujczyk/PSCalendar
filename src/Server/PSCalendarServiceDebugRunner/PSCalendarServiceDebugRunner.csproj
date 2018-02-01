@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}</ProjectGuid>
+    <ProjectGuid>{44E78515-0D65-43B6-A5A6-1E6577E114F8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PSCalendarDBScripts</RootNamespace>
-    <AssemblyName>PSCalendarDBScripts</AssemblyName>
+    <RootNamespace>PSCalendarServiceDebugRunner</RootNamespace>
+    <AssemblyName>PSCalendarServiceDebugRunner</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\out\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,20 +47,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DBUpPT\DBUpHelper\DBUpHelper.csproj">
-      <Project>{935a1b8b-9b9d-4ad3-bc9a-b88a57a37b65}</Project>
-      <Name>DBUpHelper</Name>
+    <ProjectReference Include="..\PSCalendarService\PSCalendarService.csproj">
+      <Project>{94b8304e-6a6f-4efe-a2d3-eae1fbe5226b}</Project>
+      <Name>PSCalendarService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
-      <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
-      <Name>MasterConfiguration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\002.CreateDB.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
