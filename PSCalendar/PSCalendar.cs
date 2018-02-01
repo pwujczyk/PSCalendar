@@ -20,7 +20,8 @@ namespace PSCalendar
         {
             get
             {
-                ChannelFactory<ICalendar> factory = new ChannelFactory<ICalendar>(new NetTcpBinding(), new EndpointAddress("net.tcp://localhost:9005/"));
+                string address = MasterConfiguration.MConfiguration.Configuration["Address"];
+                ChannelFactory<ICalendar> factory = new ChannelFactory<ICalendar>(new NetTcpBinding(), new EndpointAddress(address));
                 ICalendar proxy = factory.CreateChannel();
                 return proxy;
 

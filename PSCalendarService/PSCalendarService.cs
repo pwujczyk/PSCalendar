@@ -8,6 +8,8 @@ using System.ServiceModel;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using MasterConfiguration;
+using PSCalendarContract;
 using PSCalendarServer;
 
 namespace PSCalendarService
@@ -28,8 +30,12 @@ namespace PSCalendarService
 
         protected override void OnStart(string[] args)
         {
+            
             AutoMapperConfiguration.Configure();
+            var binding = new NetTcpBinding();
+            var address = MConfiguration.Configuration["Address"];
             host = new ServiceHost(typeof(Calendar));
+            host.AddServiceEndpoint(typeof(ICalendar), binding, address);
             host.Open();
         }
 

@@ -1,5 +1,10 @@
 [Oo]bj/
 [Bb]in/
+.nuget/
 packages/
+artifacts/
+*.user
 *.suo
-.vs/
+debug/
+out/
+.vs

@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionStringHelper", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarServiceDebugRunner", "PSCalendarServiceDebugRunner\PSCalendarServiceDebugRunner.csproj", "{44E78515-0D65-43B6-A5A6-1E6577E114F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterConfiguration", "..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj", "{108CEFCD-3617-4C60-BDF3-D1F77636FB62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{794F7057-6F89-4775-A58A-D532B5C178F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,14 @@ Global
 		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44E78515-0D65-43B6-A5A6-1E6577E114F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{108CEFCD-3617-4C60-BDF3-D1F77636FB62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{108CEFCD-3617-4C60-BDF3-D1F77636FB62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{108CEFCD-3617-4C60-BDF3-D1F77636FB62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{108CEFCD-3617-4C60-BDF3-D1F77636FB62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{794F7057-6F89-4775-A58A-D532B5C178F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{794F7057-6F89-4775-A58A-D532B5C178F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{794F7057-6F89-4775-A58A-D532B5C178F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{794F7057-6F89-4775-A58A-D532B5C178F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +81,7 @@ Global
 		{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE} = {9DECCCB9-77AB-4B16-BB9F-9505867B7A2E}
 		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
 		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
+		{108CEFCD-3617-4C60-BDF3-D1F77636FB62} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F13A32D5-D694-446D-B7F6-F22FCB6170AF}

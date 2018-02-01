@@ -12,19 +12,21 @@ namespace PSCalendarServer
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class PowerShellEntities : DbContext
     {
         public PowerShellEntities()
             : base("name=PowerShellEntities")
         {
         }
-    
+
+        public PowerShellEntities(string connectionString) : base(connectionString) { }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-    
+
         public DbSet<Event> Events { get; set; }
         public DbSet<PeriodicEvent> PeriodicEvents { get; set; }
     }
