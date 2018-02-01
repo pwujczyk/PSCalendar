@@ -18,7 +18,7 @@ namespace PSCalendarServer
         {
             Mapper.CreateMap<dto.Event, Event>()
                 .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeStringResolver>().FromMember(src => src.Type));
-            Mapper.CreateMap<Event, dto.Event>()
+            Mapper.CreateMap<DB.Events, dto.Event>()
                 .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeResolver>().FromMember(x => x.Type))
                 .ForMember(dst => dst.Color, opt => opt.ResolveUsing<ColorResolver>().FromMember(x => x.Type));
 

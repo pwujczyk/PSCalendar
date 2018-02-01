@@ -73,28 +73,7 @@
   <ItemGroup>
     <Compile Include="AutomapperConfiguration.cs" />
     <Compile Include="Calendar.cs" />
-    <Compile Include="CalendarDBEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CalendarDBEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CalendarDBEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CalendarDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CalendarDBEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CalendarDBEntities.edmx</DependentUpon>
-    </Compile>
     <Compile Include="CommonExtensions.cs" />
-    <Compile Include="Event.cs">
-      <DependentUpon>CalendarDBEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PeriodicEvent.cs">
-      <DependentUpon>CalendarDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +84,10 @@
     <ProjectReference Include="..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
       <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
       <Name>MasterConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DB\DB.csproj">
+      <Project>{d9330d60-bdbf-48b1-a4c2-a19665b9d489}</Project>
+      <Name>DB</Name>
     </ProjectReference>
     <ProjectReference Include="..\PSCalendarContract\PSCalendarContract.csproj">
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
@@ -132,29 +115,10 @@
     <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
-    <EntityDeploy Include="CalendarDBEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CalendarDBEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="CalendarDBEntities.edmx.diagram">
-      <DependentUpon>CalendarDBEntities.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="CalendarDBEntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CalendarDBEntities.edmx</DependentUpon>
-      <LastGenOutput>CalendarDBEntities.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="CalendarDBEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CalendarDBEntities.edmx</DependentUpon>
-      <LastGenOutput>CalendarDBEntities.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />

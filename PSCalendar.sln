@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasterConfiguration", "..\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{794F7057-6F89-4775-A58A-D532B5C178F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB", "DB\DB.csproj", "{D9330D60-BDBF-48B1-A4C2-A19665B9D489}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{794F7057-6F89-4775-A58A-D532B5C178F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{794F7057-6F89-4775-A58A-D532B5C178F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{794F7057-6F89-4775-A58A-D532B5C178F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9330D60-BDBF-48B1-A4C2-A19665B9D489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9330D60-BDBF-48B1-A4C2-A19665B9D489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9330D60-BDBF-48B1-A4C2-A19665B9D489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9330D60-BDBF-48B1-A4C2-A19665B9D489}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{935A1B8B-9B9D-4AD3-BC9A-B88A57A37B65} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
 		{C8FBD1AC-9605-4BE3-9429-9FE18F383A6E} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
 		{108CEFCD-3617-4C60-BDF3-D1F77636FB62} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
+		{D9330D60-BDBF-48B1-A4C2-A19665B9D489} = {9DECCCB9-77AB-4B16-BB9F-9505867B7A2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F13A32D5-D694-446D-B7F6-F22FCB6170AF}

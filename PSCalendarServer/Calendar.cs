@@ -11,6 +11,7 @@ using PSCalendarContract.Dto;
 using System.ServiceModel;
 using MasterConfiguration;
 using System.Data.Entity;
+using DB;
 
 namespace PSCalendarServer
 {
@@ -24,7 +25,7 @@ namespace PSCalendarServer
             {
                 string serverName = MConfiguration.Configuration["ServerName"];
                 string dbName = MConfiguration.Configuration["DatabaseName"];
-                string connString=ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "CalendarDBEntities");
+                string connString=ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
                 return connString;
             }
         }
@@ -34,11 +35,11 @@ namespace PSCalendarServer
             AutoMapperConfiguration.Configure();
         }
 
-        private PowerShellEntities Entities
+        private CalendarEntities Entities
         {
             get
             {
-                return new PowerShellEntities(ConnectionString);
+                return new CalendarEntities(ConnectionString);
             }
         }
 
@@ -46,8 +47,8 @@ namespace PSCalendarServer
 
         public void AddEvent(dto.Event @event)
         {
-            Event insert = Mapper.Map<dto.Event, Event>(@event);
-            PowerShellEntities entities = Entities;
+            DB.Events insert = Mapper.Map<dto.Event, DB.Events>(@event);
+            CalendarEntities entities = Entities;
 
             entities.Events.Add(insert);
             entities.Entry(insert).State = EntityState.Added;
@@ -56,8 +57,8 @@ namespace PSCalendarServer
 
         public void ChangeEvent(dto.Event @event)
         {
-            Event update = Mapper.Map<dto.Event, Event>(@event);
-            PowerShellEntities entities = Entities;
+            DB.Events update = Mapper.Map<dto.Event, DB.Events>(@event);
+            CalendarEntities entities = Entities;
             var eventUpdate = entities.Events.SingleOrDefault(x => x.EventsId == update.EventsId);
             if (update.Date != DateTime.MinValue)
             {
@@ -83,11 +84,11 @@ namespace PSCalendarServer
         public List<dto.Event> GetEvents(DateTime start, DateTime end)
         {
 
-            PowerShellEntities entities = Entities;
-            List<Event> resultDb = (from i in entities.Events
+            CalendarEntities entities = Entities;
+            List<DB.Events> resultDb = (from i in entities.Events
                                     where start <= i.Date && i.Date <= end
                                     select i).ToList();
-            List<dto.Event> result = Mapper.Map<List<Event>, List<dto.Event>>(resultDb);
+            List<dto.Event> result = Mapper.Map<List<DB.Events>, List<dto.Event>>(resultDb);
             return result;
         }
 
@@ -98,7 +99,7 @@ namespace PSCalendarServer
 
         public bool Delete(int id)
         {
-            PowerShellEntities entities = Entities;
+            CalendarEntities entities = Entities;
 
             var c = new Event() { EventsId = id };
             entities.Entry(c).State = EntityState.Deleted;

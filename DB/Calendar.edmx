@@ -4,7 +4,15 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PowerShellModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CalendarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="dbUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScriptName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Applied" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Events">
           <Key>
             <PropertyRef Name="EventsId" />
@@ -15,24 +23,24 @@
           <Property Name="Type" Type="varchar" MaxLength="10" />
           <Property Name="NiceId" Type="int" />
         </EntityType>
-        <EntityType Name="PeriodicEvents">
-          <Key>
-            <PropertyRef Name="PeriodicEventsId" />
-          </Key>
-          <Property Name="PeriodicEventsId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="PeriodType" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityContainer Name="PowerShellModelStoreContainer">
+        <EntityContainer Name="CalendarModelStoreContainer">
+          <EntitySet Name="dbUp" EntityType="Self.dbUp" Schema="gc" store:Type="Tables" />
           <EntitySet Name="Events" EntityType="Self.Events" Schema="gc" store:Type="Tables" />
-          <EntitySet Name="PeriodicEvents" EntityType="Self.PeriodicEvents" Schema="gc" store:Type="Tables" />
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="PowerShellModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Event">
+      <Schema Namespace="CalendarModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="dbUp">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScriptName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Applied" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Events">
           <Key>
             <PropertyRef Name="EventsId" />
           </Key>
@@ -42,41 +50,33 @@
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="NiceId" Type="Int32" />
         </EntityType>
-        <EntityType Name="PeriodicEvent">
-          <Key>
-            <PropertyRef Name="PeriodicEventsId" />
-          </Key>
-          <Property Name="PeriodicEventsId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PeriodType" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityContainer Name="PowerShellEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Events" EntityType="Self.Event" />
-          <EntitySet Name="PeriodicEvents" EntityType="Self.PeriodicEvent" />
+        <EntityContainer Name="CalendarEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="dbUp" EntityType="Self.dbUp" />
+          <EntitySet Name="Events" EntityType="Self.Events" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="PowerShellModelStoreContainer" CdmEntityContainer="PowerShellEntities">
+        <EntityContainerMapping StorageEntityContainer="CalendarModelStoreContainer" CdmEntityContainer="CalendarEntities">
+          <EntitySetMapping Name="dbUp">
+            <EntityTypeMapping TypeName="CalendarModel.dbUp">
+              <MappingFragment StoreEntitySet="dbUp">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ScriptName" ColumnName="ScriptName" />
+                <ScalarProperty Name="Applied" ColumnName="Applied" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="PowerShellModel.Event">
+            <EntityTypeMapping TypeName="CalendarModel.Events">
               <MappingFragment StoreEntitySet="Events">
                 <ScalarProperty Name="EventsId" ColumnName="EventsId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="NiceId" ColumnName="NiceId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PeriodicEvents">
-            <EntityTypeMapping TypeName="PowerShellModel.PeriodicEvent">
-              <MappingFragment StoreEntitySet="PeriodicEvents">
-                <ScalarProperty Name="PeriodicEventsId" ColumnName="PeriodicEventsId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PeriodType" ColumnName="PeriodType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -94,9 +94,9 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

@@ -3,7 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
     <StartProgram>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</StartProgram>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments>-noexit -command "import-module D:\GitHub\PSCalendar\out\Debug\PSCalendar.dll"</StartArguments>
   </PropertyGroup>
 </Project>
