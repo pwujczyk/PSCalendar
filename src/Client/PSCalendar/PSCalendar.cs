@@ -58,6 +58,9 @@ namespace PSCalendar
         [Parameter]
         public int? Change { get; set; }
 
+        [Parameter]
+        public SwitchParameter Sync { get; set; }
+
         protected override void BeginProcessing()
         {
 
@@ -94,6 +97,11 @@ namespace PSCalendar
             else
             {
                 ShowCurrentMonth();
+            }
+
+            if (Sync.IsPresent)
+            {
+                SyncCalendar();
             }
 
             base.BeginProcessing();
@@ -252,6 +260,11 @@ namespace PSCalendar
         {
             for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
                 yield return day;
+        }
+
+        private void SyncCalendar()
+        {
+            this.Client.Sync();
         }
     }
 }

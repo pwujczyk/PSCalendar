@@ -31,5 +31,8 @@ namespace PSCalendarContract
 
         [OperationContract]
         bool Delete(int id);
+
+        [OperationContract]
+        void Sync();
     }
 }

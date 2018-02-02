@@ -34,7 +34,7 @@ namespace PSCalendarService
             AutoMapperConfiguration.Configure();
             var binding = new NetTcpBinding();
             var address = MConfiguration.Configuration["Address"];
-            host = new ServiceHost(typeof(Calendar));
+            host = new ServiceHost(typeof(CalendarServer));
             host.AddServiceEndpoint(typeof(ICalendar), binding, address);
             host.Open();
         }

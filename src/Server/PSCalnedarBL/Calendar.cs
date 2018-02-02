@@ -1,22 +1,17 @@
-﻿using System;
+﻿using AutoMapper;
+using MasterConfiguration;
+using PSCalendarContract.Dto;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PSCalendarContract;
 using dto = PSCalendarContract.Dto;
-using AutoMapper;
-using System.Data;
-using PSCalendarContract.Dto;
-using System.ServiceModel;
-using MasterConfiguration;
-using System.Data.Entity;
 
-
-namespace PSCalendarServer
+namespace PSCalnedarBL
 {
-    [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    public class Calendar : ICalendar
+    public class Calendar
     {
 
         private string ConnectionString
@@ -33,7 +28,6 @@ namespace PSCalendarServer
         public Calendar()
         {
 
-            
         }
 
         private PSCalendarDB.CalendarEntities entities;
@@ -49,8 +43,6 @@ namespace PSCalendarServer
                 return entities;
             }
         }
-
-        public void GetDate() { }
 
         public void AddEvent(dto.Event @event)
         {
@@ -90,10 +82,10 @@ namespace PSCalendarServer
         public List<dto.Event> GetEvents(DateTime start, DateTime end)
         {
 
-            
+
             List<PSCalendarDB.Events> resultDb = (from i in Entities.Events
-                                        where start <= i.Date && i.Date <= end
-                                        select i).ToList();
+                                                  where start <= i.Date && i.Date <= end
+                                                  select i).ToList();
             List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Events>, List<dto.Event>>(resultDb);
             return result;
         }

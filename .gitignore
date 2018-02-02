@@ -8,3 +8,4 @@ artifacts/
 debug/
 out/
 .vs
+client_secret.json
