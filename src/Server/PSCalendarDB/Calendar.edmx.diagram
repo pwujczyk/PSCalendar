@@ -6,7 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="62c5edba27004187ae19c368208f9f83" Name="Diagram1">
         <EntityTypeShape EntityType="CalendarModel.dbUp" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CalendarModel.Events" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CalendarModel.Event" Width="1.5" PointX="0.75" PointY="4" />
+        <EntityTypeShape EntityType="CalendarModel.SyncAccount" Width="1.5" PointX="3" PointY="4.375" />
+        <AssociationConnector Association="CalendarModel.SyncAccountEvent" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

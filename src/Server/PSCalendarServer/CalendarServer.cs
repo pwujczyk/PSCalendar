@@ -8,7 +8,7 @@ using System.Data;
 using PSCalendarContract.Dto;
 using System.ServiceModel;
 using SyncGmailCalendar;
-using PSCalnedarBL;
+using PSCalendarBL;
 
 namespace PSCalendarServer
 {

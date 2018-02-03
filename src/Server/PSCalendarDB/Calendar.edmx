@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CalendarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CalendarModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="dbUp">
           <Key>
             <PropertyRef Name="Id" />
@@ -13,22 +13,77 @@
           <Property Name="ScriptName" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Applied" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="Events">
+        <EntityType Name="Event">
           <Key>
-            <PropertyRef Name="EventsId" />
+            <PropertyRef Name="EventId" />
           </Key>
-          <Property Name="EventsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
-          <Property Name="NiceId" Type="int" />
+          <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="SyncAccount">
+          <Key>
+            <PropertyRef Name="SyncAccountId" />
+          </Key>
+          <Property Name="SyncAccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SyncAccountEvent">
+          <Key>
+            <PropertyRef Name="SyncAccountId" />
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="SyncAccountId" Type="int" Nullable="false" />
+          <Property Name="EventId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SyncAccountEvent_Event">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="SyncAccountEvent" Type="Self.SyncAccountEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="SyncAccountEvent">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SyncAccountEvent_SyncAccount">
+          <End Role="SyncAccount" Type="Self.SyncAccount" Multiplicity="1" />
+          <End Role="SyncAccountEvent" Type="Self.SyncAccountEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SyncAccount">
+              <PropertyRef Name="SyncAccountId" />
+            </Principal>
+            <Dependent Role="SyncAccountEvent">
+              <PropertyRef Name="SyncAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="CalendarModelStoreContainer">
           <EntitySet Name="dbUp" EntityType="Self.dbUp" Schema="gc" store:Type="Tables" />
-          <EntitySet Name="Events" EntityType="Self.Events" Schema="gc" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="gc" store:Type="Tables" />
+          <EntitySet Name="SyncAccount" EntityType="Self.SyncAccount" Schema="gc" store:Type="Tables" />
+          <EntitySet Name="SyncAccountEvent" EntityType="Self.SyncAccountEvent" store:Type="Tables" store:Schema="gc">
+            <DefiningQuery>SELECT 
+    [SyncAccountEvent].[SyncAccountId] AS [SyncAccountId], 
+    [SyncAccountEvent].[EventId] AS [EventId]
+    FROM [gc].[SyncAccountEvent] AS [SyncAccountEvent]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_SyncAccountEvent_Event" Association="Self.FK_SyncAccountEvent_Event">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="SyncAccountEvent" EntitySet="SyncAccountEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SyncAccountEvent_SyncAccount" Association="Self.FK_SyncAccountEvent_SyncAccount">
+            <End Role="SyncAccount" EntitySet="SyncAccount" />
+            <End Role="SyncAccountEvent" EntitySet="SyncAccountEvent" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CalendarModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -40,20 +95,38 @@
           <Property Name="ScriptName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Applied" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="Events">
-          <Key>
-            <PropertyRef Name="EventsId" />
-          </Key>
-          <Property Name="EventsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="NiceId" Type="Int32" />
-        </EntityType>
         <EntityContainer Name="CalendarEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="dbUp" EntityType="Self.dbUp" />
-          <EntitySet Name="Events" EntityType="Self.Events" />
+          <EntitySet Name="Event" EntityType="CalendarModel.Event" />
+          <EntitySet Name="SyncAccount" EntityType="CalendarModel.SyncAccount" />
+          <AssociationSet Name="SyncAccountEvent" Association="CalendarModel.SyncAccountEvent">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="SyncAccount" EntitySet="SyncAccount" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="SyncAccount" Relationship="CalendarModel.SyncAccountEvent" FromRole="Event" ToRole="SyncAccount" />
+        </EntityType>
+        <EntityType Name="SyncAccount">
+          <Key>
+            <PropertyRef Name="SyncAccountId" />
+          </Key>
+          <Property Name="SyncAccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Event" Relationship="CalendarModel.SyncAccountEvent" FromRole="SyncAccount" ToRole="Event" />
+        </EntityType>
+        <Association Name="SyncAccountEvent">
+          <End Type="CalendarModel.Event" Role="Event" Multiplicity="*" />
+          <End Type="CalendarModel.SyncAccount" Role="SyncAccount" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -69,17 +142,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="CalendarModel.Events">
-              <MappingFragment StoreEntitySet="Events">
-                <ScalarProperty Name="EventsId" ColumnName="EventsId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
+          <EntitySetMapping Name="Event">
+            <EntityTypeMapping TypeName="CalendarModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="NiceId" ColumnName="NiceId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SyncAccount">
+            <EntityTypeMapping TypeName="CalendarModel.SyncAccount">
+              <MappingFragment StoreEntitySet="SyncAccount">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="SyncAccountEvent" TypeName="CalendarModel.SyncAccountEvent" StoreEntitySet="SyncAccountEvent">
+            <EndProperty Name="SyncAccount">
+              <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
+            </EndProperty>
+            <EndProperty Name="Event">
+              <ScalarProperty Name="EventId" ColumnName="EventId" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

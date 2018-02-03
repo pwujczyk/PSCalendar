@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using dto = PSCalendarContract.Dto;
 
-namespace PSCalnedarBL
+namespace PSCalendarBL
 {
     public class Calendar
     {
@@ -23,6 +23,11 @@ namespace PSCalnedarBL
                 string connString = ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
                 return connString;
             }
+        }
+
+        static Calendar()
+        {
+            AutoMapperConfiguration.Configure();
         }
 
         public Calendar()
@@ -47,17 +52,30 @@ namespace PSCalnedarBL
         public void AddEvent(dto.Event @event)
         {
 
-            PSCalendarDB.Events insert = Mapper.Map<dto.Event, PSCalendarDB.Events>(@event);
-
-            Entities.Events.Add(insert);
+            PSCalendarDB.Event insert = Mapper.Map<dto.Event, PSCalendarDB.Event>(@event);
+            insert.EventId = GetLastId();
+            Entities.Event.Add(insert);
             Entities.Entry(insert).State = EntityState.Added;
             Entities.SaveChanges();
         }
 
+        public int GetLastId()
+        {
+            var @event=Entities.Event.OrderByDescending(x=>x.EventId).FirstOrDefault();
+            if (@event == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return @event.EventId+1;
+            }
+        }
+
         public void ChangeEvent(dto.Event @event)
         {
-            PSCalendarDB.Events update = Mapper.Map<dto.Event, PSCalendarDB.Events>(@event);
-            var eventUpdate = Entities.Events.SingleOrDefault(x => x.EventsId == update.EventsId);
+            PSCalendarDB.Event update = Mapper.Map<dto.Event, PSCalendarDB.Event>(@event);
+            var eventUpdate = Entities.Event.SingleOrDefault(x => x.EventId == update.EventId);
             if (update.Date != DateTime.MinValue)
             {
                 eventUpdate.Date = update.Date;
@@ -83,10 +101,10 @@ namespace PSCalnedarBL
         {
 
 
-            List<PSCalendarDB.Events> resultDb = (from i in Entities.Events
-                                                  where start <= i.Date && i.Date <= end
+            List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
+                                                 where start <= i.Date && i.Date <= end
                                                   select i).ToList();
-            List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Events>, List<dto.Event>>(resultDb);
+            List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<dto.Event>>(resultDb);
             return result;
         }
 

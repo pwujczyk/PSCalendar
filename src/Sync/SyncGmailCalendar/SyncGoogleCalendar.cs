@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PSCalendarTools;
 
 namespace SyncGmailCalendar
 {
@@ -17,18 +18,36 @@ namespace SyncGmailCalendar
     {
         static string[] Scopes = { CalendarService.Scope.Calendar };
 
-        public void Sync()
+        public void Sync(string account)
         {
-            var credentials = Authenticate("pwujczyk@gmail.com");
-            var events = GetAllEvents(credentials);
+            //GetGoogleCalendarEventsAndDisplay(account);
 
-            DisplayEvents(events);
-            AddEvent(credentials);
+            var psCalendar = new PSCalendarBL.Calendar();
+            var start = DateTime.Now.GetFirstMonthDay();
+            var end = DateTime.Now.GetLastMonthDay();
+            var psEvents = psCalendar.GetEvents(start, end);
+            var googleEvents = GetGoogleCalendarEvents(account, start, end);
+            GetGoogleCalendarEventsAndDisplay(account, start, end);
+
+            foreach (var item in psEvents)
+            {
+
+            }
+
+            AddEvent(account);
+            GetGoogleCalendarEventsAndDisplay(account, start, end);
+        }
+
+        private void GetGoogleCalendarEventsAndDisplay(string account, DateTime start, DateTime end)
+        {
+            var events = GetGoogleCalendarEvents(account, start, end);
             DisplayEvents(events);
         }
 
-        private void AddEvent(UserCredential credential)
+        private void AddEvent(string account)
         {
+            var credential = Authenticate(account);
+
             var service = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
@@ -89,8 +108,9 @@ namespace SyncGmailCalendar
             return credential;
         }
 
-        private Events GetAllEvents(UserCredential credential)
+        private Events GetGoogleCalendarEvents(string account, DateTime start, DateTime end)
         {
+            UserCredential credential = Authenticate(account);
             var service = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
@@ -99,10 +119,11 @@ namespace SyncGmailCalendar
 
             // Define parameters of request.
             EventsResource.ListRequest request = service.Events.List("primary");
-            request.TimeMin = DateTime.Now.AddMonths(-1);
+            request.TimeMin = start;
+            request.TimeMax = end;
             request.ShowDeleted = false;
             request.SingleEvents = true;
-            request.MaxResults = 10;
+            request.MaxResults = 100;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
             // List events.

@@ -12,12 +12,21 @@ namespace PSCalendarDB
     using System;
     using System.Collections.Generic;
     
-    public partial class Events
+    public partial class Event
     {
-        public int EventsId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Event()
+        {
+            this.SyncAccount = new HashSet<SyncAccount>();
+        }
+    
+        public int EventId { get; set; }
         public string Name { get; set; }
         public System.DateTime Date { get; set; }
         public string Type { get; set; }
-        public Nullable<int> NiceId { get; set; }
+        public System.Guid Guid { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SyncAccount> SyncAccount { get; set; }
     }
 }

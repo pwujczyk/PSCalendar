@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5F3532C5-B5AF-4F9A-85A1-C6C09230AFFE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>PSCalendarDBScripts</RootNamespace>
-    <AssemblyName>PSCalendarDBScripts</AssemblyName>
+    <ProjectGuid>{2936AF01-1CE5-43EC-8207-4BD4CCF106A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PSCalendarTools</RootNamespace>
+    <AssemblyName>PSCalendarTools</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,30 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="CommonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\DBUpPT\DBUpHelper\DBUpHelper.csproj">
-      <Project>{935a1b8b-9b9d-4ad3-bc9a-b88a57a37b65}</Project>
-      <Name>DBUpHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
-      <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
-      <Name>MasterConfiguration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\001.CreateDB.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\003.SyncAccounts.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\002.SyncAccountsEvents.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

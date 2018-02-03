@@ -31,7 +31,7 @@ namespace PSCalendarService
         protected override void OnStart(string[] args)
         {
             
-            AutoMapperConfiguration.Configure();
+            
             var binding = new NetTcpBinding();
             var address = MConfiguration.Configuration["Address"];
             host = new ServiceHost(typeof(CalendarServer));

@@ -2,11 +2,12 @@
 using PSCalendarContract.Attributes;
 using PSCalendarContract.Dto;
 using PSCalendarDB;
+using PSCalendarTools;
 using System;
 using System.Reflection;
 using dto = PSCalendarContract.Dto;
 
-namespace PSCalendarServer
+namespace PSCalendarBL
 {
     public static class AutoMapperConfiguration
     {
@@ -14,18 +15,18 @@ namespace PSCalendarServer
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<dto.Event, PSCalendarDB.Events>()
+                cfg.CreateMap<dto.Event, PSCalendarDB.Event>()
                 .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeStringResolver>());
-                cfg.CreateMap<PSCalendarDB.Events, dto.Event>()
+                cfg.CreateMap<PSCalendarDB.Event, dto.Event>()
                 .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeResolver>())
                 .ForMember(dst => dst.Color, opt => opt.ResolveUsing<ColorResolver>());
             });
         }
     }
 
-    public class ColorResolver : AutoMapper.IValueResolver<PSCalendarDB.Events, dto.Event, ConsoleColor>
+    public class ColorResolver : AutoMapper.IValueResolver<PSCalendarDB.Event, dto.Event, ConsoleColor>
     {
-        public ConsoleColor Resolve(PSCalendarDB.Events source, dto.Event destination, ConsoleColor destMember, ResolutionContext context)
+        public ConsoleColor Resolve(PSCalendarDB.Event source, dto.Event destination, ConsoleColor destMember, ResolutionContext context)
         {
             PeriodTypeResolver resolver = new PeriodTypeResolver();
             EventType @event = resolver.ResolvePublic(source.Type);
@@ -44,9 +45,9 @@ namespace PSCalendarServer
             return ConsoleColor.White;
         }
     }
-    public class PeriodTypeResolver : IValueResolver<PSCalendarDB.Events, dto.Event, EventType>
+    public class PeriodTypeResolver : IValueResolver<PSCalendarDB.Event, dto.Event, EventType>
     {
-        public EventType Resolve(PSCalendarDB.Events source, dto.Event destination, EventType destMember, ResolutionContext context)
+        public EventType Resolve(PSCalendarDB.Event source, dto.Event destination, EventType destMember, ResolutionContext context)
         {
             return ResolveCore(source.Type);
         }
@@ -62,9 +63,9 @@ namespace PSCalendarServer
         }
     }
 
-    public class PeriodTypeStringResolver : IValueResolver<dto.Event, PSCalendarDB.Events, string>
+    public class PeriodTypeStringResolver : IValueResolver<dto.Event, PSCalendarDB.Event, string>
     {
-        public string Resolve(Event source, Events destination, string destMember, ResolutionContext context)
+        public string Resolve(dto.Event source, PSCalendarDB.Event destination, string destMember, ResolutionContext context)
         {
             return source.Type.ToString();
         }

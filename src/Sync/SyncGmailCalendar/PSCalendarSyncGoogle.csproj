@@ -85,5 +85,19 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\PSCalendarContract\PSCalendarContract.csproj">
+      <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
+      <Name>PSCalendarContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Tools\PSCalendarTools.csproj">
+      <Project>{2936af01-1ce5-43ec-8207-4bd4ccf106a1}</Project>
+      <Name>PSCalendarTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Server\PSCalnedarBL\PSCalendarBL.csproj">
+      <Project>{1fec128a-5608-4bf7-a457-682a3c5b6eeb}</Project>
+      <Name>PSCalendarBL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
