@@ -17,7 +17,7 @@ namespace PSCalendarDBScripts
             string dbName= MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
 
             //todo:get from configuration
-            dBUp.PerformUpdate(".\\sql2014", "PawelPT", assembly, true);
+            dBUp.PerformUpdate(serverName, dbName, assembly, true);
         }
     }
 }

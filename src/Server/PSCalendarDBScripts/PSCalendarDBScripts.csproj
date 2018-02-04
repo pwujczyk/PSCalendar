@@ -67,5 +67,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\002.SyncAccountsEvents.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\004.GmailCalendarSync.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

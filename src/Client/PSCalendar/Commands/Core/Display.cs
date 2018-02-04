@@ -4,12 +4,13 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PSCalendarContract;
 using PSCalendarContract.Dto;
 using PSCalendarTools;
 
 namespace PSCalendar.Commands
 {
-    class Display : BaseCommand
+    class Display : BaseCommand<ICalendar>
     {
         private static string Spacer = "".PadLeft(4);
 

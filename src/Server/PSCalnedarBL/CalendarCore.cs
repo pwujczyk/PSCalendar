@@ -11,49 +11,14 @@ using dto = PSCalendarContract.Dto;
 
 namespace PSCalendarBL
 {
-    public class Calendar
+    public class CalendarCore : CalendarBase
     {
-
-        private string ConnectionString
-        {
-            get
-            {
-                string serverName = MConfiguration.Configuration["ServerName"];
-                string dbName = MConfiguration.Configuration["DatabaseName"];
-                string connString = ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
-                return connString;
-            }
-        }
-
-        static Calendar()
-        {
-            AutoMapperConfiguration.Configure();
-        }
-
-        public Calendar()
-        {
-
-        }
-
-        private PSCalendarDB.CalendarEntities entities;
-        private PSCalendarDB.CalendarEntities Entities
-        {
-            get
-            {
-                if (entities == null)
-                {
-                    entities = new PSCalendarDB.CalendarEntities(ConnectionString);
-
-                }
-                return entities;
-            }
-        }
-
         public void AddEvent(dto.Event @event)
         {
 
             PSCalendarDB.Event insert = Mapper.Map<dto.Event, PSCalendarDB.Event>(@event);
             insert.EventId = GetLastId();
+            insert.EventGuid = Guid.NewGuid();
             Entities.Event.Add(insert);
             Entities.Entry(insert).State = EntityState.Added;
             Entities.SaveChanges();
@@ -61,14 +26,14 @@ namespace PSCalendarBL
 
         public int GetLastId()
         {
-            var @event=Entities.Event.OrderByDescending(x=>x.EventId).FirstOrDefault();
+            var @event = Entities.Event.OrderByDescending(x => x.EventId).FirstOrDefault();
             if (@event == null)
             {
                 return 0;
             }
             else
             {
-                return @event.EventId+1;
+                return @event.EventId + 1;
             }
         }
 
@@ -99,14 +64,13 @@ namespace PSCalendarBL
 
         public List<dto.Event> GetEvents(DateTime start, DateTime end)
         {
-
-
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
                                                  where start <= i.Date && i.Date <= end
-                                                  select i).ToList();
+                                                 select i).ToList();
             List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<dto.Event>>(resultDb);
             return result;
         }
+
 
         public List<dto.PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)
         {

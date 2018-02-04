@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PSCalendarContract;
 using PSCalendarContract.Dto;
 using PSCalendarTools;
 
 namespace PSCalendar.Commands
 {
-    class Change : BaseCommand
+    class Change : BaseCommand<ICalendar>
     {
 
 

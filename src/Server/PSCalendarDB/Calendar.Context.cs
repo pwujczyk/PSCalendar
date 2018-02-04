@@ -28,5 +28,7 @@ namespace PSCalendarDB
         public virtual DbSet<dbUp> dbUp { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<SyncAccount> SyncAccount { get; set; }
+        public virtual DbSet<SyncAccountEvent> SyncAccountEvent { get; set; }
+        public virtual DbSet<GoogleCalendarSyncView> GoogleCalendarSyncView { get; set; }
     }
 }

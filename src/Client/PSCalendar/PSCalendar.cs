@@ -17,10 +17,6 @@ namespace PSCalendar
     [Cmdlet(VerbsCommon.Get, "Calendar")]
     public class PSCalendarCmdlet : PSCmdlet
     {
-
-
- 
-
         [Parameter]
         public string Add { get; set; }
 
@@ -34,9 +30,6 @@ namespace PSCalendar
         public int? ShowMonth { get; set; }
 
         [Parameter]
-        public SwitchParameter Help { get; set; }
-
-        [Parameter]
         public int? Delete { get; set; }
 
         [Parameter]
@@ -46,7 +39,7 @@ namespace PSCalendar
         public SwitchParameter Sync { get; set; }
 
         [Parameter]
-        public string AddSyncAccountEmail { get; set; }
+        public string AddSyncAccount { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -56,6 +49,8 @@ namespace PSCalendar
             conditionTable.Add(new Add(this));
             conditionTable.Add(new Change(this));
             conditionTable.Add(new Display(this));
+            conditionTable.Add(new Sync(this));
+            conditionTable.Add(new AddSyncAccount(this));
 
             foreach (var item in conditionTable)
             {

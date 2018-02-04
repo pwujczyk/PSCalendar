@@ -9,6 +9,7 @@ namespace PSCalendarContract.Dto
     public class Event
     {
         public int EventsId { get; set; }
+        public Guid EventGuid { get; set; }
         public string Name { get; set; }
         public System.DateTime Date { get; set; }
         public EventType Type { get; set; }

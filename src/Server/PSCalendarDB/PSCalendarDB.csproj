@@ -71,8 +71,14 @@
     <Compile Include="Event.cs">
       <DependentUpon>Calendar.tt</DependentUpon>
     </Compile>
+    <Compile Include="GoogleCalendarSyncView.cs">
+      <DependentUpon>Calendar.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncAccount.cs">
+      <DependentUpon>Calendar.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SyncAccountEvent.cs">
       <DependentUpon>Calendar.tt</DependentUpon>
     </Compile>
   </ItemGroup>

@@ -15,13 +15,13 @@
         </EntityType>
         <EntityType Name="Event">
           <Key>
-            <PropertyRef Name="EventId" />
+            <PropertyRef Name="EventGuid" />
           </Key>
+          <Property Name="EventGuid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="EventId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
-          <Property Name="Guid" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="SyncAccount">
           <Key>
@@ -30,31 +30,47 @@
           <Property Name="SyncAccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="200" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SyncAccountEvent">
           <Key>
             <PropertyRef Name="SyncAccountId" />
-            <PropertyRef Name="EventId" />
           </Key>
           <Property Name="SyncAccountId" Type="int" Nullable="false" />
+          <Property Name="EventGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GoogleCalendarId" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="GoogleCalendarSyncView">
+          <Key>
+            <PropertyRef Name="EventId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="EventGuid" />
+          </Key>
           <Property Name="EventId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="10" />
+          <Property Name="EventGuid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SyncAccountId" Type="int" />
+          <Property Name="GoogleCalendarId" Type="varchar" MaxLength="40" />
+          <Property Name="Email" Type="varchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK_SyncAccountEvent_Event">
           <End Role="Event" Type="Self.Event" Multiplicity="1" />
           <End Role="SyncAccountEvent" Type="Self.SyncAccountEvent" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Event">
-              <PropertyRef Name="EventId" />
+              <PropertyRef Name="EventGuid" />
             </Principal>
             <Dependent Role="SyncAccountEvent">
-              <PropertyRef Name="EventId" />
+              <PropertyRef Name="EventGuid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SyncAccountEvent_SyncAccount">
           <End Role="SyncAccount" Type="Self.SyncAccount" Multiplicity="1" />
-          <End Role="SyncAccountEvent" Type="Self.SyncAccountEvent" Multiplicity="*" />
+          <End Role="SyncAccountEvent" Type="Self.SyncAccountEvent" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="SyncAccount">
               <PropertyRef Name="SyncAccountId" />
@@ -68,11 +84,18 @@ warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a prima
           <EntitySet Name="dbUp" EntityType="Self.dbUp" Schema="gc" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="gc" store:Type="Tables" />
           <EntitySet Name="SyncAccount" EntityType="Self.SyncAccount" Schema="gc" store:Type="Tables" />
-          <EntitySet Name="SyncAccountEvent" EntityType="Self.SyncAccountEvent" store:Type="Tables" store:Schema="gc">
+          <EntitySet Name="SyncAccountEvent" EntityType="Self.SyncAccountEvent" Schema="gc" store:Type="Tables" />
+          <EntitySet Name="GoogleCalendarSyncView" EntityType="Self.GoogleCalendarSyncView" store:Type="Views" store:Schema="gc">
             <DefiningQuery>SELECT 
-    [SyncAccountEvent].[SyncAccountId] AS [SyncAccountId], 
-    [SyncAccountEvent].[EventId] AS [EventId]
-    FROM [gc].[SyncAccountEvent] AS [SyncAccountEvent]</DefiningQuery>
+    [GoogleCalendarSyncView].[EventId] AS [EventId], 
+    [GoogleCalendarSyncView].[Name] AS [Name], 
+    [GoogleCalendarSyncView].[Date] AS [Date], 
+    [GoogleCalendarSyncView].[Type] AS [Type], 
+    [GoogleCalendarSyncView].[EventGuid] AS [EventGuid], 
+    [GoogleCalendarSyncView].[SyncAccountId] AS [SyncAccountId], 
+    [GoogleCalendarSyncView].[GoogleCalendarId] AS [GoogleCalendarId], 
+    [GoogleCalendarSyncView].[Email] AS [Email]
+    FROM [gc].[GoogleCalendarSyncView] AS [GoogleCalendarSyncView]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_SyncAccountEvent_Event" Association="Self.FK_SyncAccountEvent_Event">
             <End Role="Event" EntitySet="Event" />
@@ -99,21 +122,27 @@ warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a prima
           <EntitySet Name="dbUp" EntityType="Self.dbUp" />
           <EntitySet Name="Event" EntityType="CalendarModel.Event" />
           <EntitySet Name="SyncAccount" EntityType="CalendarModel.SyncAccount" />
-          <AssociationSet Name="SyncAccountEvent" Association="CalendarModel.SyncAccountEvent">
+          <EntitySet Name="SyncAccountEvent" EntityType="CalendarModel.SyncAccountEvent" />
+          <EntitySet Name="GoogleCalendarSyncView" EntityType="CalendarModel.GoogleCalendarSyncView" />
+          <AssociationSet Name="FK_SyncAccountEvent_Event" Association="CalendarModel.FK_SyncAccountEvent_Event">
             <End Role="Event" EntitySet="Event" />
-            <End Role="SyncAccount" EntitySet="SyncAccount" />
+            <End Role="SyncAccountEvent" EntitySet="SyncAccountEvent" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="FK_SyncAccountEvent_SyncAccount" Association="CalendarModel.FK_SyncAccountEvent_SyncAccount">
+            <End Role="SyncAccount" EntitySet="SyncAccount" />
+            <End Role="SyncAccountEvent" EntitySet="SyncAccountEvent" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Event">
           <Key>
-            <PropertyRef Name="EventId" />
+            <PropertyRef Name="EventGuid" />
           </Key>
+          <Property Name="EventGuid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="EventId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Guid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="SyncAccount" Relationship="CalendarModel.SyncAccountEvent" FromRole="Event" ToRole="SyncAccount" />
+          <NavigationProperty Name="SyncAccountEvent" Relationship="CalendarModel.FK_SyncAccountEvent_Event" FromRole="Event" ToRole="SyncAccountEvent" />
         </EntityType>
         <EntityType Name="SyncAccount">
           <Key>
@@ -121,13 +150,59 @@ warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a prima
           </Key>
           <Property Name="SyncAccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Event" Relationship="CalendarModel.SyncAccountEvent" FromRole="SyncAccount" ToRole="Event" />
+          <NavigationProperty Name="SyncAccountEvent" Relationship="CalendarModel.FK_SyncAccountEvent_SyncAccount" FromRole="SyncAccount" ToRole="SyncAccountEvent" />
         </EntityType>
-        <Association Name="SyncAccountEvent">
-          <End Type="CalendarModel.Event" Role="Event" Multiplicity="*" />
-          <End Type="CalendarModel.SyncAccount" Role="SyncAccount" Multiplicity="*" />
+        <EntityType Name="SyncAccountEvent">
+          <Key>
+            <PropertyRef Name="SyncAccountId" />
+          </Key>
+          <Property Name="SyncAccountId" Type="Int32" Nullable="false" />
+          <Property Name="EventGuid" Type="Guid" Nullable="false" />
+          <Property Name="GoogleCalendarId" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Event" Relationship="CalendarModel.FK_SyncAccountEvent_Event" FromRole="SyncAccountEvent" ToRole="Event" />
+          <NavigationProperty Name="SyncAccount" Relationship="CalendarModel.FK_SyncAccountEvent_SyncAccount" FromRole="SyncAccountEvent" ToRole="SyncAccount" />
+        </EntityType>
+        <EntityType Name="GoogleCalendarSyncView">
+          <Key>
+            <PropertyRef Name="EventId" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="EventGuid" />
+          </Key>
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EventGuid" Type="Guid" Nullable="false" />
+          <Property Name="SyncAccountId" Type="Int32" />
+          <Property Name="GoogleCalendarId" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_SyncAccountEvent_Event">
+          <End Type="CalendarModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="CalendarModel.SyncAccountEvent" Role="SyncAccountEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventGuid" />
+            </Principal>
+            <Dependent Role="SyncAccountEvent">
+              <PropertyRef Name="EventGuid" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_SyncAccountEvent_SyncAccount">
+          <End Type="CalendarModel.SyncAccount" Role="SyncAccount" Multiplicity="1" />
+          <End Type="CalendarModel.SyncAccountEvent" Role="SyncAccountEvent" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="SyncAccount">
+              <PropertyRef Name="SyncAccountId" />
+            </Principal>
+            <Dependent Role="SyncAccountEvent">
+              <PropertyRef Name="SyncAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -145,11 +220,11 @@ warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a prima
           <EntitySetMapping Name="Event">
             <EntityTypeMapping TypeName="CalendarModel.Event">
               <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="Guid" ColumnName="Guid" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -161,15 +236,30 @@ warning 6002: The table/view 'PawelPT.gc.SyncAccountEvent' does not have a prima
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="SyncAccountEvent" TypeName="CalendarModel.SyncAccountEvent" StoreEntitySet="SyncAccountEvent">
-            <EndProperty Name="SyncAccount">
-              <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
-            </EndProperty>
-            <EndProperty Name="Event">
-              <ScalarProperty Name="EventId" ColumnName="EventId" />
-            </EndProperty>
-          </AssociationSetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="SyncAccountEvent">
+            <EntityTypeMapping TypeName="CalendarModel.SyncAccountEvent">
+              <MappingFragment StoreEntitySet="SyncAccountEvent">
+                <ScalarProperty Name="GoogleCalendarId" ColumnName="GoogleCalendarId" />
+                <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
+                <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GoogleCalendarSyncView">
+            <EntityTypeMapping TypeName="CalendarModel.GoogleCalendarSyncView">
+              <MappingFragment StoreEntitySet="GoogleCalendarSyncView">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="GoogleCalendarId" ColumnName="GoogleCalendarId" />
+                <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
+                <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

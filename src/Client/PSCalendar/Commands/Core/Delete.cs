@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PSCalendarContract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PSCalendar.Commands
 {
-    class Delete : BaseCommand
+    class Delete : BaseCommand<ICalendar>
     {
         public Delete(PSCalendarCmdlet cmdlet) : base(cmdlet) { }
 

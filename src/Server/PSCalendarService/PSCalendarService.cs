@@ -36,6 +36,7 @@ namespace PSCalendarService
             var address = MConfiguration.Configuration["Address"];
             host = new ServiceHost(typeof(CalendarServer));
             host.AddServiceEndpoint(typeof(ICalendar), binding, address);
+            host.AddServiceEndpoint(typeof(ICalendarSync), binding, address);
             host.Open();
         }
 

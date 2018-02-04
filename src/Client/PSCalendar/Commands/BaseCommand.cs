@@ -10,26 +10,35 @@ namespace PSCalendar.Commands
 {
     abstract class BaseCommand
     {
+        public abstract void InvokeCommand();
+    }
+
+    abstract class BaseCommand<T> : BaseCommand
+    {
         //todo: jak zrobic wyswietlanie
         protected PSCalendarCmdlet Cmdlet;
 
-        protected ICalendar Client
+        protected T Client
         {
             get
             {
                 string address = MasterConfiguration.MConfiguration.Configuration["Address"];
-                ChannelFactory<ICalendar> factory = new ChannelFactory<ICalendar>(new NetTcpBinding(), new EndpointAddress(address));
-                ICalendar proxy = factory.CreateChannel();
+                ChannelFactory<T> factory = new ChannelFactory<T>(new NetTcpBinding(), new EndpointAddress(address));
+                T proxy = factory.CreateChannel();
                 return proxy;
-
-
-                //Binding binding = new BasicHttpBinding();
-                //EndpointAddress address = new EndpointAddress("http://localhost:9004/");
-                //CalendarClient client = new CalendarClient(binding, address);
-                //client.Open();
-                //return client;
             }
         }
+
+        //protected ICalendarSync Client
+        //{
+        //    get
+        //    {
+        //        string address = MasterConfiguration.MConfiguration.Configuration["Address"];
+        //        ChannelFactory<ICalendarSync> factory = new ChannelFactory<ICalendarSync>(new NetTcpBinding(), new EndpointAddress(address));
+        //        ICalendarSync proxy = factory.CreateChannel();
+        //        return proxy;
+        //    }
+        //}
 
 
         public BaseCommand(PSCalendarCmdlet cmdlet)
@@ -48,7 +57,7 @@ namespace PSCalendar.Commands
             (Client as ICommunicationObject).Close();
         }
 
-        public void InvokeCommand()
+        public override void InvokeCommand()
         {
             if (this.Condition)
             {

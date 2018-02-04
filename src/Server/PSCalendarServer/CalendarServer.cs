@@ -13,9 +13,9 @@ using PSCalendarBL;
 namespace PSCalendarServer
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    public class CalendarServer : ICalendar
+    public partial class CalendarServer : ICalendar, ICalendarSync
     {
-        private Calendar Calendar = new Calendar();
+        private CalendarCore Calendar = new CalendarCore();
 
         public void GetDate() { }
 
@@ -49,10 +49,5 @@ namespace PSCalendarServer
             return Calendar.Delete(id);
         }
 
-        public void Sync()
-        {
-            SyncGoogleCalendar sync = new SyncGoogleCalendar();
-            sync.Sync("pwujczyk@gmail.com");
-        }
     }
 }

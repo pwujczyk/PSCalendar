@@ -22,20 +22,32 @@ namespace SyncGmailCalendar
         {
             //GetGoogleCalendarEventsAndDisplay(account);
 
-            var psCalendar = new PSCalendarBL.Calendar();
+            var psCalendar = new PSCalendarBL.CalendarCore();
             var start = DateTime.Now.GetFirstMonthDay();
             var end = DateTime.Now.GetLastMonthDay();
             var psEvents = psCalendar.GetEvents(start, end);
+            var xxx = new PSCalendarBL.CalendarSync();
+            var psEventsForGoogle = xxx.GetSyncEvents(start, end);
             var googleEvents = GetGoogleCalendarEvents(account, start, end);
             GetGoogleCalendarEventsAndDisplay(account, start, end);
 
-            foreach (var item in psEvents)
+            foreach (var item in psEventsForGoogle)
             {
-
+                if (item.GoogleCalendarId == null)
+                {
+                    var googleCalendarId = AddEvent(account, item);
+                    UpdateEvent(account,item,googleCalendarId);
+                }
             }
 
-            AddEvent(account);
+            //   AddEvent(account);
             GetGoogleCalendarEventsAndDisplay(account, start, end);
+        }
+
+        private void UpdateEvent(string acccount,PSCalendarContract.Dto.GoogleEvent item, string googleCalendarId)
+        {
+            var xxx = new PSCalendarBL.CalendarSync();
+            xxx.UpdateEventWithGoogleId(acccount, item, googleCalendarId);
         }
 
         private void GetGoogleCalendarEventsAndDisplay(string account, DateTime start, DateTime end)
@@ -44,7 +56,7 @@ namespace SyncGmailCalendar
             DisplayEvents(events);
         }
 
-        private void AddEvent(string account)
+        private string AddEvent(string account, PSCalendarContract.Dto.Event @event)
         {
             var credential = Authenticate(account);
 
@@ -54,16 +66,30 @@ namespace SyncGmailCalendar
                 //ApplicationName = ApplicationName,
             });
 
-            Event e = new Event();
+            Event e = BuildEvent(@event);
 
-            e.Start = new EventDateTime() { DateTime = DateTime.Now };
-            e.End = new EventDateTime() { DateTime = DateTime.Now.AddHours(1) };
-            e.Description = "description";
-            e.Summary = "summary";
 
-            var request = service.Events.Insert(e, "Accenture");
+            var request = service.Events.Insert(e, "primary");
             var r = request.Execute();
+            return r.ICalUID;
 
+        }
+
+        private Event BuildEvent(PSCalendarContract.Dto.Event @event)
+        {
+            Event result = new Event();
+            if (@event.Date.Date == @event.Date)
+            {//whole day event
+                result.Start = new EventDateTime() { Date = @event.Date.ToString("yyyy-MM-dd") };
+                result.End = new EventDateTime() { Date = @event.Date.ToString("yyyy-MM-dd") };
+            }
+            else
+            {
+                result.Start = new EventDateTime() { DateTime = @event.Date };
+                result.End = new EventDateTime() { DateTime = @event.Date.AddHours(1) };
+            }
+            result.Summary = @event.Name;
+            return result;
         }
 
         private static void DisplayEvents(Events events)

@@ -20,6 +20,8 @@ namespace PSCalendarBL
                 cfg.CreateMap<PSCalendarDB.Event, dto.Event>()
                 .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeResolver>())
                 .ForMember(dst => dst.Color, opt => opt.ResolveUsing<ColorResolver>());
+
+                cfg.CreateMap<PSCalendarDB.GoogleCalendarSyncView, dto.GoogleEvent>();
             });
         }
     }

@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomapperConfiguration.cs" />
-    <Compile Include="Calendar.cs" />
+    <Compile Include="CalendarCore.cs" />
+    <Compile Include="CalendarBase.cs" />
+    <Compile Include="CalendarSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -48,12 +48,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Add.cs" />
+    <Compile Include="Commands\Core\Add.cs" />
+    <Compile Include="Commands\Sync\AddSyncAccount.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
-    <Compile Include="Commands\Change.cs" />
-    <Compile Include="Commands\Delete.cs" />
-    <Compile Include="Commands\Display.cs" />
-    <Compile Include="Commands\Sync.cs" />
+    <Compile Include="Commands\Core\Change.cs" />
+    <Compile Include="Commands\Core\Delete.cs" />
+    <Compile Include="Commands\Core\Display.cs" />
+    <Compile Include="Commands\Sync\Sync.cs" />
     <Compile Include="ConditionTable.cs" />
     <Compile Include="PSCalendar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

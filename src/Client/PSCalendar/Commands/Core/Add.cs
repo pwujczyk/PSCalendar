@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PSCalendarTools;
+using PSCalendarContract;
 
 namespace PSCalendar.Commands
 {
-    class Add : BaseCommand
+    class Add : BaseCommand<ICalendar>
     {
         public Add(PSCalendarCmdlet cmdl) : base(cmdl) { }
 
