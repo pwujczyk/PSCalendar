@@ -36,7 +36,10 @@ namespace PSCalendar
         public int? Change { get; set; }
 
         [Parameter]
-        public SwitchParameter Sync { get; set; }
+        public SwitchParameter SyncCurrentMonth { get; set; }
+
+        [Parameter]
+        public int? SyncMonth { get; set; }
 
         [Parameter]
         public string AddSyncAccount { get; set; }

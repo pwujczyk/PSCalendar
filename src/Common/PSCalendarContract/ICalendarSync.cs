@@ -11,7 +11,7 @@ namespace PSCalendarContract
     public interface ICalendarSync
     {
         [OperationContract]
-        void Sync();
+        void Sync(DateTime start, DateTime end);
 
         [OperationContract]
         void AddSyncAccount(string email);

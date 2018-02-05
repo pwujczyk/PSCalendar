@@ -80,7 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomapperConfiguration.cs" />
-    <Compile Include="SyncGoogleCalendar.cs" />
+    <Compile Include="CalendarSyncGoogle.cs" />
+    <Compile Include="GoogleCalendarAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,14 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace PSCalendarServer
 {
     public partial class CalendarServer
     {
-        public void Sync()
+        public void Sync(DateTime start, DateTime end)
         {
-            SyncGoogleCalendar sync = new SyncGoogleCalendar();
-            sync.Sync("pwujczyk@gmail.com");
+            CalendarSyncGoogle sync = new CalendarSyncGoogle();
+            //var start = DateTime.Now;//.GetFirstMonthDay();
+            //var end = DateTime.Now;//.GetLastMonthDay();
+            sync.Sync("pwujczyk@gmail.com",start,end);
         }
 
         public void AddSyncAccount(string email)
