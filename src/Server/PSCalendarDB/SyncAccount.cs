@@ -14,9 +14,16 @@ namespace PSCalendarDB
     
     public partial class SyncAccount
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SyncAccount()
+        {
+            this.SyncAccountEvent = new HashSet<SyncAccountEvent>();
+        }
+    
         public int SyncAccountId { get; set; }
         public string Email { get; set; }
     
-        public virtual SyncAccountEvent SyncAccountEvent { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SyncAccountEvent> SyncAccountEvent { get; set; }
     }
 }

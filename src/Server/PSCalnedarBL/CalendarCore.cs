@@ -7,16 +7,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using dto = PSCalendarContract.Dto;
 
 namespace PSCalendarBL
 {
     public class CalendarCore : CalendarBase
     {
-        public void AddEvent(dto.Event @event)
+        public void AddEvent(Event @event)
         {
-
-            PSCalendarDB.Event insert = Mapper.Map<dto.Event, PSCalendarDB.Event>(@event);
+            PSCalendarDB.Event insert = Mapper.Map<Event, PSCalendarDB.Event>(@event);
             insert.EventId = GetLastId();
             insert.EventGuid = Guid.NewGuid();
             Entities.Event.Add(insert);
@@ -37,9 +35,9 @@ namespace PSCalendarBL
             }
         }
 
-        public void ChangeEvent(dto.Event @event)
+        public void ChangeEvent(Event @event)
         {
-            PSCalendarDB.Event update = Mapper.Map<dto.Event, PSCalendarDB.Event>(@event);
+            PSCalendarDB.Event update = Mapper.Map<Event, PSCalendarDB.Event>(@event);
             var eventUpdate = Entities.Event.SingleOrDefault(x => x.EventId == update.EventId);
             if (update.Date != DateTime.MinValue)
             {
@@ -57,24 +55,23 @@ namespace PSCalendarBL
             Entities.SaveChanges();
         }
 
-        public void AddPeriodEveent(dto.PeriodicEvent periodEvent)
+        public void AddPeriodEveent(PeriodicEvent periodEvent)
         {
 
         }
 
-        public List<dto.Event> GetEvents(DateTime start, DateTime end)
+        public List<Event> GetEvents(DateTime start, DateTime end)
         {
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
                                                  where start <= i.Date && i.Date <= end
                                                  select i).ToList();
-            List<dto.Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<dto.Event>>(resultDb);
+            List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
             return result;
         }
 
-
-        public List<dto.PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)
+        public List<PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)
         {
-            return new List<dto.PeriodicEvent>();
+            return new List<PeriodicEvent>();
         }
 
         public bool Delete(int id)

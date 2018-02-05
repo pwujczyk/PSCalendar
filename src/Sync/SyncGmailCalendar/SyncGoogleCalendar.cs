@@ -11,12 +11,19 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PSCalendarTools;
+using AutoMapper;
 
 namespace SyncGmailCalendar
 {
     public class SyncGoogleCalendar
     {
         static string[] Scopes = { CalendarService.Scope.Calendar };
+         const string CalendarId = "primary";
+
+        static SyncGoogleCalendar()
+        {
+            AutomapperConfiguration.Configure();
+        }
 
         public void Sync(string account)
         {
@@ -33,21 +40,42 @@ namespace SyncGmailCalendar
 
             foreach (var item in psEventsForGoogle)
             {
-                if (item.GoogleCalendarId == null)
+                if (item.GoogleCalendarEventId == null)
                 {
-                    var googleCalendarId = AddEvent(account, item);
-                    UpdateEvent(account,item,googleCalendarId);
+                    var googleCalendarevent = AddEvent(account, item);
+                    UpdateSyncAccountEvent(account, item, googleCalendarevent.Id);
+                    xxx.UpdateLogItem(item.EventGuid);
                 }
+                else
+                {
+                    var googleCalendarEvent = GetEvent(account, item.GoogleCalendarEventId);
+                    var lastSyncAccountLogItemModyficationDate = xxx.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
+                    if (googleCalendarEvent.Updated > lastSyncAccountLogItemModyficationDate)
+                    {
+                        PSCalendarContract.Dto.Event @event = new PSCalendarContract.Dto.Event();
+                        var mapper = AutomapperConfiguration.dtoConfig.CreateMapper();
+                        @event = mapper.Map<Google.Apis.Calendar.v3.Data.Event, PSCalendarContract.Dto.Event>(googleCalendarEvent);
+                        psCalendar.ChangeEvent(@event);
+                        xxx.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                    }
+
+                    if (googleCalendarEvent.Updated < lastSyncAccountLogItemModyficationDate)
+                    {
+                        UpdateEvent(account, item, googleCalendarEvent.Id);
+                        xxx.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                    }
+
+                } 
             }
 
             //   AddEvent(account);
             GetGoogleCalendarEventsAndDisplay(account, start, end);
         }
 
-        private void UpdateEvent(string acccount,PSCalendarContract.Dto.GoogleEvent item, string googleCalendarId)
+        private void UpdateSyncAccountEvent(string acccount, PSCalendarContract.Dto.GoogleEvent item, string googleCalendarEventId)
         {
             var xxx = new PSCalendarBL.CalendarSync();
-            xxx.UpdateEventWithGoogleId(acccount, item, googleCalendarId);
+            xxx.UpdateSyncAccountEvent(acccount, item, googleCalendarEventId);
         }
 
         private void GetGoogleCalendarEventsAndDisplay(string account, DateTime start, DateTime end)
@@ -56,7 +84,27 @@ namespace SyncGmailCalendar
             DisplayEvents(events);
         }
 
-        private string AddEvent(string account, PSCalendarContract.Dto.Event @event)
+        private Event AddEvent(string account, PSCalendarContract.Dto.Event @event)
+        {
+            var credential = Authenticate(account);
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                //ApplicationName = ApplicationName,
+            });
+
+            Event e = BuildEvent(@event);
+
+            
+            var request = service.Events.Insert(e, CalendarId);
+
+            Google.Apis.Calendar.v3.Data.Event r = request.Execute();
+            return r;
+
+        }
+
+        private void UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId)
         {
             var credential = Authenticate(account);
 
@@ -69,11 +117,28 @@ namespace SyncGmailCalendar
             Event e = BuildEvent(@event);
 
 
-            var request = service.Events.Insert(e, "primary");
-            var r = request.Execute();
-            return r.ICalUID;
+            var request = service.Events.Update(e, CalendarId,eventId);
 
+            Google.Apis.Calendar.v3.Data.Event r = request.Execute();
+            //return r;
         }
+
+        private Event GetEvent(string account, string googleEventId)
+        {
+            var credential = Authenticate(account);
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                //ApplicationName = ApplicationName,
+            });
+
+
+            var request = service.Events.Get(CalendarId, googleEventId);
+            Event r = request.Execute();
+            return r;
+        }
+
 
         private Event BuildEvent(PSCalendarContract.Dto.Event @event)
         {
@@ -91,6 +156,7 @@ namespace SyncGmailCalendar
             result.Summary = @event.Name;
             return result;
         }
+
 
         private static void DisplayEvents(Events events)
         {

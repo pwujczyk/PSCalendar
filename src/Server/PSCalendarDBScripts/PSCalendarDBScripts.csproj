@@ -62,13 +62,16 @@
     <EmbeddedResource Include="Scripts\001.CreateDB.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\003.SyncAccounts.sql" />
+    <EmbeddedResource Include="Scripts\003.SyncAccountsEvent.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\002.SyncAccountsEvents.sql" />
+    <EmbeddedResource Include="Scripts\002.SyncAccounts.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\004.GmailCalendarSync.sql" />
+    <EmbeddedResource Include="Scripts\004.GmailCalendarSyncView.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\005.SyncUpdateLog.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

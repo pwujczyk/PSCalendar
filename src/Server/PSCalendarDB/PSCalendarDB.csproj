@@ -81,6 +81,9 @@
     <Compile Include="SyncAccountEvent.cs">
       <DependentUpon>Calendar.tt</DependentUpon>
     </Compile>
+    <Compile Include="SyncAccountLog.cs">
+      <DependentUpon>Calendar.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Calendar.edmx">

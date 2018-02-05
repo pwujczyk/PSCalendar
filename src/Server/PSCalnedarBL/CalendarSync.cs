@@ -40,15 +40,41 @@ namespace PSCalendarBL
             return result;
         }
 
-        public void UpdateEventWithGoogleId(string account,PSCalendarContract.Dto.Event @event, string googleId)
+        public void UpdateSyncAccountEvent(string account,PSCalendarContract.Dto.Event @event, string googleCalendarEventId)
         {
             SyncAccountEvent syncAccountEvent = new SyncAccountEvent();
             syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == @event.EventGuid);
-            syncAccountEvent.GoogleCalendarId = googleId;
+            syncAccountEvent.GoogleCalendarEventId = googleCalendarEventId;
             syncAccountEvent.SyncAccount = this.Entities.SyncAccount.Single(x => x.Email == account);
 
             Entities.SyncAccountEvent.Add(syncAccountEvent);
             Entities.SaveChanges();
+        }
+
+        public void UpdateLogItem(Guid eventGuid)
+        {
+            UpdateLogItem(eventGuid, DateTime.Now);
+        }
+
+        public void UpdateLogItem(Guid eventGuid,DateTime datetime)
+        {
+            var logItem=this.Entities.SyncAccountLog.FirstOrDefault(x => x.EventGuid == eventGuid);
+            if (logItem==null)
+            {
+                logItem = new SyncAccountLog();
+                logItem.EventGuid = eventGuid;
+                this.Entities.SyncAccountLog.Add(logItem);
+            }
+            //todo: change to idateprovider
+            logItem.LastModifcationDate = datetime;
+
+            Entities.SaveChanges();
+        }
+
+        public DateTime GetLastSyncAccountLogItemModyficationDate(Guid eventGuid)
+        {
+            var syncAccountLogItem=this.Entities.SyncAccountLog.Single(x => x.EventGuid == eventGuid);
+            return syncAccountLogItem.LastModifcationDate;
         }
     }
 }

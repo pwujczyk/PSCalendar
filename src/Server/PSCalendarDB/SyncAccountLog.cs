@@ -12,14 +12,12 @@ namespace PSCalendarDB
     using System;
     using System.Collections.Generic;
     
-    public partial class SyncAccountEvent
+    public partial class SyncAccountLog
     {
-        public int SyncAccountEventId { get; set; }
-        public System.Guid EventGuid { get; set; }
-        public int SyncAccountId { get; set; }
-        public string GoogleCalendarEventId { get; set; }
+        public int SyncAccountLogId { get; set; }
+        public Nullable<System.Guid> EventGuid { get; set; }
+        public System.DateTime LastModifcationDate { get; set; }
     
         public virtual Event Event { get; set; }
-        public virtual SyncAccount SyncAccount { get; set; }
     }
 }

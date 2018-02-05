@@ -8,6 +8,6 @@ namespace PSCalendarContract.Dto
 {
     public class GoogleEvent: Event
     {
-        public string GoogleCalendarId { get; set; }
+        public string GoogleCalendarEventId { get; set; }
     }
 }

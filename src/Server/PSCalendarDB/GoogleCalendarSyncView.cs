@@ -19,8 +19,7 @@ namespace PSCalendarDB
         public System.DateTime Date { get; set; }
         public string Type { get; set; }
         public System.Guid EventGuid { get; set; }
-        public Nullable<int> SyncAccountId { get; set; }
-        public string GoogleCalendarId { get; set; }
         public string Email { get; set; }
+        public string GoogleCalendarEventId { get; set; }
     }
 }
