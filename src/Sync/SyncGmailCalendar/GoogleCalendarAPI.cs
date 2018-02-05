@@ -107,8 +107,6 @@ namespace SyncGmailCalendar
 
             // List events.
             Events events = request.Execute();
-
-
             return events;
         }
     }

@@ -14,7 +14,12 @@ namespace PSCalendarBL
     {
         public event EventHandler<Guid> PSCalendarEventChanged;
 
-        public void AddEvent(Event @event)
+        public Guid AddEvent(Event @event)
+        {
+            return AddEvent(@event, DateTime.Now);
+        }
+
+        public Guid AddEvent(Event @event, DateTime updateDate)
         {
             PSCalendarDB.Event insert = Mapper.Map<Event, PSCalendarDB.Event>(@event);
             insert.EventId = GetLastId();
@@ -22,6 +27,14 @@ namespace PSCalendarBL
             Entities.Event.Add(insert);
             Entities.Entry(insert).State = EntityState.Added;
             Entities.SaveChanges();
+            UpdateSyncLogItem(insert.EventGuid, updateDate);
+            return insert.EventGuid;
+        }
+
+        private void UpdateSyncLogItem(Guid guid, DateTime udpateDate)
+        {
+
+            new CalendarSync().UpdateLogItem(guid, udpateDate);
         }
 
         public int GetLastId()
@@ -55,7 +68,7 @@ namespace PSCalendarBL
             }
             Entities.Entry(eventUpdate).State = EntityState.Modified;
             Entities.SaveChanges();
-            OnPSCalendarEventChanged(eventUpdate.EventGuid);
+            UpdateSyncLogItem(eventUpdate.EventGuid, DateTime.Now);
         }
 
         public void AddPeriodEveent(PeriodicEvent periodEvent)
@@ -67,10 +80,11 @@ namespace PSCalendarBL
         {
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
                                                  where start <= i.Date && i.Date <= end
-                                                 select i).ToList();
+                                                 select i).OrderBy(i => i.EventId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
             return result;
         }
+
 
         public List<PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)
         {
@@ -79,7 +93,7 @@ namespace PSCalendarBL
 
         public bool Delete(int id)
         {
-            var c = new Event() { EventsId = id };
+            var c = new Event() { EventId = id };
             Entities.Entry(c).State = EntityState.Deleted;
             Entities.SaveChanges();
             return true;
@@ -87,7 +101,7 @@ namespace PSCalendarBL
 
         private void OnPSCalendarEventChanged(Guid eventArgs)
         {
-            if (PSCalendarEventChanged!=null)
+            if (PSCalendarEventChanged != null)
             {
                 PSCalendarEventChanged.Invoke(this, eventArgs);
             }

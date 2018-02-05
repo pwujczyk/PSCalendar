@@ -19,14 +19,9 @@ namespace PSCalendarServer
 
         public CalendarServer()
         {
-            this.Calendar.PSCalendarEventChanged += Calendar_PSCalendarEventChanged;
         }
 
-        private void Calendar_PSCalendarEventChanged(object sender, Guid e)
-        {
-            var CalendarSync = new CalendarSync();
-            CalendarSync.UpdateLogItem(e);
-        }
+
 
         public void GetDate() { }
 

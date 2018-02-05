@@ -37,6 +37,7 @@ namespace PSCalendarService
             host = new ServiceHost(typeof(CalendarServer));
             host.AddServiceEndpoint(typeof(ICalendar), binding, address);
             host.AddServiceEndpoint(typeof(ICalendarSync), binding, address);
+            host.CloseTimeout = TimeSpan.FromMinutes(20);
             host.Open();
         }
 
