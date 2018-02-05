@@ -12,6 +12,8 @@ namespace PSCalendarBL
 {
     public class CalendarCore : CalendarBase
     {
+        public event EventHandler<Guid> PSCalendarEventChanged;
+
         public void AddEvent(Event @event)
         {
             PSCalendarDB.Event insert = Mapper.Map<Event, PSCalendarDB.Event>(@event);
@@ -53,6 +55,7 @@ namespace PSCalendarBL
             }
             Entities.Entry(eventUpdate).State = EntityState.Modified;
             Entities.SaveChanges();
+            OnPSCalendarEventChanged(eventUpdate.EventGuid);
         }
 
         public void AddPeriodEveent(PeriodicEvent periodEvent)
@@ -76,11 +79,18 @@ namespace PSCalendarBL
 
         public bool Delete(int id)
         {
-
             var c = new Event() { EventsId = id };
             Entities.Entry(c).State = EntityState.Deleted;
             Entities.SaveChanges();
             return true;
+        }
+
+        private void OnPSCalendarEventChanged(Guid eventArgs)
+        {
+            if (PSCalendarEventChanged!=null)
+            {
+                PSCalendarEventChanged.Invoke(this, eventArgs);
+            }
         }
     }
 }
