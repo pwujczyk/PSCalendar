@@ -57,7 +57,7 @@ namespace SyncGmailCalendar
                         var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
                         if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
                         {
-                            UpdateEventInPSTable(googleCalendarEvent);
+                            UpdateEventInPSTable(googleCalendarEvent,account);
                             CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
                         }
 
@@ -114,12 +114,13 @@ namespace SyncGmailCalendar
             SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id);
         }
 
-        private void UpdateEventInPSTable(Event googleEvent)
+        private void UpdateEventInPSTable(Event googleEvent, string account)
         {
             PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
             if (googleEvent.Status == "cancelled")
             {
                 CalendarCoreBL.Delete(@event.EventGuid);
+                CalendarSyncBL.SyncAccountEventMarkAsDeleted(@event.GoogleCalendarEventId, account);
             }
             else
             {
