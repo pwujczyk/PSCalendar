@@ -10,19 +10,19 @@ namespace SyncGmailCalendar
 {
     public class CalendarSyncGoogle
     {
-        GoogleCalendarAPI SyncGoogleCalendar = new GoogleCalendarAPI();
+        GoogleCalendarAPI SyncGoogleCalendarAPI = new GoogleCalendarAPI();
         PSCalendarBL.CalendarCore CalendarCoreBL = new PSCalendarBL.CalendarCore();
         PSCalendarBL.CalendarSync CalendarSyncBL = new PSCalendarBL.CalendarSync();
 
         static CalendarSyncGoogle()
         {
             AutomapperConfiguration.Configure();
-          
+
         }
 
         public CalendarSyncGoogle()
         {
-           
+
         }
 
 
@@ -38,34 +38,52 @@ namespace SyncGmailCalendar
 
             foreach (var item in psEventsWithAdditionalInfo)
             {
-                if (item.GoogleCalendarEventId == null)
+                if (EventNotExistsInGoogleCalendar(item))
                 {
                     AddEventToGoogleCalendar(account, item);
                 }
                 else
                 {
-                    var googleCalendarEvent = SyncGoogleCalendar.GetEvent(account, item.GoogleCalendarEventId);
-                    var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
-                    if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                    if (GoogleCalendarEventShouldBeDeleted(item))
                     {
-                        UpdateEventInPSTable(googleCalendarEvent);
+                        SyncGoogleCalendarAPI.Delete(account, item.GoogleCalendarEventId);
+                        CalendarSyncBL.SyncAccountEventMarkAsDeleted(item.GoogleCalendarEventId, account);
+                        var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId);
                         CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
                     }
-
-                    if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                    else
                     {
-                        UpdateEventInGoogleCalendar(account, item, googleCalendarEvent);
-                        CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-                    }
+                        var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId);
+                        var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
+                        if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                        {
+                            UpdateEventInPSTable(googleCalendarEvent);
+                            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                        }
 
-                    
+                        if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                        {
+                            UpdateEventInGoogleCalendar(account, item, googleCalendarEvent);
+                            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                        }
+                    }
                 }
             }
         }
 
+        private static bool GoogleCalendarEventShouldBeDeleted(PSCalendarContract.Dto.GoogleEvent item)
+        {
+            return item.SyncAccountTobeDeleted && item.SyncAccountDeleted == false;
+        }
+
+        private static bool EventNotExistsInGoogleCalendar(PSCalendarContract.Dto.GoogleEvent item)
+        {
+            return item.GoogleCalendarEventId == null;
+        }
+
         public void SyncGoogleToPowershell(string account, DateTime start, DateTime end)
         {
-            var googleCalendarEvents = SyncGoogleCalendar.GetGoogleCalendarEvents(account, start, end);
+            var googleCalendarEvents = SyncGoogleCalendarAPI.GetGoogleCalendarEvents(account, start, end);
             var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(start, end);
 
             foreach (var googleEvent in googleCalendarEvents.Items)
@@ -77,7 +95,7 @@ namespace SyncGmailCalendar
                 else
                 {
                     PSCalendarContract.Dto.Event @event = ConvertEvent(googleEvent);
-                    Guid eventGuid=CalendarCoreBL.AddEvent(@event);
+                    Guid eventGuid = CalendarCoreBL.AddEvent(@event);
                     UpdateSyncAccountEvent(account, eventGuid, googleEvent.Id);
                     CalendarSyncBL.UpdateLogItem(eventGuid, googleEvent.Updated.Value);
                 }
@@ -93,25 +111,32 @@ namespace SyncGmailCalendar
 
         private void UpdateEventInGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, Event googleCalendarEvent)
         {
-            SyncGoogleCalendar.UpdateEvent(account, item, googleCalendarEvent.Id);
+            SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id);
         }
 
         private void UpdateEventInPSTable(Event googleEvent)
         {
             PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
-            @event.Name = googleEvent.Summary;
-            @event.Date = googleEvent.Start.DateTime.Value;
-            //todo: change to automapper
-            CalendarCoreBL.ChangeEvent(@event);
+            if (googleEvent.Status == "cancelled")
+            {
+                CalendarCoreBL.Delete(@event.EventGuid);
+            }
+            else
+            {
+                @event.Name = googleEvent.Summary;
+                @event.Date = googleEvent.Start.DateTime.Value;
+                //todo: change to automapper
+                CalendarCoreBL.ChangeEvent(@event);
+            }
         }
 
 
 
         private void AddEventToGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item)
         {
-            var googleCalendarEvent = SyncGoogleCalendar.AddEvent(account, item);
+            var googleCalendarEvent = SyncGoogleCalendarAPI.AddEvent(account, item);
             UpdateSyncAccountEvent(account, item.EventGuid, googleCalendarEvent.Id);
-            CalendarSyncBL.UpdateLogItem(item.EventGuid,googleCalendarEvent.Updated.Value);
+            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
         }
 
         private void UpdateSyncAccountEvent(string acccount, Guid eventGuid, string googleCalendarEventId)

@@ -73,5 +73,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\005.SyncUpdateLog.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\006.DeleteEventProc.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\007.SyncAccountEventMarkAsDeleted.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\008.EventNiceIdUnique.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

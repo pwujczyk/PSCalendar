@@ -1,0 +1,1 @@
+﻿	CREATE UNIQUE INDEX EventNiceIdUnique ON [gc].[Event]([NiceId]) WHERE [NiceId] IS NOT NULL

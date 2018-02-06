@@ -20,7 +20,7 @@ namespace SyncGmailCalendar
                 .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Summary))
                 .ForMember(dst => dst.Date, opt => opt.MapFrom(src => src.Start.DateTime))
                 .ForMember(dst => dst.EventGuid, opt => opt.Ignore())
-                .ForMember(dst => dst.EventId, opt => opt.Ignore())
+                .ForMember(dst => dst.NiceId, opt => opt.Ignore())
                 .ForMember(dst => dst.Type, opt => opt.Ignore());
             });
         }

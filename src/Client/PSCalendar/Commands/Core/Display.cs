@@ -136,7 +136,7 @@ namespace PSCalendar.Commands
             {
                 Event e = eventsStack.Pop();
                 Console.ForegroundColor = CommonExtensions.ParseEnum<System.ConsoleColor>(e.Color.ToString());
-                Console.Write(string.Format("{0}. {1}    {2}", e.EventId, e.Date, e.Name));
+                Console.Write(string.Format("{0}. {1}    {2}", e.NiceId, e.Date, e.Name));
                 Console.ResetColor();
 
             }

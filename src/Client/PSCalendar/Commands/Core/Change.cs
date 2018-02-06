@@ -32,7 +32,7 @@ namespace PSCalendar.Commands
         private void ChangeItem()
         {
             DateTime dt = this.Cmdlet.Date == null ? DateTime.MinValue : DateTime.Parse(this.Cmdlet.Date);
-            var @event = new Event { EventId = this.Cmdlet.Change.Value, Date = dt, Name = this.Cmdlet.Add, Type = this.Cmdlet.Type };
+            var @event = new Event { NiceId = this.Cmdlet.Change.Value, Date = dt, Name = this.Cmdlet.Add, Type = this.Cmdlet.Type };
             InvokeCall(() => Client.ChangeEvent(@event));
         }
     }

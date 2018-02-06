@@ -28,6 +28,11 @@ namespace PSCalendarBL
             }
         }
 
+        public void SyncAccountEventMarkAsDeleted(string googleCalendarEventId, string email)
+        {
+            this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId, email);
+        }
+
 
         public List<GoogleEvent> GetSyncEvents(DateTime start, DateTime end)
         {

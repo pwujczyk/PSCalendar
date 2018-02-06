@@ -12,6 +12,8 @@ namespace PSCalendarDB
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class CalendarEntities : DbContext
     {
@@ -31,5 +33,27 @@ namespace PSCalendarDB
         public virtual DbSet<GoogleCalendarSyncView> GoogleCalendarSyncView { get; set; }
         public virtual DbSet<SyncAccountLog> SyncAccountLog { get; set; }
         public virtual DbSet<SyncAccountEvent> SyncAccountEvent { get; set; }
+    
+        public virtual int DeleteEventByEventId(Nullable<System.Guid> eventGuid)
+        {
+            var eventGuidParameter = eventGuid.HasValue ?
+                new ObjectParameter("EventGuid", eventGuid) :
+                new ObjectParameter("EventGuid", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteEventByEventId", eventGuidParameter);
+        }
+    
+        public virtual int SyncAccountEventMarkAsDeleted(string googleCalendarEventId, string email)
+        {
+            var googleCalendarEventIdParameter = googleCalendarEventId != null ?
+                new ObjectParameter("GoogleCalendarEventId", googleCalendarEventId) :
+                new ObjectParameter("GoogleCalendarEventId", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SyncAccountEventMarkAsDeleted", googleCalendarEventIdParameter, emailParameter);
+        }
     }
 }

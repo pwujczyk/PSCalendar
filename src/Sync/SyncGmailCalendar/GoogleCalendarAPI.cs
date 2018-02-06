@@ -57,6 +57,13 @@ namespace SyncGmailCalendar
             return r;
         }
 
+        public string Delete(string account, string googleEventId)
+        {
+            var request = GetService(account).Events.Delete(CalendarId, googleEventId);
+            string r = request.Execute();
+            return r;
+        }
+
         private Event BuildEvent(PSCalendarContract.Dto.Event @event)
         {
             Event result = new Event();

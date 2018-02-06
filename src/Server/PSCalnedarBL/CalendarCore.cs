@@ -22,7 +22,7 @@ namespace PSCalendarBL
         public Guid AddEvent(Event @event, DateTime updateDate)
         {
             PSCalendarDB.Event insert = Mapper.Map<Event, PSCalendarDB.Event>(@event);
-            insert.EventId = GetLastId();
+            insert.NiceId = GetLastId();
             insert.EventGuid = Guid.NewGuid();
             Entities.Event.Add(insert);
             Entities.Entry(insert).State = EntityState.Added;
@@ -39,21 +39,21 @@ namespace PSCalendarBL
 
         public int GetLastId()
         {
-            var @event = Entities.Event.OrderByDescending(x => x.EventId).FirstOrDefault();
+            var @event = Entities.Event.Where(x => x.Deleted == false).OrderByDescending(x => x.NiceId).FirstOrDefault();
             if (@event == null)
             {
                 return 0;
             }
             else
             {
-                return @event.EventId + 1;
+                return @event.NiceId.Value + 1;
             }
         }
 
         public void ChangeEvent(Event @event)
         {
             PSCalendarDB.Event update = Mapper.Map<Event, PSCalendarDB.Event>(@event);
-            var eventUpdate = Entities.Event.SingleOrDefault(x => x.EventId == update.EventId);
+            var eventUpdate = Entities.Event.SingleOrDefault(x => x.NiceId == update.NiceId);
             if (update.Date != DateTime.MinValue)
             {
                 eventUpdate.Date = update.Date;
@@ -79,8 +79,8 @@ namespace PSCalendarBL
         public List<Event> GetEvents(DateTime start, DateTime end)
         {
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
-                                                 where start <= i.Date && i.Date <= end
-                                                 select i).OrderBy(i => i.EventId).ToList();
+                                                 where start <= i.Date && i.Date <= end && i.Deleted == false
+                                                 select i).OrderBy(i => i.NiceId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
             return result;
         }
@@ -93,11 +93,17 @@ namespace PSCalendarBL
 
         public bool Delete(int id)
         {
-            var c = new Event() { EventId = id };
-            Entities.Entry(c).State = EntityState.Deleted;
-            Entities.SaveChanges();
+            var @event = Entities.Event.Where(x => x.Deleted == false).Single(x => x.NiceId == id);
+            Entities.DeleteEventByEventId(@event.EventGuid);
             return true;
         }
+
+        public bool Delete(Guid guid)
+        {
+            Entities.DeleteEventByEventId(guid);
+            return true;
+        }
+
 
         private void OnPSCalendarEventChanged(Guid eventArgs)
         {
