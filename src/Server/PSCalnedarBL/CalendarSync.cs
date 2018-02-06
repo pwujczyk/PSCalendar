@@ -37,15 +37,15 @@ namespace PSCalendarBL
         public List<GoogleEvent> GetSyncEvents(DateTime start, DateTime end)
         {
             List<PSCalendarDB.GoogleCalendarSyncView> googleList = (from i in Entities.GoogleCalendarSyncView.AsNoTracking()
-                                                                    where start <= i.Date && i.Date <= end
-                                                                select i).ToList();
+                                                                    where start <= i.StartDate && i.StartDate <= end
+                                                                    select i).ToList();
 
 
             List<GoogleEvent> result = Mapper.Map<List<PSCalendarDB.GoogleCalendarSyncView>, List<GoogleEvent>>(googleList);
             return result;
         }
 
-        public void UpdateSyncAccountEvent(string account,Guid eventGuid, string googleCalendarEventId)
+        public void UpdateSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId)
         {
             SyncAccountEvent syncAccountEvent = new SyncAccountEvent();
             syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
@@ -56,11 +56,11 @@ namespace PSCalendarBL
             Entities.SaveChanges();
         }
 
-        
-        public void UpdateLogItem(Guid eventGuid,DateTime datetime)
+
+        public void UpdateLogItem(Guid eventGuid, DateTime datetime)
         {
-            var logItem=this.Entities.SyncAccountLog.FirstOrDefault(x => x.EventGuid == eventGuid);
-            if (logItem==null)
+            var logItem = this.Entities.SyncAccountLog.FirstOrDefault(x => x.EventGuid == eventGuid);
+            if (logItem == null)
             {
                 logItem = new SyncAccountLog();
                 logItem.EventGuid = eventGuid;
@@ -74,7 +74,7 @@ namespace PSCalendarBL
 
         public DateTime GetLastSyncAccountLogItemModyficationDate(Guid eventGuid)
         {
-            var syncAccountLogItem=this.Entities.SyncAccountLog.Single(x => x.EventGuid == eventGuid);
+            var syncAccountLogItem = this.Entities.SyncAccountLog.Single(x => x.EventGuid == eventGuid);
             return syncAccountLogItem.LastModifcationDate;
         }
 

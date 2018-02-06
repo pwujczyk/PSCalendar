@@ -14,13 +14,14 @@ namespace PSCalendarDB
     
     public partial class GoogleCalendarSyncView
     {
+        public Nullable<int> NiceId { get; set; }
         public string Name { get; set; }
-        public System.DateTime Date { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
         public string Type { get; set; }
         public System.Guid EventGuid { get; set; }
-        public string Email { get; set; }
         public string GoogleCalendarEventId { get; set; }
-        public Nullable<int> NiceId { get; set; }
+        public string Email { get; set; }
         public bool EventDeleted { get; set; }
         public Nullable<bool> SyncAccountTobeDeleted { get; set; }
         public Nullable<bool> SyncAccountDeleted { get; set; }

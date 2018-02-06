@@ -17,18 +17,20 @@ namespace PSCalendar.Commands
         {
             get
             {
-                return this.Cmdlet.Add.NotEmpty() && this.Cmdlet.Date.NotEmpty() && this.Cmdlet.Type != EventType.None;
+                return this.Cmdlet.Add.NotEmpty() && this.Cmdlet.StartDate.NotEmpty() && this.Cmdlet.Type != EventType.None;
             }
         }
 
         protected override void Invoke()
         {
-            AddNewEvent(this.Cmdlet.Add, DateTime.Parse(this.Cmdlet.Date), this.Cmdlet.Type);
+            DateTime startDate = DateTime.Parse(this.Cmdlet.StartDate);
+            DateTime endDate = EndDateTools.GetEndDate(startDate, this.Cmdlet.EndDate, this.Cmdlet.Duration);
+            AddNewEvent(this.Cmdlet.Add, startDate, endDate, this.Cmdlet.Type);
         }
 
-        private void AddNewEvent(string name, DateTime date, EventType type)
+        private void AddNewEvent(string name, DateTime startDate, DateTime endDate, EventType type)
         {
-            InvokeCall(() => Client.AddEvent(new Event { Date = date, Name = name, Type = type }));
+            InvokeCall(() => Client.AddEvent(new Event { StartDate = startDate, EndDate = endDate, Name = name, Type = type }));
         }
     }
 }

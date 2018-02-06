@@ -21,7 +21,13 @@ namespace PSCalendar
         public string Add { get; set; }
 
         [Parameter]
-        public string Date { get; set; }
+        public string StartDate { get; set; }
+
+        [Parameter]
+        public string EndDate { get; set; }
+
+        [Parameter]
+        public string Duration { get; set; }
 
         [Parameter]
         public EventType Type { get; set; }

@@ -23,10 +23,11 @@ namespace PSCalendarDB
     
         public System.Guid EventGuid { get; set; }
         public string Name { get; set; }
-        public System.DateTime Date { get; set; }
         public string Type { get; set; }
         public bool Deleted { get; set; }
         public Nullable<int> NiceId { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SyncAccountLog> SyncAccountLog { get; set; }

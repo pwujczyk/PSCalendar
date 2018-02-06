@@ -125,7 +125,7 @@ namespace SyncGmailCalendar
             else
             {
                 @event.Name = googleEvent.Summary;
-                @event.Date = googleEvent.Start.DateTime.Value;
+                @event.StartDate = googleEvent.Start.DateTime.Value;
                 //todo: change to automapper
                 CalendarCoreBL.ChangeEvent(@event);
             }

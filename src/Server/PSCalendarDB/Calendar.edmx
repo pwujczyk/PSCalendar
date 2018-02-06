@@ -20,7 +20,8 @@
           <Property Name="EventGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="NiceId" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
           <Property Name="Deleted" Type="bit" Nullable="false" />
         </EntityType>
@@ -55,13 +56,15 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
         <EntityType Name="GoogleCalendarSyncView">
           <Key>
             <PropertyRef Name="Name" />
-            <PropertyRef Name="Date" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
             <PropertyRef Name="EventGuid" />
             <PropertyRef Name="EventDeleted" />
           </Key>
           <Property Name="NiceId" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="Type" Type="varchar" MaxLength="10" />
           <Property Name="EventGuid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="GoogleCalendarEventId" Type="varchar" MaxLength="40" />
@@ -123,7 +126,8 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
             <DefiningQuery>SELECT 
     [GoogleCalendarSyncView].[NiceId] AS [NiceId], 
     [GoogleCalendarSyncView].[Name] AS [Name], 
-    [GoogleCalendarSyncView].[Date] AS [Date], 
+    [GoogleCalendarSyncView].[StartDate] AS [StartDate], 
+    [GoogleCalendarSyncView].[EndDate] AS [EndDate], 
     [GoogleCalendarSyncView].[Type] AS [Type], 
     [GoogleCalendarSyncView].[EventGuid] AS [EventGuid], 
     [GoogleCalendarSyncView].[GoogleCalendarEventId] AS [GoogleCalendarEventId], 
@@ -162,7 +166,6 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           <EntitySet Name="dbUp" EntityType="Self.dbUp" />
           <EntitySet Name="Event" EntityType="CalendarModel.Event" />
           <EntitySet Name="SyncAccount" EntityType="CalendarModel.SyncAccount" />
-          <EntitySet Name="GoogleCalendarSyncView" EntityType="CalendarModel.GoogleCalendarSyncView" />
           <EntitySet Name="SyncAccountLog" EntityType="CalendarModel.SyncAccountLog" />
           <AssociationSet Name="FK_SyncAccountLog_Event" Association="CalendarModel.FK_SyncAccountLog_Event">
             <End Role="Event" EntitySet="Event" />
@@ -184,6 +187,7 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
             <Parameter Name="GoogleCalendarEventId" Mode="In" Type="String" />
             <Parameter Name="Email" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="GoogleCalendarSyncView" EntityType="CalendarModel.GoogleCalendarSyncView" />
           </EntityContainer>
         <EntityType Name="Event">
           <Key>
@@ -191,12 +195,13 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           </Key>
           <Property Name="EventGuid" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SyncAccountLog" Relationship="CalendarModel.FK_SyncAccountLog_Event" FromRole="Event" ToRole="SyncAccountLog" />
           <NavigationProperty Name="SyncAccountEvent" Relationship="CalendarModel.FK_SyncAccountEvent_Event" FromRole="Event" ToRole="SyncAccountEvent" />
           <Property Name="Deleted" Type="Boolean" Nullable="false" />
           <Property Name="NiceId" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="SyncAccount">
           <Key>
@@ -205,24 +210,6 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           <Property Name="SyncAccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SyncAccountEvent" Relationship="CalendarModel.FK_SyncAccountEvent_SyncAccount" FromRole="SyncAccount" ToRole="SyncAccountEvent" />
-        </EntityType>
-        <EntityType Name="GoogleCalendarSyncView">
-          <Key>
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="EventGuid" />
-            <PropertyRef Name="EventDeleted" />
-          </Key>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="EventGuid" Type="Guid" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="GoogleCalendarEventId" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-          <Property Name="NiceId" Type="Int32" />
-          <Property Name="EventDeleted" Type="Boolean" Nullable="false" />
-          <Property Name="SyncAccountTobeDeleted" Type="Boolean" />
-          <Property Name="SyncAccountDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="SyncAccountLog">
           <Key>
@@ -282,6 +269,26 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="GoogleCalendarSyncView">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="StartDate" />
+            <PropertyRef Name="EndDate" />
+            <PropertyRef Name="EventGuid" />
+            <PropertyRef Name="EventDeleted" />
+          </Key>
+          <Property Name="NiceId" Type="Int32" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EventGuid" Type="Guid" Nullable="false" />
+          <Property Name="GoogleCalendarEventId" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="EventDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="SyncAccountTobeDeleted" Type="Boolean" />
+          <Property Name="SyncAccountDeleted" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -300,10 +307,11 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           <EntitySetMapping Name="Event">
             <EntityTypeMapping TypeName="CalendarModel.Event">
               <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="NiceId" ColumnName="NiceId" />
                 <ScalarProperty Name="Deleted" ColumnName="Deleted" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
               </MappingFragment>
@@ -314,22 +322,6 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
               <MappingFragment StoreEntitySet="SyncAccount">
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="SyncAccountId" ColumnName="SyncAccountId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="GoogleCalendarSyncView">
-            <EntityTypeMapping TypeName="CalendarModel.GoogleCalendarSyncView">
-              <MappingFragment StoreEntitySet="GoogleCalendarSyncView">
-                <ScalarProperty Name="SyncAccountDeleted" ColumnName="SyncAccountDeleted" />
-                <ScalarProperty Name="SyncAccountTobeDeleted" ColumnName="SyncAccountTobeDeleted" />
-                <ScalarProperty Name="EventDeleted" ColumnName="EventDeleted" />
-                <ScalarProperty Name="NiceId" ColumnName="NiceId" />
-                <ScalarProperty Name="GoogleCalendarEventId" ColumnName="GoogleCalendarEventId" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -356,6 +348,23 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="DeleteEventByEventId" FunctionName="CalendarModel.Store.DeleteEventByEventId" />
           <FunctionImportMapping FunctionImportName="SyncAccountEventMarkAsDeleted" FunctionName="CalendarModel.Store.SyncAccountEventMarkAsDeleted" />
+          <EntitySetMapping Name="GoogleCalendarSyncView">
+            <EntityTypeMapping TypeName="CalendarModel.GoogleCalendarSyncView">
+              <MappingFragment StoreEntitySet="GoogleCalendarSyncView">
+                <ScalarProperty Name="SyncAccountDeleted" ColumnName="SyncAccountDeleted" />
+                <ScalarProperty Name="SyncAccountTobeDeleted" ColumnName="SyncAccountTobeDeleted" />
+                <ScalarProperty Name="EventDeleted" ColumnName="EventDeleted" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="GoogleCalendarEventId" ColumnName="GoogleCalendarEventId" />
+                <ScalarProperty Name="EventGuid" ColumnName="EventGuid" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NiceId" ColumnName="NiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

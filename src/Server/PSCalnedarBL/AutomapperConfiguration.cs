@@ -27,7 +27,7 @@ namespace PSCalendarBL
     }
 
     public class ColorResolver : AutoMapper.IValueResolver<PSCalendarDB.Event, dto.Event, ConsoleColor>
-    {
+    {//todo: maybe move color resolver to gui
         public ConsoleColor Resolve(PSCalendarDB.Event source, dto.Event destination, ConsoleColor destMember, ResolutionContext context)
         {
             PeriodTypeResolver resolver = new PeriodTypeResolver();

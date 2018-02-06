@@ -8,12 +8,12 @@
         <EntityTypeShape EntityType="CalendarModel.dbUp" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CalendarModel.Event" Width="1.5" PointX="3.75" PointY="3.875" />
         <EntityTypeShape EntityType="CalendarModel.SyncAccount" Width="1.5" PointX="3.75" PointY="1.125" />
-        <EntityTypeShape EntityType="CalendarModel.GoogleCalendarSyncView" Width="2.625" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="CalendarModel.SyncAccountLog" Width="2.625" PointX="8.625" PointY="5.625" />
         <AssociationConnector Association="CalendarModel.FK_SyncAccountLog_Event" />
         <EntityTypeShape EntityType="CalendarModel.SyncAccountEvent" Width="3.75" PointX="6" PointY="2.625" />
         <AssociationConnector Association="CalendarModel.FK_SyncAccountEvent_Event" />
         <AssociationConnector Association="CalendarModel.FK_SyncAccountEvent_SyncAccount" />
+        <EntityTypeShape EntityType="CalendarModel.GoogleCalendarSyncView" Width="2.875" PointX="0.75" PointY="3.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

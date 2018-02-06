@@ -17,7 +17,7 @@ namespace PSCalendar.Commands
         {
             get
             {
-                return this.Cmdlet.Change.HasValue && (this.Cmdlet.Add.NotEmpty() || this.Cmdlet.Date.NotEmpty() || this.Cmdlet.Type != EventType.None);
+                return this.Cmdlet.Change.HasValue && (this.Cmdlet.Add.NotEmpty() || this.Cmdlet.StartDate.NotEmpty() || this.Cmdlet.Type != EventType.None);
             }
         }
 
@@ -31,8 +31,18 @@ namespace PSCalendar.Commands
 
         private void ChangeItem()
         {
-            DateTime dt = this.Cmdlet.Date == null ? DateTime.MinValue : DateTime.Parse(this.Cmdlet.Date);
-            var @event = new Event { NiceId = this.Cmdlet.Change.Value, Date = dt, Name = this.Cmdlet.Add, Type = this.Cmdlet.Type };
+            DateTime startDate = this.Cmdlet.StartDate == null ? DateTime.MinValue : DateTime.Parse(this.Cmdlet.StartDate);
+
+            DateTime endDate = DateTime.MinValue;
+            string endDateStr = this.Cmdlet.EndDate;
+            string durationStr = this.Cmdlet.Duration;
+            if (endDateStr.NotEmpty() || durationStr.NotEmpty())
+            {
+                endDate = EndDateTools.GetEndDate(startDate, endDateStr, durationStr);
+            }
+
+
+            var @event = new Event { NiceId = this.Cmdlet.Change.Value, StartDate = startDate, EndDate = endDate, Name = this.Cmdlet.Add, Type = this.Cmdlet.Type };
             InvokeCall(() => Client.ChangeEvent(@event));
         }
     }

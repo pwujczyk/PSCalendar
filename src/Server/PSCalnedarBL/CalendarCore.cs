@@ -54,9 +54,13 @@ namespace PSCalendarBL
         {
             PSCalendarDB.Event update = Mapper.Map<Event, PSCalendarDB.Event>(@event);
             var eventUpdate = Entities.Event.SingleOrDefault(x => x.NiceId == update.NiceId);
-            if (update.Date != DateTime.MinValue)
+            if (update.StartDate != DateTime.MinValue)
             {
-                eventUpdate.Date = update.Date;
+                eventUpdate.StartDate = update.StartDate;
+            }
+            if (update.EndDate != DateTime.MinValue)
+            {
+                eventUpdate.EndDate = update.EndDate;
             }
             if (!string.IsNullOrEmpty(update.Name))
             {
@@ -79,7 +83,7 @@ namespace PSCalendarBL
         public List<Event> GetEvents(DateTime start, DateTime end)
         {
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
-                                                 where start <= i.Date && i.Date <= end && i.Deleted == false
+                                                 where start <= i.StartDate && i.StartDate <= end && i.Deleted == false
                                                  select i).OrderBy(i => i.NiceId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
             return result;

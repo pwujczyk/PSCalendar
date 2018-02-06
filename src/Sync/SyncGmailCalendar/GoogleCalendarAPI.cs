@@ -19,7 +19,7 @@ namespace SyncGmailCalendar
     {
         static string[] Scopes = { CalendarService.Scope.Calendar };
         const string CalendarId = "primary";
-        
+
         private CalendarService GetService(string account)
         {
             var credential = Authenticate(account);
@@ -45,9 +45,9 @@ namespace SyncGmailCalendar
         public void UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId)
         {
             Event e = BuildEvent(@event);
-            var request = GetService(account).Events.Update(e, CalendarId,eventId);
+            var request = GetService(account).Events.Update(e, CalendarId, eventId);
 
-           Event r = request.Execute();
+            Event r = request.Execute();
         }
 
         public Event GetEvent(string account, string googleEventId)
@@ -67,15 +67,15 @@ namespace SyncGmailCalendar
         private Event BuildEvent(PSCalendarContract.Dto.Event @event)
         {
             Event result = new Event();
-            if (@event.Date.Date == @event.Date)
+            if (@event.StartDate.Date == @event.StartDate)
             {//whole day event
-                result.Start = new EventDateTime() { Date = @event.Date.ToString("yyyy-MM-dd") };
-                result.End = new EventDateTime() { Date = @event.Date.ToString("yyyy-MM-dd") };
+                result.Start = new EventDateTime() { Date = @event.StartDate.ToString("yyyy-MM-dd") };
+                result.End = new EventDateTime() { Date = @event.EndDate.ToString("yyyy-MM-dd") };
             }
             else
             {
-                result.Start = new EventDateTime() { DateTime = @event.Date };
-                result.End = new EventDateTime() { DateTime = @event.Date.AddHours(1) };
+                result.Start = new EventDateTime() { DateTime = @event.StartDate };
+                result.End = new EventDateTime() { DateTime = @event.EndDate };
             }
             result.Summary = @event.Name;
             return result;
