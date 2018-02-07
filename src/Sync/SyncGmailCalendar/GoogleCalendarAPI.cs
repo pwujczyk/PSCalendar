@@ -18,7 +18,7 @@ namespace SyncGmailCalendar
     public class GoogleCalendarAPI
     {
         static string[] Scopes = { CalendarService.Scope.Calendar };
-        const string CalendarId = "primary";
+        //const string CalendarId = "primary";
 
         private CalendarService GetService(string account)
         {
@@ -32,34 +32,34 @@ namespace SyncGmailCalendar
             return service;
         }
 
-        public Event AddEvent(string account, PSCalendarContract.Dto.Event @event)
+        public Event AddEvent(string account, PSCalendarContract.Dto.Event @event, string calendarId)
         {
             Event e = BuildEvent(@event);
-            var request = GetService(account).Events.Insert(e, CalendarId);
+            var request = GetService(account).Events.Insert(e, calendarId);
 
             Google.Apis.Calendar.v3.Data.Event r = request.Execute();
             return r;
 
         }
 
-        public void UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId)
+        public void UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId, string calendarId)
         {
             Event e = BuildEvent(@event);
-            var request = GetService(account).Events.Update(e, CalendarId, eventId);
+            var request = GetService(account).Events.Update(e, calendarId, eventId);
 
             Event r = request.Execute();
         }
 
-        public Event GetEvent(string account, string googleEventId)
+        public Event GetEvent(string account, string googleEventId,string calendarId)
         {
-            var request = GetService(account).Events.Get(CalendarId, googleEventId);
+            var request = GetService(account).Events.Get(calendarId, googleEventId);
             Event r = request.Execute();
             return r;
         }
 
-        public string Delete(string account, string googleEventId)
+        public string Delete(string account, string googleEventId, string calendarId)
         {
-            var request = GetService(account).Events.Delete(CalendarId, googleEventId);
+            var request = GetService(account).Events.Delete(calendarId, googleEventId);
             string r = request.Execute();
             return r;
         }
@@ -101,10 +101,10 @@ namespace SyncGmailCalendar
             return credential;
         }
 
-        public Events GetGoogleCalendarEvents(string account, DateTime start, DateTime end)
+        public Events GetGoogleCalendarEvents(string account, DateTime start, DateTime end, string calendarId)
         {
             // Define parameters of request.
-            EventsResource.ListRequest request = GetService(account).Events.List("primary");
+            EventsResource.ListRequest request = GetService(account).Events.List(calendarId);
             request.TimeMin = start;
             request.TimeMax = end;
             request.ShowDeleted = false;

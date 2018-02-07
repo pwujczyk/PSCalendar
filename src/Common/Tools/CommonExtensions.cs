@@ -13,6 +13,29 @@ namespace PSCalendarTools
             return (T)Enum.Parse(typeof(T), value, true);
         }
 
+        public static T Parse<T>(this string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
+        }
+
+        public static T TryParse<T>(this string value)
+        {
+            var names=Enum.GetNames(typeof(T));
+            foreach (var item in names)
+            {
+                if (item==value)
+                {
+                    return value.Parse<T>();
+                }
+            }
+            return (T)Enum.ToObject(typeof(T), 0);
+        }
+
+        public static string ToFlatString(this IEnumerable<string> that)
+        {
+            return String.Join(", ", that.ToArray());
+        }
+
         public static DateTime GetLastMonthDay(this DateTime date)
         {
             var lastDayOfMonth = date.GetFirstMonthDay().AddMonths(1).AddDays(-1);
