@@ -145,6 +145,16 @@ namespace SyncGmailCalendar
             CalendarSyncBL.UpdateSyncAccountEvent(acccount, eventGuid, googleCalendarEventId);
         }
 
+        public void CreateCalendars(string account)
+        {
+            IEnumerable<string> calendars = SyncGoogleCalendarAPI.GetGoogleCalendars(account).Items.Select(x => x.Summary);
+            List<string> categories= Enum.GetNames(typeof(PSCalendarContract.Dto.EventType)).ToList();
+            foreach (var item in categories.Except(calendars))
+            {
+                if (item == PSCalendarContract.Dto.EventType.None.ToString()) continue;
+                SyncGoogleCalendarAPI.CreateGoogleCalendar(account, item);
+            }
+        }
 
         //private void GetGoogleCalendarEventsAndDisplay(string account, DateTime start, DateTime end)
         //{

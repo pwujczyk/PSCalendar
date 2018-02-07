@@ -15,5 +15,8 @@ namespace PSCalendarContract
 
         [OperationContract]
         void AddSyncAccount(string email);
+
+        [OperationContract]
+        void AddCalendars();
     }
 }

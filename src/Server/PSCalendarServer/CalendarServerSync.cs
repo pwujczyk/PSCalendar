@@ -25,5 +25,11 @@ namespace PSCalendarServer
             CalendarSync calendarsync = new CalendarSync();
             calendarsync.AddSyncAccount(email);
         }
+
+        public void AddCalendars()
+        {
+            CalendarSyncGoogle s = new CalendarSyncGoogle();
+            s.CreateCalendars("pwujczyk@gmail.com");
+        }
     }
 }

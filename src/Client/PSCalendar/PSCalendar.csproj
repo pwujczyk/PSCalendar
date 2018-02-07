@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Core\Add.cs" />
+    <Compile Include="Commands\Sync\AddGoogleCalendars.cs" />
     <Compile Include="Commands\EndDateTools.cs" />
     <Compile Include="Commands\Sync\AddSyncAccount.cs" />
     <Compile Include="Commands\BaseCommand.cs" />

@@ -11,6 +11,7 @@ using System.ServiceModel.Channels;
 using System.Text;
 using PSCalendarTools;
 using PSCalendar.Commands;
+using PSCalendar.Commands.Core;
 
 namespace PSCalendar
 {
@@ -50,6 +51,9 @@ namespace PSCalendar
         [Parameter]
         public string AddSyncAccount { get; set; }
 
+        [Parameter]
+        public SwitchParameter AddGoogleCalendars { get; set; }
+
         protected override void BeginProcessing()
         {
 
@@ -60,6 +64,7 @@ namespace PSCalendar
             conditionTable.Add(new Display(this));
             conditionTable.Add(new Sync(this));
             conditionTable.Add(new AddSyncAccount(this));
+            conditionTable.Add(new AddGoogleCalendars(this));
 
             foreach (var item in conditionTable)
             {

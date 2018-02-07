@@ -116,5 +116,21 @@ namespace SyncGmailCalendar
             Events events = request.Execute();
             return events;
         }
+
+        public CalendarList GetGoogleCalendars(string account)
+        {
+            CalendarListResource.ListRequest request = GetService(account).CalendarList.List();
+            CalendarList x = request.Execute();
+            return x;
+        }
+
+        public Calendar CreateGoogleCalendar(string account, string name)
+        {
+            Calendar c = new Calendar();
+            c.Summary = name;
+            var request = GetService(account).Calendars.Insert(c);
+            Calendar r=request.Execute();
+            return r;
+        }
     }
 }
