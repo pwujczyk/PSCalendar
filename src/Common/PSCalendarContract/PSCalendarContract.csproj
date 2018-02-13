@@ -48,6 +48,7 @@
     <Compile Include="Dto\PeriodicEvent.cs" />
     <Compile Include="Dto\PeriodType.cs" />
     <Compile Include="Dto\EventType.cs" />
+    <Compile Include="Dto\SyncAccountEvent.cs" />
     <Compile Include="ICalendar.cs" />
     <Compile Include="ICalendarSync.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

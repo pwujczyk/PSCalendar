@@ -23,8 +23,12 @@ namespace PSCalendar.Commands
             get
             {
                 string address = MasterConfiguration.MConfiguration.Configuration["Address"];
-                ChannelFactory<T> factory = new ChannelFactory<T>(new NetTcpBinding(), new EndpointAddress(address));
+                NetTcpBinding netTcpBinding = new NetTcpBinding();
+                netTcpBinding.CloseTimeout = TimeSpan.FromMinutes(20);
+                ChannelFactory<T> factory = new ChannelFactory<T>(netTcpBinding, new EndpointAddress(address));
+               
                 T proxy = factory.CreateChannel();
+                
                 return proxy;
             }
         }

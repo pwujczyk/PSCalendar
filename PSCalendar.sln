@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarBL", "src\Server\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSCalendarTools", "src\Common\Tools\PSCalendarTools.csproj", "{2936AF01-1CE5-43EC-8207-4BD4CCF106A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexList", "..\IndexList\IndexList\IndexList.csproj", "{5685EED3-A7E7-4B1A-8E04-6910AE7642B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{2936AF01-1CE5-43EC-8207-4BD4CCF106A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2936AF01-1CE5-43EC-8207-4BD4CCF106A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2936AF01-1CE5-43EC-8207-4BD4CCF106A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5685EED3-A7E7-4B1A-8E04-6910AE7642B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5685EED3-A7E7-4B1A-8E04-6910AE7642B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5685EED3-A7E7-4B1A-8E04-6910AE7642B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5685EED3-A7E7-4B1A-8E04-6910AE7642B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +135,7 @@ Global
 		{89ECB289-DF9F-4018-A475-58551DE518F4} = {98ECB088-4E1C-487C-A0F0-BB7F3C44AD3B}
 		{1FEC128A-5608-4BF7-A457-682A3C5B6EEB} = {DB53AD86-AE86-430B-82B9-7C87FFA37EDA}
 		{2936AF01-1CE5-43EC-8207-4BD4CCF106A1} = {24AC6543-24FF-436C-A1B6-732F44A69BEA}
+		{5685EED3-A7E7-4B1A-8E04-6910AE7642B8} = {36B5A40E-0376-4359-ACB6-24B1F1DD8911}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F13A32D5-D694-446D-B7F6-F22FCB6170AF}

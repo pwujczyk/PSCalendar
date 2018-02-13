@@ -43,16 +43,20 @@ namespace PSCalendar
         public int? Change { get; set; }
 
         [Parameter]
-        public SwitchParameter SyncCurrentMonth { get; set; }
+        public SwitchParameter SyncCurrentMonthAllAccounts { get; set; }
 
         [Parameter]
         public int? SyncMonth { get; set; }
+
+
+        [Parameter]
+        public string SyncAccount { get; set; }
 
         [Parameter]
         public string AddSyncAccount { get; set; }
 
         [Parameter]
-        public SwitchParameter AddGoogleCalendars { get; set; }
+        public string AddGoogleCalendarsToAccount { get; set; }
 
         protected override void BeginProcessing()
         {
@@ -62,7 +66,8 @@ namespace PSCalendar
             conditionTable.Add(new Add(this));
             conditionTable.Add(new Change(this));
             conditionTable.Add(new Display(this));
-            conditionTable.Add(new Sync(this));
+            conditionTable.Add(new SyncAccount(this));
+            conditionTable.Add(new SyncAllAccounts(this));
             conditionTable.Add(new AddSyncAccount(this));
             conditionTable.Add(new AddGoogleCalendars(this));
 

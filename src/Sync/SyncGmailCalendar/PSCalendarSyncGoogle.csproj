@@ -84,6 +84,7 @@
     <Compile Include="EventTypeCalendarId.cs" />
     <Compile Include="GoogleCalendarAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PSToGoogleSync.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -93,6 +94,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\IndexList\IndexList\IndexList.csproj">
+      <Project>{5685eed3-a7e7-4b1a-8e04-6910ae7642b8}</Project>
+      <Name>IndexList</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\PSCalendarContract\PSCalendarContract.csproj">
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
       <Name>PSCalendarContract</Name>

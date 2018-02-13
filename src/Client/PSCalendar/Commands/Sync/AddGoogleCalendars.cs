@@ -1,4 +1,5 @@
 ﻿using PSCalendarContract;
+using PSCalendarTools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace PSCalendar.Commands.Core
     {
         public AddGoogleCalendars(PSCalendarCmdlet cmdl) : base(cmdl) { }
 
-        protected override bool Condition => this.Cmdlet.AddGoogleCalendars;
+        protected override bool Condition => this.Cmdlet.AddGoogleCalendarsToAccount.NotEmpty();
 
         protected override void Invoke()
         {
-            InvokeCall(() => Client.AddCalendars());
+            InvokeCall(() => Client.AddCalendarsToAccount(this.Cmdlet.AddGoogleCalendarsToAccount));
         }
     }
 }

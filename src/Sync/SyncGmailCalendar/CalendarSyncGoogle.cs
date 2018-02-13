@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PSCalendarTools;
+using PSCalendarSyncGoogle;
 
 namespace SyncGmailCalendar
 {
@@ -26,22 +27,46 @@ namespace SyncGmailCalendar
 
         }
 
-
-        public void Sync(string account, DateTime start, DateTime end)
+        public void SyncAllAcounts(DateTime start, DateTime end)
         {
-            this.CalendarList = ValidadteCalendarList(account);
-
-            SyncPowershellToGoogle(account, start, end);
-            foreach (var item in CalendarList)
+            var accounts = CalendarSyncBL.GetSyncAccounts();
+            foreach (var account in accounts)
             {
-                SyncGoogleToPowershell(account, start, end, item.Value);
+                this.CalendarList = ValidadteCalendarList(account);
+                foreach (var item in CalendarList)
+                {
+                    SyncGoogleToPowershell(account, start, end, item.Value);
+                }
+            }
+
+            foreach (var account in accounts)
+            {
+                SyncPowershellToGoogle(account, start, end);
             }
 
         }
 
+        public void SyncAccount(string account, DateTime start, DateTime end)
+        {
+            this.CalendarList = ValidadteCalendarList(account);
+            foreach (var item in CalendarList)
+            {
+                SyncGoogleToPowershell(account, start, end, item.Value);
+            }
+            // SyncPowershellToGoogle(account, start, end);
+            new PSToGoogleSync(account, start, end, CalendarList).Sync();
+        }
+
+        public void SyncPowershellToGoogle2(string account, DateTime start, DateTime end)
+        {
+
+
+        }
+
+
         public void SyncPowershellToGoogle(string account, DateTime start, DateTime end)
         {
-            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(start, end);
+            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
 
             foreach (var item in psEventsWithAdditionalInfo)
             {
@@ -52,28 +77,31 @@ namespace SyncGmailCalendar
                 }
                 else
                 {
-                    if (GoogleCalendarEventShouldBeDeleted(item))
+                    if (item.Email == account)
                     {
-
-                        SyncGoogleCalendarAPI.Delete(account, item.GoogleCalendarEventId, calendarid);
-                        CalendarSyncBL.SyncAccountEventMarkAsDeleted(item.GoogleCalendarEventId, account);
-                        var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
-                        CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-                    }
-                    else
-                    {
-                        var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
-                        var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
-                        if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                        if (GoogleCalendarEventShouldBeDeleted(item))
                         {
-                            UpdateEventInPSTable(googleCalendarEvent, account);
+
+                            SyncGoogleCalendarAPI.Delete(account, item.GoogleCalendarEventId, calendarid);
+                            CalendarSyncBL.SyncAccountEventMarkAsDeleted(item.GoogleCalendarEventId, account);
+                            var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
                             CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
                         }
-
-                        if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                        else
                         {
-                            UpdateEventInGoogleCalendar(account, item, googleCalendarEvent, calendarid);
-                            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                            var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
+                            var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
+                            if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                            {
+                                UpdateEventInPSTable(googleCalendarEvent, account);
+                                CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                            }
+
+                            if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+                            {
+                                UpdateEventInGoogleCalendar(account, item, googleCalendarEvent, calendarid);
+                                CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                            }
                         }
                     }
                 }
@@ -98,7 +126,7 @@ namespace SyncGmailCalendar
         public void SyncGoogleToPowershell(string account, DateTime start, DateTime end, string calendarid)
         {
             var googleCalendarEvents = SyncGoogleCalendarAPI.GetGoogleCalendarEvents(account, start, end, calendarid);
-            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(start, end);
+            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
 
             foreach (var googleEvent in googleCalendarEvents.Items)
             {
@@ -111,7 +139,7 @@ namespace SyncGmailCalendar
                     PSCalendarContract.Dto.Event @event = ConvertEvent(googleEvent);
                     @event.Type = this.CalendarList.Single(x => x.Value == calendarid).Key;
                     Guid eventGuid = CalendarCoreBL.AddEvent(@event);
-                    UpdateSyncAccountEvent(account, eventGuid, googleEvent.Id);
+                    CalendarSyncBL.UpdateSyncAccountEvent(account, eventGuid, googleEvent.Id);
                     CalendarSyncBL.UpdateLogItem(eventGuid, googleEvent.Updated.Value);
                 }
             }
@@ -151,14 +179,10 @@ namespace SyncGmailCalendar
         private void AddEventToGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, string calendarid)
         {
             var googleCalendarEvent = SyncGoogleCalendarAPI.AddEvent(account, item, calendarid);
-            UpdateSyncAccountEvent(account, item.EventGuid, googleCalendarEvent.Id);
+            CalendarSyncBL.UpdateSyncAccountEvent(account, item.EventGuid, googleCalendarEvent.Id);
             CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
         }
 
-        private void UpdateSyncAccountEvent(string acccount, Guid eventGuid, string googleCalendarEventId)
-        {
-            CalendarSyncBL.UpdateSyncAccountEvent(acccount, eventGuid, googleCalendarEventId);
-        }
 
         public void CreateCalendars(string account)
         {
@@ -174,7 +198,7 @@ namespace SyncGmailCalendar
         private static List<string> GetEventTypesAsStringList()
         {
             return Enum.GetNames(typeof(PSCalendarContract.Dto.EventType))
-                .Except( new List<string>() { PSCalendarContract.Dto.EventType.None.ToString() }).ToList();
+                .Except(new List<string>() { PSCalendarContract.Dto.EventType.None.ToString() }).ToList();
         }
 
         private Dictionary<PSCalendarContract.Dto.EventType, string> ValidadteCalendarList(string account)
@@ -183,7 +207,7 @@ namespace SyncGmailCalendar
             List<string> psCategories = GetEventTypesAsStringList();
             List<string> googleCalendarTypes = calendarList.Select(i => i.Summary).ToList();
             var allCalendarExists = psCategories.Where(x => !googleCalendarTypes.Contains(x));//.Where(x => !categories.Contains(x));
-            if (allCalendarExists.Count()==0)
+            if (allCalendarExists.Count() == 0)
             {
                 Dictionary<PSCalendarContract.Dto.EventType, string> result = new Dictionary<PSCalendarContract.Dto.EventType, string>();
                 foreach (var calendarItem in calendarList)

@@ -21,8 +21,6 @@ namespace PSCalendarServer
         {
         }
 
-
-
         public void GetDate() { }
 
         public void AddEvent(Event @event)
@@ -42,7 +40,7 @@ namespace PSCalendarServer
 
         public List<Event> GetEvents(DateTime start, DateTime end)
         {
-            return Calendar.GetEvents(start, end);
+            return Calendar.GetActiveEvents(start, end);
         }
 
         public List<PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)

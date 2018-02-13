@@ -120,6 +120,7 @@ namespace SyncGmailCalendar
         public CalendarList GetGoogleCalendars(string account)
         {
             CalendarListResource.ListRequest request = GetService(account).CalendarList.List();
+            
             CalendarList x = request.Execute();
             return x;
         }

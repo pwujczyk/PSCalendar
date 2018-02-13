@@ -80,7 +80,7 @@ namespace PSCalendarBL
 
         }
 
-        public List<Event> GetEvents(DateTime start, DateTime end)
+        public List<Event> GetActiveEvents(DateTime start, DateTime end)
         {
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
                                                  where start <= i.StartDate && i.StartDate <= end && i.Deleted == false
@@ -89,6 +89,14 @@ namespace PSCalendarBL
             return result;
         }
 
+        public List<Event> GetAllEvents(DateTime start, DateTime end)
+        {
+            List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
+                                                 where start <= i.StartDate && i.StartDate <= end
+                                                 select i).OrderBy(i => i.NiceId).ToList();
+            List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
+            return result;
+        }
 
         public List<PeriodicEvent> GetPeriodEvents(DateTime start, DateTime end)
         {

@@ -28,16 +28,28 @@ namespace PSCalendarBL
             }
         }
 
+        public List<string> GetSyncAccounts()
+        {
+            return this.Entities.SyncAccount.Select(x => x.Email).ToList();
+        }
+
         public void SyncAccountEventMarkAsDeleted(string googleCalendarEventId, string email)
         {
             this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId, email);
         }
 
+        //public List<string> Get()
+        //{
+        //    from sae in Entities.SyncAccountEvent 
+        //    join sa in Entities.SyncAccount on sae.SyncAccountId.Equals(sae.SyncAccountId)
+        //    select new 
 
-        public List<GoogleEvent> GetSyncEvents(DateTime start, DateTime end)
+        //}
+
+        public List<GoogleEvent> GetSyncEvents(string email, DateTime start, DateTime end)
         {
             List<PSCalendarDB.GoogleCalendarSyncView> googleList = (from i in Entities.GoogleCalendarSyncView.AsNoTracking()
-                                                                    where start <= i.StartDate && i.StartDate <= end
+                                                                    where start <= i.StartDate && i.StartDate <= end// && i.Email == email
                                                                     select i).ToList();
 
 
@@ -47,7 +59,7 @@ namespace PSCalendarBL
 
         public void UpdateSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId)
         {
-            SyncAccountEvent syncAccountEvent = new SyncAccountEvent();
+            var syncAccountEvent = new PSCalendarDB.SyncAccountEvent();
             syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
             syncAccountEvent.GoogleCalendarEventId = googleCalendarEventId;
             syncAccountEvent.SyncAccount = this.Entities.SyncAccount.Single(x => x.Email == account);
@@ -55,6 +67,12 @@ namespace PSCalendarBL
             Entities.SyncAccountEvent.Add(syncAccountEvent);
             Entities.SaveChanges();
         }
+
+        //public void GetSyncAccountEvent(string account, DateTime start, DateTime end)
+        //{
+        //    List<PSCalendarDB.SyncAccountEvent> syncAccountEvents = this.Entities.SyncAccountEvent.Where(x => x.SyncAccount.Email == account).ToList();
+        //    List<PSCalendarContract.Dto.SyncAccountEvent> result = Mapper.Map<List<PSCalendarDB.SyncAccountEvent>, List<PSCalendarContract.Dto.SyncAccountEvent>>(syncAccountEvents);
+        //}
 
 
         public void UpdateLogItem(Guid eventGuid, DateTime datetime)

@@ -12,12 +12,16 @@ namespace PSCalendarServer
 {
     public partial class CalendarServer
     {
-        public void Sync(DateTime start, DateTime end)
+        public void SyncAllAcounts(DateTime start, DateTime end)
         {
             CalendarSyncGoogle sync = new CalendarSyncGoogle();
-            //var start = DateTime.Now;//.GetFirstMonthDay();
-            //var end = DateTime.Now;//.GetLastMonthDay();
-            sync.Sync("pwujczyk@gmail.com",start,end);
+            sync.SyncAllAcounts(start, end);
+        }
+
+        public void SyncAccount(DateTime start, DateTime end, string account)
+        {
+            CalendarSyncGoogle sync = new CalendarSyncGoogle();
+            sync.SyncAccount(account, start, end);
         }
 
         public void AddSyncAccount(string email)
@@ -26,10 +30,10 @@ namespace PSCalendarServer
             calendarsync.AddSyncAccount(email);
         }
 
-        public void AddCalendars()
+        public void AddCalendarsToAccount(string account)
         {
             CalendarSyncGoogle s = new CalendarSyncGoogle();
-            s.CreateCalendars("pwujczyk@gmail.com");
+            s.CreateCalendars(account);
         }
     }
 }

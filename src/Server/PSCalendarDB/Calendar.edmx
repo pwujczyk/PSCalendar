@@ -241,7 +241,7 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           <Property Name="SyncAccountId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Event" Relationship="CalendarModel.FK_SyncAccountEvent_Event" FromRole="SyncAccountEvent" ToRole="Event" />
           <NavigationProperty Name="SyncAccount" Relationship="CalendarModel.FK_SyncAccountEvent_SyncAccount" FromRole="SyncAccountEvent" ToRole="SyncAccount" />
-          <Property Name="GoogleCalendarEventId" Type="String" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="GoogleCalendarEventId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ToBeDeleted" Type="Boolean" Nullable="false" />
           <Property Name="Deleted" Type="Boolean" Nullable="false" />
         </EntityType>

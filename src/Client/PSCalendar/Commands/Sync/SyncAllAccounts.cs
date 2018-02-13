@@ -8,11 +8,11 @@ using PSCalendarTools;
 
 namespace PSCalendar.Commands
 {
-    class Sync : BaseCommand<ICalendarSync>
+    class SyncAllAccounts : BaseCommand<ICalendarSync>
     {
-        protected override bool Condition => this.Cmdlet.SyncCurrentMonth.IsPresent || this.Cmdlet.SyncMonth.HasValue;
+        protected override bool Condition => this.Cmdlet.SyncCurrentMonthAllAccounts.IsPresent || this.Cmdlet.SyncMonth.HasValue;
 
-        public Sync(PSCalendarCmdlet cmdlet) : base(cmdlet) { }
+        public SyncAllAccounts(PSCalendarCmdlet cmdlet) : base(cmdlet) { }
 
         protected override void Invoke()
         {
@@ -26,7 +26,7 @@ namespace PSCalendar.Commands
             start = now.GetFirstMonthDay();
             end = now.GetLastMonthDay();
 
-            InvokeCall(() => this.Client.Sync(start, end));
+            InvokeCall(() => this.Client.SyncAllAcounts(start, end));
         }
     }
 }
