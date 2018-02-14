@@ -20,6 +20,7 @@ namespace PSCalendarDB
         public string GoogleCalendarEventId { get; set; }
         public bool ToBeDeleted { get; set; }
         public bool Deleted { get; set; }
+        public string GoogleCalendarId { get; set; }
     
         public virtual Event Event { get; set; }
         public virtual SyncAccount SyncAccount { get; set; }

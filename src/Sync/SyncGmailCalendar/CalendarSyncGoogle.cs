@@ -6,13 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using PSCalendarTools;
 using PSCalendarSyncGoogle;
+using PSCalendarSyncGoogle.Syncs;
 
 namespace SyncGmailCalendar
 {
     public class CalendarSyncGoogle
     {
         GoogleCalendarAPI SyncGoogleCalendarAPI = new GoogleCalendarAPI();
-        PSCalendarBL.CalendarCore CalendarCoreBL = new PSCalendarBL.CalendarCore();
+      //  PSCalendarBL.CalendarCore CalendarCoreBL = new PSCalendarBL.CalendarCore();
         PSCalendarBL.CalendarSync CalendarSyncBL = new PSCalendarBL.CalendarSync();
         Dictionary<PSCalendarContract.Dto.EventType, string> CalendarList;
 
@@ -33,15 +34,17 @@ namespace SyncGmailCalendar
             foreach (var account in accounts)
             {
                 this.CalendarList = ValidadteCalendarList(account);
-                foreach (var item in CalendarList)
-                {
-                    SyncGoogleToPowershell(account, start, end, item.Value);
-                }
+                new GoogleToPSSync(account, start, end, CalendarList).Sync();
+                //foreach (var item in CalendarList)
+                //{
+                //    //SyncGoogleToPowershell(account, start, end, item.Value);
+                //}
             }
 
             foreach (var account in accounts)
             {
-                SyncPowershellToGoogle(account, start, end);
+                //SyncPowershellToGoogle(account, start, end);
+                new PSToGoogleSync(account, start, end, CalendarList).Sync();
             }
 
         }
@@ -49,139 +52,135 @@ namespace SyncGmailCalendar
         public void SyncAccount(string account, DateTime start, DateTime end)
         {
             this.CalendarList = ValidadteCalendarList(account);
-            foreach (var item in CalendarList)
-            {
-                SyncGoogleToPowershell(account, start, end, item.Value);
-            }
+            //foreach (var item in CalendarList)
+            //{
+            //    SyncGoogleToPowershell(account, start, end, item.Value);
+            //}
+            new GoogleToPSSync(account, start, end, CalendarList).Sync();
             // SyncPowershellToGoogle(account, start, end);
             new PSToGoogleSync(account, start, end, CalendarList).Sync();
         }
 
-        public void SyncPowershellToGoogle2(string account, DateTime start, DateTime end)
-        {
 
 
-        }
+        //public void SyncPowershellToGoogle(string account, DateTime start, DateTime end)
+        //{
+        //    var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
 
+        //    foreach (var item in psEventsWithAdditionalInfo)
+        //    {
+        //        var calendarid = GetCalendarId(item.Type);
+        //        if (EventNotExistsInGoogleCalendar(item))
+        //        {
+        //            AddEventToGoogleCalendar(account, item, calendarid);
+        //        }
+        //        else
+        //        {
+        //            if (item.Email == account)
+        //            {
+        //                if (GoogleCalendarEventShouldBeDeleted(item))
+        //                {
 
-        public void SyncPowershellToGoogle(string account, DateTime start, DateTime end)
-        {
-            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
+        //                    SyncGoogleCalendarAPI.Delete(account, item.GoogleCalendarEventId, calendarid);
+        //                    CalendarSyncBL.SyncAccountEventMarkAsDeleted(item.GoogleCalendarEventId, account);
+        //                    var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
+        //                    CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+        //                }
+        //                else
+        //                {
+        //                    var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
+        //                    var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
+        //                    if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+        //                    {
+        //                        UpdateEventInPSTable(googleCalendarEvent, account);
+        //                        CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+        //                    }
 
-            foreach (var item in psEventsWithAdditionalInfo)
-            {
-                var calendarid = GetCalendarId(item.Type);
-                if (EventNotExistsInGoogleCalendar(item))
-                {
-                    AddEventToGoogleCalendar(account, item, calendarid);
-                }
-                else
-                {
-                    if (item.Email == account)
-                    {
-                        if (GoogleCalendarEventShouldBeDeleted(item))
-                        {
+        //                    if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
+        //                    {
+        //                        UpdateEventInGoogleCalendar(account, item, googleCalendarEvent, calendarid);
+        //                        CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
-                            SyncGoogleCalendarAPI.Delete(account, item.GoogleCalendarEventId, calendarid);
-                            CalendarSyncBL.SyncAccountEventMarkAsDeleted(item.GoogleCalendarEventId, account);
-                            var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
-                            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-                        }
-                        else
-                        {
-                            var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(account, item.GoogleCalendarEventId, calendarid);
-                            var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
-                            if (googleCalendarEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
-                            {
-                                UpdateEventInPSTable(googleCalendarEvent, account);
-                                CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-                            }
+        //private string GetCalendarId(PSCalendarContract.Dto.EventType type)
+        //{
+        //    return this.CalendarList.Single(x => x.Key == type).Value;
+        //}
 
-                            if (googleCalendarEvent.Updated.Value.TrimMilliseconds() < lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
-                            {
-                                UpdateEventInGoogleCalendar(account, item, googleCalendarEvent, calendarid);
-                                CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //private static bool GoogleCalendarEventShouldBeDeleted(PSCalendarContract.Dto.GoogleEvent item)
+        //{
+        //    return item.SyncAccountTobeDeleted && item.SyncAccountDeleted == false;
+        //}
 
-        private string GetCalendarId(PSCalendarContract.Dto.EventType type)
-        {
-            return this.CalendarList.Single(x => x.Key == type).Value;
-        }
+        //private static bool EventNotExistsInGoogleCalendar(PSCalendarContract.Dto.GoogleEvent item)
+        //{
+        //    return item.GoogleCalendarEventId == null;
+        //}
 
-        private static bool GoogleCalendarEventShouldBeDeleted(PSCalendarContract.Dto.GoogleEvent item)
-        {
-            return item.SyncAccountTobeDeleted && item.SyncAccountDeleted == false;
-        }
+        //public void SyncGoogleToPowershell(string account, DateTime start, DateTime end, string calendarid)
+        //{
+        //    var googleCalendarEvents = SyncGoogleCalendarAPI.GetGoogleCalendarEvents(account, start, end, calendarid);
+        //    var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
 
-        private static bool EventNotExistsInGoogleCalendar(PSCalendarContract.Dto.GoogleEvent item)
-        {
-            return item.GoogleCalendarEventId == null;
-        }
+        //    foreach (var googleEvent in googleCalendarEvents.Items)
+        //    {
+        //        if (psEventsWithAdditionalInfo.Any(x => x.GoogleCalendarEventId == googleEvent.Id))
+        //        {
+        //            continue;
+        //        }
+        //        else
+        //        {
+        //            PSCalendarContract.Dto.Event @event = ConvertEvent(googleEvent);
+        //            @event.Type = this.CalendarList.Single(x => x.Value == calendarid).Key;
+        //            Guid eventGuid = CalendarCoreBL.AddEvent(@event);
+        //            CalendarSyncBL.UpdateSyncAccountEvent(account, eventGuid, googleEvent.Id);
+        //            CalendarSyncBL.UpdateLogItem(eventGuid, googleEvent.Updated.Value);
+        //        }
+        //    }
+        //}
 
-        public void SyncGoogleToPowershell(string account, DateTime start, DateTime end, string calendarid)
-        {
-            var googleCalendarEvents = SyncGoogleCalendarAPI.GetGoogleCalendarEvents(account, start, end, calendarid);
-            var psEventsWithAdditionalInfo = CalendarSyncBL.GetSyncEvents(account, start, end);
+        //private PSCalendarContract.Dto.Event ConvertEvent(Event googleEvent)
+        //{
+        //    var mapper = AutomapperConfiguration.dtoConfig.CreateMapper();
+        //    PSCalendarContract.Dto.Event @event = mapper.Map<Event, PSCalendarContract.Dto.Event>(googleEvent);
+        //    return @event;
+        //}
 
-            foreach (var googleEvent in googleCalendarEvents.Items)
-            {
-                if (psEventsWithAdditionalInfo.Any(x => x.GoogleCalendarEventId == googleEvent.Id))
-                {
-                    continue;
-                }
-                else
-                {
-                    PSCalendarContract.Dto.Event @event = ConvertEvent(googleEvent);
-                    @event.Type = this.CalendarList.Single(x => x.Value == calendarid).Key;
-                    Guid eventGuid = CalendarCoreBL.AddEvent(@event);
-                    CalendarSyncBL.UpdateSyncAccountEvent(account, eventGuid, googleEvent.Id);
-                    CalendarSyncBL.UpdateLogItem(eventGuid, googleEvent.Updated.Value);
-                }
-            }
-        }
+        //private void UpdateEventInGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, Event googleCalendarEvent, string calendarid)
+        //{
+        //    SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id, calendarid);
+        //}
 
-        private PSCalendarContract.Dto.Event ConvertEvent(Event googleEvent)
-        {
-            var mapper = AutomapperConfiguration.dtoConfig.CreateMapper();
-            PSCalendarContract.Dto.Event @event = mapper.Map<Event, PSCalendarContract.Dto.Event>(googleEvent);
-            return @event;
-        }
-
-        private void UpdateEventInGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, Event googleCalendarEvent, string calendarid)
-        {
-            SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id, calendarid);
-        }
-
-        private void UpdateEventInPSTable(Event googleEvent, string account)
-        {
-            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
-            if (googleEvent.Status == "cancelled")
-            {
-                CalendarCoreBL.Delete(@event.EventGuid);
-                CalendarSyncBL.SyncAccountEventMarkAsDeleted(@event.GoogleCalendarEventId, account);
-            }
-            else
-            {
-                @event.Name = googleEvent.Summary;
-                @event.StartDate = googleEvent.Start.DateTime.Value;
-                //todo: change to automapper
-                CalendarCoreBL.ChangeEvent(@event);
-            }
-        }
+        //private void UpdateEventInPSTable(Event googleEvent, string account)
+        //{
+        //    PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
+        //    if (googleEvent.Status == "cancelled")
+        //    {
+        //        CalendarCoreBL.Delete(@event.EventGuid);
+        //        CalendarSyncBL.SyncAccountEventMarkAsDeleted(@event.GoogleCalendarEventId, account);
+        //    }
+        //    else
+        //    {
+        //        @event.Name = googleEvent.Summary;
+        //        @event.StartDate = googleEvent.Start.DateTime.Value;
+        //        //todo: change to automapper
+        //        CalendarCoreBL.ChangeEvent(@event);
+        //    }
+        //}
 
 
 
-        private void AddEventToGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, string calendarid)
-        {
-            var googleCalendarEvent = SyncGoogleCalendarAPI.AddEvent(account, item, calendarid);
-            CalendarSyncBL.UpdateSyncAccountEvent(account, item.EventGuid, googleCalendarEvent.Id);
-            CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
-        }
+        //private void AddEventToGoogleCalendar(string account, PSCalendarContract.Dto.GoogleEvent item, string calendarid)
+        //{
+        //    var googleCalendarEvent = SyncGoogleCalendarAPI.AddEvent(account, item, calendarid);
+        //    CalendarSyncBL.UpdateSyncAccountEvent(account, item.EventGuid, googleCalendarEvent.Id);
+        //    CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+        //}
 
 
         public void CreateCalendars(string account)

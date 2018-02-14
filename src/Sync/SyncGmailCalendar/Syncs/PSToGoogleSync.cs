@@ -6,22 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PSCalendarSyncGoogle
+namespace PSCalendarSyncGoogle.Syncs
 {
-    public class PSToGoogleSync
+    public class PSToGoogleSync : SyncBase
     {
-
-        DateTime Start, End;
-        string Account;
-
-        PSCalendarBL.CalendarCore CalendarCoreBL = new PSCalendarBL.CalendarCore();
-        PSCalendarBL.CalendarSync CalendarSyncBL = new PSCalendarBL.CalendarSync();
-        GoogleCalendarAPI SyncGoogleCalendarAPI = new GoogleCalendarAPI();
-
         private List<Event> ItemsToBeSync;
-
-        Dictionary<EventType, string> CalendarList;
-
         IndexList<GoogleEvent> alreadyCreatedItems;
         private IndexList<GoogleEvent> AlreadyCreatedItems
         {
@@ -41,14 +30,9 @@ namespace PSCalendarSyncGoogle
         }
 
         public PSToGoogleSync(string account, DateTime start, DateTime end, Dictionary<EventType, string> calendarList)
+            : base(account, start, end, calendarList)
         {
-            this.Start = start;
-            this.End = end;
-            this.Account = account;
-
             this.ItemsToBeSync = GetItems(start, end);
-
-            this.CalendarList = calendarList;
         }
 
         public void Sync()
@@ -76,8 +60,9 @@ namespace PSCalendarSyncGoogle
 
         private void UpdateEvent(Event item)
         {
-            var calendarId = GetCalendarId(item.Type);
+            //var calendarId = GetCalendarId(item.Type);
             var googleCalendarEventId = AlreadyCreatedItems[item.EventGuid].GoogleCalendarEventId;
+            var calendarId = AlreadyCreatedItems[item.EventGuid].GoogleCalendarId;
 
             var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(this.Account, googleCalendarEventId, calendarId);
             var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
@@ -121,8 +106,9 @@ namespace PSCalendarSyncGoogle
 
         private void DeleteEvent(Event item)
         {
-            var calendarId = GetCalendarId(item.Type);
+            //var calendarId = GetCalendarId(item.Type);
             var googleCalendarEventId = AlreadyCreatedItems[item.EventGuid].GoogleCalendarEventId;
+            var calendarId = AlreadyCreatedItems[item.EventGuid].GoogleCalendarId;
 
             SyncGoogleCalendarAPI.Delete(this.Account, googleCalendarEventId, calendarId);
             CalendarSyncBL.SyncAccountEventMarkAsDeleted(googleCalendarEventId, this.Account);
@@ -137,14 +123,14 @@ namespace PSCalendarSyncGoogle
             return createdItem.SyncAccountTobeDeleted && createdItem.SyncAccountDeleted == false;
         }
 
-        private GoogleEvent GetGoogleCalendarEvent(Guid guid)
+        private GoogleEvent GetPSEvent(Guid guid)
         {
             return this.AlreadyCreatedItems.SingleOrDefault(x => x.EventGuid == guid);
         }
 
         private bool GoogleCalendarEventExists(Event item)
         {
-            return GetGoogleCalendarEvent(item.EventGuid) != null;
+            return GetPSEvent(item.EventGuid)?.GoogleCalendarEventId != null;
         }
 
         private List<PSCalendarContract.Dto.Event> GetItems(DateTime start, DateTime end)
@@ -156,14 +142,11 @@ namespace PSCalendarSyncGoogle
         {
             var calendarId = GetCalendarId(item.Type);
             var googleCalendarEvent = SyncGoogleCalendarAPI.AddEvent(this.Account, item, calendarId);
-            CalendarSyncBL.UpdateSyncAccountEvent(this.Account, item.EventGuid, googleCalendarEvent.Id);
+            CalendarSyncBL.AddSyncAccountEvent(this.Account, item.EventGuid, googleCalendarEvent.Id, calendarId);
             CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
         }
 
 
-        private string GetCalendarId(PSCalendarContract.Dto.EventType type)
-        {
-            return this.CalendarList.Single(x => x.Key == type).Value;
-        }
+
     }
 }

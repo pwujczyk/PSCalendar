@@ -57,14 +57,32 @@ namespace PSCalendarBL
             return result;
         }
 
-        public void UpdateSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId)
+        public void AddSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId,string googleCalendarId)
         {
             var syncAccountEvent = new PSCalendarDB.SyncAccountEvent();
             syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
             syncAccountEvent.GoogleCalendarEventId = googleCalendarEventId;
             syncAccountEvent.SyncAccount = this.Entities.SyncAccount.Single(x => x.Email == account);
+            syncAccountEvent.GoogleCalendarId = googleCalendarId;
 
             Entities.SyncAccountEvent.Add(syncAccountEvent);
+            Entities.SaveChanges();
+        }
+
+        public void UpdateGoogleCalendar(Guid eventGuid, EventType eventType, string googleCalendarId)
+        {
+            var syncAccountEvent=this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid);
+            syncAccountEvent.GoogleCalendarId = googleCalendarId;
+
+            var @event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
+            @event.Type = eventType.ToString();
+            //var syncAccountEvent = new PSCalendarDB.SyncAccountEvent);
+            //syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
+            //syncAccountEvent.GoogleCalendarEventId = googleCalendarEventId;
+            //syncAccountEvent.SyncAccount = this.Entities.SyncAccount.Single(x => x.Email == account);
+            //syncAccountEvent.GoogleCalendarId = googleCalendarId;
+
+            //Entities.SyncAccountEvent.Add(syncAccountEvent);
             Entities.SaveChanges();
         }
 
@@ -99,7 +117,8 @@ namespace PSCalendarBL
 
         public GoogleEvent GetEvent(string googleId)
         {
-            return Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId));
+            var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId));
+            return r;
         }
     }
 }

@@ -21,9 +21,10 @@ namespace PSCalendarDB
         public string Type { get; set; }
         public System.Guid EventGuid { get; set; }
         public string GoogleCalendarEventId { get; set; }
-        public string Email { get; set; }
         public bool EventDeleted { get; set; }
         public Nullable<bool> SyncAccountTobeDeleted { get; set; }
         public Nullable<bool> SyncAccountDeleted { get; set; }
+        public string GoogleCalendarId { get; set; }
+        public string Email { get; set; }
     }
 }

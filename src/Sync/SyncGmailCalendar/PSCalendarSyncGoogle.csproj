@@ -84,7 +84,9 @@
     <Compile Include="EventTypeCalendarId.cs" />
     <Compile Include="GoogleCalendarAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PSToGoogleSync.cs" />
+    <Compile Include="Syncs\GoogleToPSSync.cs" />
+    <Compile Include="Syncs\PSToGoogleSync.cs" />
+    <Compile Include="Syncs\SyncBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

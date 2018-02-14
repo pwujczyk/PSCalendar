@@ -12,6 +12,7 @@ namespace PSCalendarContract.Dto
         public string GoogleCalendarEventId { get; set; }
         public bool SyncAccountTobeDeleted { get; set; }
         public bool SyncAccountDeleted { get; set; }
-        public string Email { get; set; }
+        //public string Email { get; set; }
+        public string GoogleCalendarId { get; set; }
     }
 }
