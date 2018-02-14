@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [gc].SyncAccountEventMarkAsDeleted
-	@GoogleCalendarEventId VARCHAR(40),
-	@Email VARCHAR(200)
+	@GoogleCalendarEventId VARCHAR(40)
 AS
 BEGIN
 	UPDATE sae SET sae.Deleted=1

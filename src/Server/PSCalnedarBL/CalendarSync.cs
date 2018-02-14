@@ -33,9 +33,9 @@ namespace PSCalendarBL
             return this.Entities.SyncAccount.Select(x => x.Email).ToList();
         }
 
-        public void SyncAccountEventMarkAsDeleted(string googleCalendarEventId, string email)
+        public void SyncAccountEventMarkAsDeleted(string googleCalendarEventId)
         {
-            this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId, email);
+            this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId,"TO be deleted");
         }
 
         //public List<string> Get()
@@ -72,8 +72,11 @@ namespace PSCalendarBL
 
         public void UpdateGoogleCalendar(Guid eventGuid, EventType eventType, string googleCalendarId)
         {
-            var syncAccountEvent=this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid);
-            syncAccountEvent.GoogleCalendarId = googleCalendarId;
+            var syncAccountEvents=this.Entities.SyncAccountEvent.Where(x => x.EventGuid == eventGuid);
+            foreach (var item in syncAccountEvents)
+            {
+                item.GoogleCalendarId = googleCalendarId;
+            }       
 
             var @event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
             @event.Type = eventType.ToString();
@@ -111,7 +114,7 @@ namespace PSCalendarBL
 
         public DateTime GetLastSyncAccountLogItemModyficationDate(Guid eventGuid)
         {
-            var syncAccountLogItem = this.Entities.SyncAccountLog.Single(x => x.EventGuid == eventGuid);
+            var syncAccountLogItem = this.Entities.SyncAccountLog.AsNoTracking().Single(x => x.EventGuid == eventGuid);
             return syncAccountLogItem.LastModifcationDate;
         }
 

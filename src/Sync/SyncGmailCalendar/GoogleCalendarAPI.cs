@@ -42,12 +42,13 @@ namespace SyncGmailCalendar
 
         }
 
-        public void UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId, string calendarId)
+        public Event UpdateEvent(string account, PSCalendarContract.Dto.Event @event, string eventId, string calendarId)
         {
             Event e = BuildEvent(@event);
             var request = GetService(account).Events.Update(e, calendarId, eventId);
 
             Event r = request.Execute();
+            return r;
         }
 
         public Event GetEvent(string account, string googleEventId,string calendarId)
@@ -110,6 +111,7 @@ namespace SyncGmailCalendar
             request.ShowDeleted = false;
             request.SingleEvents = true;
             request.MaxResults = 100;
+            request.ShowDeleted = true;
             request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
 
             // List events.
