@@ -35,7 +35,7 @@ namespace PSCalendarBL
 
         public void SyncAccountEventMarkAsDeleted(string googleCalendarEventId)
         {
-            this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId,"TO be deleted");
+            this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId);
         }
 
         //public List<string> Get()
@@ -58,7 +58,7 @@ namespace PSCalendarBL
             return result;
         }
 
-        public void AddSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId,string googleCalendarId)
+        public void AddSyncAccountEvent(string account, Guid eventGuid, string googleCalendarEventId, string googleCalendarId)
         {
             var syncAccountEvent = new PSCalendarDB.SyncAccountEvent();
             syncAccountEvent.Event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
@@ -70,13 +70,12 @@ namespace PSCalendarBL
             Entities.SaveChanges();
         }
 
-        public void UpdateGoogleCalendar(Guid eventGuid, EventType eventType, string googleCalendarId)
+        public void UpdateGoogleCalendar(string account, Guid eventGuid, EventType eventType, string googleCalendarId)
         {
-            var syncAccountEvents=this.Entities.SyncAccountEvent.Where(x => x.EventGuid == eventGuid);
-            foreach (var item in syncAccountEvents)
-            {
-                item.GoogleCalendarId = googleCalendarId;
-            }       
+            var syncAccountEvents = this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email==account);
+
+            syncAccountEvents.GoogleCalendarId = googleCalendarId;
+
 
             var @event = this.Entities.Event.Single(x => x.EventGuid == eventGuid);
             @event.Type = eventType.ToString();

@@ -132,7 +132,7 @@ namespace PSCalendarSyncGoogle.Syncs
         private void MoveEvent(string calendarId, EventType eventType, Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
             var psGoogleEvent = GetGoogleEvent(googleEvent.Id);
-            CalendarSyncBL.UpdateGoogleCalendar(psGoogleEvent.EventGuid, eventType, calendarId);
+            CalendarSyncBL.UpdateGoogleCalendar(this.Account, psGoogleEvent.EventGuid, eventType, calendarId);
             //we are not updating date, as we want to perform update of elements
             //CalendarSyncBL.UpdateLogItem(psGoogleEvent.EventGuid, googleEvent.Updated.Value);
         }

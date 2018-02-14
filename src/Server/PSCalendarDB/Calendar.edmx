@@ -116,7 +116,6 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
         </Function>
         <Function Name="SyncAccountEventMarkAsDeleted" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="gc">
           <Parameter Name="GoogleCalendarEventId" Type="varchar" Mode="In" />
-          <Parameter Name="Email" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="CalendarModelStoreContainer">
           <EntitySet Name="dbUp" EntityType="Self.dbUp" Schema="gc" store:Type="Tables" />
@@ -188,7 +187,6 @@ warning 6002: The table/view 'PawelPTTEST.gc.GoogleCalendarSyncView' does not ha
           </FunctionImport>
           <FunctionImport Name="SyncAccountEventMarkAsDeleted">
             <Parameter Name="GoogleCalendarEventId" Mode="In" Type="String" />
-            <Parameter Name="Email" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="GoogleCalendarSyncView" EntityType="CalendarModel.GoogleCalendarSyncView" />
           </EntityContainer>

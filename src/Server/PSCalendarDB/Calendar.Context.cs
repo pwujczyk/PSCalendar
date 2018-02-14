@@ -43,17 +43,13 @@ namespace PSCalendarDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteEventByEventId", eventGuidParameter);
         }
     
-        public virtual int SyncAccountEventMarkAsDeleted(string googleCalendarEventId, string email)
+        public virtual int SyncAccountEventMarkAsDeleted(string googleCalendarEventId)
         {
             var googleCalendarEventIdParameter = googleCalendarEventId != null ?
                 new ObjectParameter("GoogleCalendarEventId", googleCalendarEventId) :
                 new ObjectParameter("GoogleCalendarEventId", typeof(string));
     
-            var emailParameter = email != null ?
-                new ObjectParameter("Email", email) :
-                new ObjectParameter("Email", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SyncAccountEventMarkAsDeleted", googleCalendarEventIdParameter, emailParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SyncAccountEventMarkAsDeleted", googleCalendarEventIdParameter);
         }
     }
 }
