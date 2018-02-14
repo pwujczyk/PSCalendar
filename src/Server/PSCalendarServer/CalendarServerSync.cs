@@ -35,5 +35,11 @@ namespace PSCalendarServer
             CalendarSyncGoogle s = new CalendarSyncGoogle();
             s.CreateCalendars(account);
         }
+
+        public void ClearAccount(string account, DateTime start, DateTime end)
+        {
+            CalendarSyncGoogle s = new CalendarSyncGoogle();
+            s.ClearAccount(account,start,end);
+        }
     }
 }

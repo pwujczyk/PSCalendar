@@ -38,14 +38,6 @@ namespace PSCalendarBL
             this.Entities.SyncAccountEventMarkAsDeleted(googleCalendarEventId);
         }
 
-        //public List<string> Get()
-        //{
-        //    from sae in Entities.SyncAccountEvent 
-        //    join sa in Entities.SyncAccount on sae.SyncAccountId.Equals(sae.SyncAccountId)
-        //    select new 
-
-        //}
-
         public List<GoogleEvent> GetSyncEvents(string email, DateTime start, DateTime end)
         {
             //email have to be here as we are using it to check if SyncAccountEvent exists for given account
@@ -117,6 +109,13 @@ namespace PSCalendarBL
             return syncAccountLogItem.LastModifcationDate;
         }
 
+
+        public void DeleteSyncAccountEvent(Guid eventGuid, string account)
+        {
+            var toDelete=this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email == account);
+            this.Entities.SyncAccountEvent.Remove(toDelete);
+            this.Entities.SaveChanges();
+        }
 
         public GoogleEvent GetEvent(string googleId)
         {

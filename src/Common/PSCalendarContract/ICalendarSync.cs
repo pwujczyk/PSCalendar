@@ -21,5 +21,10 @@ namespace PSCalendarContract
 
         [OperationContract]
         void AddCalendarsToAccount(string account);
+
+
+        [OperationContract]
+        void ClearAccount(string account,DateTime start, DateTime end);
     }
+
 }

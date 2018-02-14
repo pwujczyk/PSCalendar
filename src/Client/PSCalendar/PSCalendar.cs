@@ -12,6 +12,7 @@ using System.Text;
 using PSCalendarTools;
 using PSCalendar.Commands;
 using PSCalendar.Commands.Core;
+using PSCalendar.Commands.Sync;
 
 namespace PSCalendar
 {
@@ -48,6 +49,11 @@ namespace PSCalendar
         [Parameter]
         public int? SyncMonth { get; set; }
 
+        [Parameter]
+        public string ClearAccount{ get; set; }
+
+        [Parameter]
+        public int ClearAccountMonth { get; set; }
 
         [Parameter]
         public string SyncAccount { get; set; }
@@ -70,6 +76,7 @@ namespace PSCalendar
             conditionTable.Add(new SyncAllAccounts(this));
             conditionTable.Add(new AddSyncAccount(this));
             conditionTable.Add(new AddGoogleCalendars(this));
+            conditionTable.Add(new ClearAccount(this));
 
             foreach (var item in conditionTable)
             {

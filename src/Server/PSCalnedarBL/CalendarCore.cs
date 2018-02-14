@@ -12,7 +12,6 @@ namespace PSCalendarBL
 {
     public class CalendarCore : CalendarBase
     {
-        public event EventHandler<Guid> PSCalendarEventChanged;
 
         public Guid AddEvent(Event @event)
         {
@@ -114,15 +113,6 @@ namespace PSCalendarBL
         {
             Entities.DeleteEventByEventId(guid);
             return true;
-        }
-
-
-        private void OnPSCalendarEventChanged(Guid eventArgs)
-        {
-            if (PSCalendarEventChanged != null)
-            {
-                PSCalendarEventChanged.Invoke(this, eventArgs);
-            }
         }
     }
 }
