@@ -48,14 +48,33 @@ namespace PSCalendarSyncGoogle.Syncs
                     }
                     else //update event
                     {
-                        UpdateEvent(item);
+                        if (ItemAlreadyDeleted(item) == false)
+                        {
+                            UpdateEvent(item);
+                        }
                     }
                 }
                 else
                 {//create event
-                    AddEventToGoogleCalendar(item);
+                    if (EventDelteted(item) == false)
+                    {
+                        AddEventToGoogleCalendar(item);
+                    }
                 }
             }
+        }
+
+        private bool ItemAlreadyDeleted(Event item)
+        {
+            var createdItem = AlreadyCreatedItems[item.EventGuid];
+            var r = createdItem.SyncAccountTobeDeleted && createdItem.SyncAccountDeleted;
+            return r;
+        }
+
+        private bool EventDelteted(Event item)
+        {
+            var r = item.Deleted;
+            return r;
         }
 
         private void UpdateEvent(Event item)

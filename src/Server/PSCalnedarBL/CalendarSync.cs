@@ -48,8 +48,9 @@ namespace PSCalendarBL
 
         public List<GoogleEvent> GetSyncEvents(string email, DateTime start, DateTime end)
         {
+            //email have to be here as we are using it to check if SyncAccountEvent exists for given account
             List<PSCalendarDB.GoogleCalendarSyncView> googleList = (from i in Entities.GoogleCalendarSyncView.AsNoTracking()
-                                                                    where start <= i.StartDate && i.StartDate <= end// && i.Email == email
+                                                                    where start <= i.StartDate && i.StartDate <= end && i.Email == email
                                                                     select i).ToList();
 
 

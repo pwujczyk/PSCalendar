@@ -15,7 +15,7 @@ namespace SyncGmailCalendar
         GoogleCalendarAPI SyncGoogleCalendarAPI = new GoogleCalendarAPI();
       //  PSCalendarBL.CalendarCore CalendarCoreBL = new PSCalendarBL.CalendarCore();
         PSCalendarBL.CalendarSync CalendarSyncBL = new PSCalendarBL.CalendarSync();
-        Dictionary<PSCalendarContract.Dto.EventType, string> CalendarList;
+        //Dictionary<PSCalendarContract.Dto.EventType, string> CalendarList;
 
         static CalendarSyncGoogle()
         {
@@ -33,8 +33,8 @@ namespace SyncGmailCalendar
             var accounts = CalendarSyncBL.GetSyncAccounts();
             foreach (var account in accounts)
             {
-                this.CalendarList = ValidadteCalendarList(account);
-                new GoogleToPSSync(account, start, end, CalendarList).Sync();
+                Dictionary<PSCalendarContract.Dto.EventType, string> calendarList= ValidadteCalendarList(account);
+                new GoogleToPSSync(account, start, end, calendarList).Sync();
                 //foreach (var item in CalendarList)
                 //{
                 //    //SyncGoogleToPowershell(account, start, end, item.Value);
@@ -43,22 +43,23 @@ namespace SyncGmailCalendar
 
             foreach (var account in accounts)
             {
-                //SyncPowershellToGoogle(account, start, end);
-                new PSToGoogleSync(account, start, end, CalendarList).Sync();
+                //SyncPowershellToGoogle(account, start, end);\
+                Dictionary<PSCalendarContract.Dto.EventType, string> calendarList = ValidadteCalendarList(account);
+                new PSToGoogleSync(account, start, end, calendarList).Sync();
             }
 
         }
 
         public void SyncAccount(string account, DateTime start, DateTime end)
         {
-            this.CalendarList = ValidadteCalendarList(account);
+            Dictionary<PSCalendarContract.Dto.EventType, string> calendarList = ValidadteCalendarList(account);
             //foreach (var item in CalendarList)
             //{
             //    SyncGoogleToPowershell(account, start, end, item.Value);
             //}
-            new GoogleToPSSync(account, start, end, CalendarList).Sync();
+            new GoogleToPSSync(account, start, end, calendarList).Sync();
             // SyncPowershellToGoogle(account, start, end);
-            new PSToGoogleSync(account, start, end, CalendarList).Sync();
+            new PSToGoogleSync(account, start, end, calendarList).Sync();
         }
 
 
