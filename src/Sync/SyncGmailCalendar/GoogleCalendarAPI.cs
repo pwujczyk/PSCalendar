@@ -85,10 +85,10 @@ namespace SyncGmailCalendar
         private UserCredential Authenticate(string email)
         {
             UserCredential credential;
-
-            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            string credPath = MasterConfiguration.MConfiguration.Configuration["CredentialPath"];
+            var clientSecretPath = Path.Combine(credPath, $".credentials/client_secret.json");
+            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
-                string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
                 credPath = Path.Combine(credPath, $".credentials/{email}.json");
 
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(

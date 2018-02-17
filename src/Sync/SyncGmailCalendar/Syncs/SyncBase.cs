@@ -31,5 +31,33 @@ namespace PSCalendarSyncGoogle.Syncs
             this.CalendarList = calendarList;
         }
 
+
+        protected void UpdateEventInPSTable(Google.Apis.Calendar.v3.Data.Event googleEvent, string account)
+        {
+            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
+
+            @event.Name = googleEvent.Summary;
+            if (googleEvent.Start.DateTime.HasValue)
+            {
+                @event.StartDate = googleEvent.Start.DateTime.Value;
+            }
+            else
+            {
+                @event.StartDate = DateTime.Parse(googleEvent.Start.Date);
+            }
+
+            if (googleEvent.End.DateTime.HasValue)
+            {
+                @event.EndDate = googleEvent.End.DateTime.Value;
+            }
+            else
+            {
+                @event.EndDate = DateTime.Parse(googleEvent.End.Date);
+            }
+
+            //    @event.EndDate = googleEvent.End.DateTime.Value;
+            //todo: change to automapper
+            CalendarCoreBL.ChangeEvent(@event);
+        }
     }
 }

@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace PSCalendarDBScripts
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             DBUpHelper.DBUp dBUp = new DBUpHelper.DBUp("gc");
             Assembly assembly = Assembly.GetExecutingAssembly();
             string serverName = MasterConfiguration.MConfiguration.Configuration["ServerName"];
-            string dbName= MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
+            string dbName = MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
 
             //todo:get from configuration
-            dBUp.PerformUpdate(serverName, dbName, assembly, true);
+            dBUp.PerformUpdate(serverName, dbName, assembly, false);
         }
     }
 }

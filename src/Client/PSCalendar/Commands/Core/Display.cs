@@ -116,7 +116,7 @@ namespace PSCalendar.Commands
 
         private void ShowMonthTitle(DateTime start)
         {
-            Console.WriteLine(string.Format("[{0}] ", start.Month.ToString().PadLeft(2, '0')) + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(start.Month));
+            Console.WriteLine(string.Format("[{0}] ", start.Month.ToString().PadLeft(2, '0')) + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(start.Month) +" "+ start.Year);
         }
 
 
@@ -166,7 +166,7 @@ namespace PSCalendar.Commands
             {
                 ViewEvent e = eventsStack.Pop();
                 Console.ForegroundColor = CommonExtensions.ParseEnum<System.ConsoleColor>(e.Color.ToString());
-                Console.Write(string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd hh:mm"), e.Name));
+                Console.Write(string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd HH:mm"), e.Name));
                 Console.ResetColor();
 
             }

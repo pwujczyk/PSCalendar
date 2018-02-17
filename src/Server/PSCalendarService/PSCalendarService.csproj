@@ -75,6 +75,10 @@
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
       <Name>PSCalendarContract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PSCalendarDBScripts\PSCalendarDBScripts.csproj">
+      <Project>{5f3532c5-b5af-4f9a-85a1-c6c09230affe}</Project>
+      <Name>PSCalendarDBScripts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PSCalendarServer\PSCalendarServer.csproj">
       <Project>{d062326e-79c5-46b4-bfd3-f586532c44c9}</Project>
       <Name>PSCalendarServer</Name>

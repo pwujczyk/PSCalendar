@@ -100,17 +100,6 @@ namespace PSCalendarSyncGoogle.Syncs
             }
         }
 
-        private void UpdateEventInPSTable(Google.Apis.Calendar.v3.Data.Event googleEvent, string account)
-        {
-            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
-
-            @event.Name = googleEvent.Summary;
-            @event.StartDate = googleEvent.Start.DateTime.Value;
-            @event.EndDate = googleEvent.End.DateTime.Value;
-            //todo: change to automapper
-            CalendarCoreBL.ChangeEvent(@event);
-        }
-
 
         private bool EventIsInDifferentCalendar(Google.Apis.Calendar.v3.Data.Event googleEvent, string calendarId)
         {
