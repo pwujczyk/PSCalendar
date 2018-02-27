@@ -42,7 +42,11 @@ namespace PSCalendarContract.Dto
         [ColorAttribute(ConsoleColor.DarkGreen)]
         Pawel = 6,
         [ColorAttribute(ConsoleColor.DarkGray)]
-        Gosia = 7
+        Gosia = 7,
+        [ColorAttribute(ConsoleColor.DarkRed)]
+        Together = 8
+
+
 
         //ok są jeszcze:
         //DarkCyjan

@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConnectionStringLightPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ConnectionStringLightPT.0.0.2\lib\v4.6.1\ConnectionStringLightPT.dll</HintPath>
+    </Reference>
+    <Reference Include="DbUp, Version=3.3.5.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\dbup.3.3.5\lib\net35\DbUp.dll</HintPath>
+    </Reference>
+    <Reference Include="DBUpPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\DBUpPT.0.0.1\lib\v4.6.1\DBUpPT.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,12 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\DBUpPT\DBUpHelper\DBUpHelper.csproj">
-      <Project>{935a1b8b-9b9d-4ad3-bc9a-b88a57a37b65}</Project>
-      <Name>DBUpHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
       <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
       <Name>MasterConfiguration</Name>

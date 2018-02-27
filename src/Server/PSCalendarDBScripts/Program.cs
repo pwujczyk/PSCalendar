@@ -11,12 +11,11 @@ namespace PSCalendarDBScripts
     {
         public static void Main(string[] args)
         {
-            DBUpHelper.DBUp dBUp = new DBUpHelper.DBUp("gc");
-            Assembly assembly = Assembly.GetExecutingAssembly();
             string serverName = MasterConfiguration.MConfiguration.Configuration["ServerName"];
             string dbName = MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
 
-            //todo:get from configuration
+            DBUpPT.DBUp dBUp = new DBUpPT.DBUp("gc");
+            Assembly assembly = Assembly.GetExecutingAssembly();
             dBUp.PerformUpdate(serverName, dbName, assembly, false);
         }
     }
