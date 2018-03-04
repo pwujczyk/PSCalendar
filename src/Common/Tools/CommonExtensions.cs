@@ -72,5 +72,17 @@ namespace PSCalendarTools
             return new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, 0);
         }
 
+        public static String TrimText(this string s, int length)
+        {
+            if (s.Length>length)
+            {
+                return s.Substring(0, length) + "...";
+            }
+            else
+            {
+                return s;
+            }
+        }
+
     }
 }

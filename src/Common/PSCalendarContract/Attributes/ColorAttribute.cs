@@ -8,8 +8,9 @@ namespace PSCalendarContract.Attributes
 {
     public class ColorAttribute : Attribute
     {
-        public ConsoleColor Color { get; set; }
-        public ColorAttribute(ConsoleColor color)
+        //public ConsoleColor Color { get; set; }
+        public int Color { get; set; }
+        public ColorAttribute(int color)
         {
             this.Color = color;
         }

@@ -28,9 +28,9 @@ namespace PSCalendarBL
         }
     }
 
-    public class ColorResolver : AutoMapper.IValueResolver<PSCalendarDB.Event, dto.Event, ConsoleColor>
+    public class ColorResolver : AutoMapper.IValueResolver<PSCalendarDB.Event, dto.Event, int>
     {//todo: maybe move color resolver to gui
-        public ConsoleColor Resolve(PSCalendarDB.Event source, dto.Event destination, ConsoleColor destMember, ResolutionContext context)
+        public int Resolve(PSCalendarDB.Event source, dto.Event destination, int destMember, ResolutionContext context)
         {
             PeriodTypeResolver resolver = new PeriodTypeResolver();
             EventType @event = resolver.ResolvePublic(source.Type);
@@ -46,7 +46,7 @@ namespace PSCalendarBL
                 return attributes[0].Color;
             }
 
-            return ConsoleColor.White;
+            return 15;
         }
     }
     public class PeriodTypeResolver : IValueResolver<PSCalendarDB.Event, dto.Event, EventType>

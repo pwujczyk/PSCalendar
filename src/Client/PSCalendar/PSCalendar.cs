@@ -13,9 +13,11 @@ using PSCalendarTools;
 using PSCalendar.Commands;
 using PSCalendar.Commands.Core;
 using PSCalendar.Commands.Sync;
+using System.Runtime.InteropServices;
 
 namespace PSCalendar
 {
+
     [Cmdlet(VerbsCommon.Get, "Calendar")]
     public class PSCalendarCmdlet : PSCmdlet
     {
@@ -64,8 +66,21 @@ namespace PSCalendar
         [Parameter]
         public string AddGoogleCalendarsToAccount { get; set; }
 
+        //Colors
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool SetConsoleMode(IntPtr hConsoleHandle, int mode);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetConsoleMode(IntPtr handle, out int mode);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr GetStdHandle(int handle);
+        //Colors
         protected override void BeginProcessing()
         {
+
+            var handle = GetStdHandle(-11);
+            int mode;
+            GetConsoleMode(handle, out mode);
+            SetConsoleMode(handle, mode | 0x4);
 
             List<BaseCommand> conditionTable = new List<BaseCommand>();
             conditionTable.Add(new Delete(this));

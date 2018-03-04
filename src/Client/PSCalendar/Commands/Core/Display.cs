@@ -34,7 +34,7 @@ namespace PSCalendar.Commands
         {
             var eventsList = GetEvents(start, end);
 
-            Stack<ViewEvent> eventsStack = CreateEventStack(eventsList);// new Stack<Event>(eventsList.OrderByDescending(x => x.StartDate));
+            Stack<ViewEvent> eventsStack = CreateEventStack(eventsList);
             ShowMonthTitle(start);
             FillEmptyValues(start);
             DateTime lastItem = DateTime.Now;
@@ -77,16 +77,10 @@ namespace PSCalendar.Commands
             List<ViewEvent> list = new List<ViewEvent>();
             foreach (var item in eventsList.OrderByDescending(x => x.StartDate))
             {
-                //if (item.StartDate.Date == item.EndDate.Date)
-                //{
-                //    list.Add(new ViewEvent(item.NiceId,item.Name, item.StartDate,item.Color));
-                //}
-                //else
-                //{
-                    TimeSpan ts = item.EndDate.Subtract(item.StartDate);
-                    for (int i = 0; i <= ts.Days; i++)
-                    {
-                        DateTime dt = item.StartDate.AddDays(i);
+                TimeSpan ts = item.EndDate.Subtract(item.StartDate);
+                for (int i = 0; i <= ts.Days; i++)
+                {
+                    DateTime dt = item.StartDate.AddDays(i);
                     if (i == 0)
                     {
                         list.Add(new ViewEvent(item.NiceId, item.Name, dt, item.Color));
@@ -95,10 +89,9 @@ namespace PSCalendar.Commands
                     {
                         list.Add(new ViewEvent(item.NiceId, item.Name, dt.Date, item.Color));
                     }
-                    }
-                //}
+                }
             }
-            return new Stack<ViewEvent>(list.OrderByDescending(x=>x.Date).ThenByDescending(x=>x.NiceId));
+            return new Stack<ViewEvent>(list.OrderByDescending(x => x.Date).ThenByDescending(x => x.NiceId));
         }
 
         public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
@@ -116,7 +109,7 @@ namespace PSCalendar.Commands
 
         private void ShowMonthTitle(DateTime start)
         {
-            Console.WriteLine(string.Format("[{0}] ", start.Month.ToString().PadLeft(2, '0')) + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(start.Month) +" "+ start.Year);
+            Console.WriteLine(string.Format("[{0}] ", start.Month.ToString().PadLeft(2, '0')) + CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(start.Month) + " " + start.Year);
         }
 
 
@@ -133,27 +126,25 @@ namespace PSCalendar.Commands
             }
         }
 
-        private static void WriteDayNumber(List<Event> eventsList, DateTime item)
+        private  void WriteDayNumber(List<Event> eventsList, DateTime item)
         {
             var @event = eventsList.Where(x => x.StartDate.Date <= item.Date && item.Date <= x.EndDate.Date).ToList();
+            int color = 15;//red
             if (@event.Count > 0)
             {
                 if (@event.Count == 1)
                 {
-                    Console.ForegroundColor = CommonExtensions.ParseEnum<System.ConsoleColor>(@event[0].Color.ToString());
-                }
-                else
-                {
-                    Console.ForegroundColor = System.ConsoleColor.Red;
+                    color = @event[0].Color;
                 }
             }
             if (item.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                Console.Write(string.Concat(".", item.Day.ToString()).PadLeft(4));
+                WriteIncolor(color, string.Concat(".", item.Day.ToString()).PadLeft(4));
+                
             }
             else
             {
-                Console.Write(item.Day.ToString().PadLeft(4));
+                WriteIncolor(color, item.Day.ToString().PadLeft(4));
             }
             Console.ResetColor();
         }
@@ -165,11 +156,15 @@ namespace PSCalendar.Commands
             if (eventsStack.Count > 0)
             {
                 ViewEvent e = eventsStack.Pop();
-                Console.ForegroundColor = CommonExtensions.ParseEnum<System.ConsoleColor>(e.Color.ToString());
-                Console.Write(string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd HH:mm"), e.Name));
+                WriteIncolor(e.Color, string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd HH:mm"), e.Name.TrimText(60)));
                 Console.ResetColor();
 
             }
+        }
+
+        private void WriteIncolor(int color, string text)
+        {
+            Console.Write("\x1b[38;5;" + color + "m" + text);
         }
 
     }

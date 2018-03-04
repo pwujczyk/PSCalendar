@@ -29,21 +29,21 @@ namespace PSCalendarContract.Dto
 
 
         None = 0,
-        [ColorAttribute(ConsoleColor.Green)]
+        [ColorAttribute(46)]//green
         Sport = 1,
-        [ColorAttribute(ConsoleColor.Magenta)]
+        [ColorAttribute(200)]
         Family = 2,
-        [ColorAttribute(ConsoleColor.Yellow)]
+        [ColorAttribute(226)]
         Friends = 3,
-        [ColorAttribute(ConsoleColor.Cyan)]
+        [ColorAttribute(168)]
         PawelWork = 4,
-        [ColorAttribute(ConsoleColor.DarkCyan)]
+        [ColorAttribute(5)]
         GosiaWork = 5,
-        [ColorAttribute(ConsoleColor.DarkGreen)]
+        [ColorAttribute(106)]
         Pawel = 6,
-        [ColorAttribute(ConsoleColor.DarkGray)]
+        [ColorAttribute(240)]
         Gosia = 7,
-        [ColorAttribute(ConsoleColor.DarkRed)]
+        [ColorAttribute(214)]
         Together = 8
 
 

@@ -16,6 +16,6 @@ namespace PSCalendarContract.Dto
         public EventType Type { get; set; }
         public bool Deleted { get; set; }
 
-        public ConsoleColor Color { get; set; }
+        public int Color { get; set; }
     }
 }

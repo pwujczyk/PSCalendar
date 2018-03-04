@@ -11,10 +11,10 @@ namespace PSCalendar.ViewObjects
         public int NiceId { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
-        public ConsoleColor Color { get; set; }
+        public int Color { get; set; }
 
 
-        public ViewEvent(int niceId, string name, DateTime date,ConsoleColor color)
+        public ViewEvent(int niceId, string name, DateTime date,int color)
         {
             this.NiceId = niceId;
             this.Name = name;
