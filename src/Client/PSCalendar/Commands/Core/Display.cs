@@ -14,7 +14,7 @@ namespace PSCalendar.Commands
     class Display : BaseCommand<ICalendar>
     {
         private static string Spacer = "".PadLeft(4);
-
+        private static int RedColor = 1;
         protected override bool Condition => true;
 
         public Display(PSCalendarCmdlet cmdl) : base(cmdl) { }
@@ -135,6 +135,10 @@ namespace PSCalendar.Commands
                 if (@event.Count == 1)
                 {
                     color = @event[0].Color;
+                }
+                else
+                {
+                    color = RedColor;//red
                 }
             }
             if (item.ToShortDateString() == DateTime.Now.ToShortDateString())
