@@ -12,12 +12,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using PSCalendarTools;
 using AutoMapper;
+using System.Net;
 
 namespace SyncGmailCalendar
 {
     public class GoogleCalendarAPI
     {
         static string[] Scopes = { CalendarService.Scope.Calendar };
+        public static string EventNotFound = HttpStatusCode.NotFound.ToString();
         //const string CalendarId = "primary";
 
         private CalendarService GetService(string account)
@@ -51,10 +53,27 @@ namespace SyncGmailCalendar
             return r;
         }
 
-        public Event GetEvent(string account, string googleEventId,string calendarId)
+        public Event GetEvent(string account, string googleEventId, string calendarId)
         {
+            Event r = null;
             var request = GetService(account).Events.Get(calendarId, googleEventId);
-            Event r = request.Execute();
+            try
+            {
+                r = request.Execute();
+
+            }
+            catch (Google.GoogleApiException ex)
+            {
+                if (ex.HttpStatusCode == HttpStatusCode.NotFound)
+                {
+                    r = new Event() { Status = EventNotFound };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
             return r;
         }
 
@@ -122,7 +141,7 @@ namespace SyncGmailCalendar
         public CalendarList GetGoogleCalendars(string account)
         {
             CalendarListResource.ListRequest request = GetService(account).CalendarList.List();
-            
+
             CalendarList x = request.Execute();
             return x;
         }
@@ -132,7 +151,7 @@ namespace SyncGmailCalendar
             Calendar c = new Calendar();
             c.Summary = name;
             var request = GetService(account).Calendars.Insert(c);
-            Calendar r=request.Execute();
+            Calendar r = request.Execute();
             return r;
         }
     }

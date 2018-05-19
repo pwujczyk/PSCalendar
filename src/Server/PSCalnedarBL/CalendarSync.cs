@@ -122,5 +122,23 @@ namespace PSCalendarBL
             var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId));
             return r;
         }
+
+        public void MarkEventAsDeleted(string googleCalendarEventId)
+        {
+            var syncAccountEvent=this.Entities.SyncAccountEvent.Single(x => x.GoogleCalendarEventId == googleCalendarEventId);
+
+            var allSyncAccountEvents = this.Entities.SyncAccountEvent.Where(x => x.EventGuid == syncAccountEvent.EventGuid);
+            foreach (var item in allSyncAccountEvents)
+            {
+                item.ToBeDeleted = true;
+                item.Deleted = true;
+            }
+
+            var powershellEvent = this.Entities.Event.Single(x => x.EventGuid == syncAccountEvent.EventGuid);
+            powershellEvent.Deleted = true;
+
+            this.Entities.SaveChanges();
+            
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace PSCalendarContract.Dto
         Friends = 3,
         [ColorAttribute(168)]
         PawelWork = 4,
-        [ColorAttribute(5)]
+        [ColorAttribute(156)]
         GosiaWork = 5,
         [ColorAttribute(106)]
         Pawel = 6,

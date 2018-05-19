@@ -49,10 +49,10 @@ namespace PSCalendarSyncGoogle.Syncs
                     else //update event
                     {
                         if (ItemAlreadyDeleted(item) == false)
-                    {
-                        UpdateEvent(item);
+                        {
+                            UpdateEvent(item);
+                        }
                     }
-                     }
                 }
                 else
                 {//create event
@@ -86,17 +86,41 @@ namespace PSCalendarSyncGoogle.Syncs
             var googleCalendarEvent = SyncGoogleCalendarAPI.GetEvent(this.Account, googleCalendarEventId, calendarId);
             var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(item.EventGuid);
 
-            if (GoogleEventIsMoreUpdatedThanPS(googleCalendarEvent, lastSyncAccountLogItemModyficationDate))
+            if (GoogleEventDeleted(googleCalendarEvent))
             {
-              //  throw new Exception("what the fuck");
-                UpdateEventInPSTable(googleCalendarEvent, this.Account);
-                CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                MarkEventInDatabaseAsDeleted(googleCalendarEventId);
             }
-
-            if (PSEventIsMoreUpdatedThanGoogle(googleCalendarEvent, lastSyncAccountLogItemModyficationDate))
+            else
             {
-                var @event=UpdateEventInGoogleCalendar(this.Account, item, googleCalendarEvent, calendarId);
-                CalendarSyncBL.UpdateLogItem(item.EventGuid, @event.Updated.Value);
+                if (GoogleEventIsMoreUpdatedThanPS(googleCalendarEvent, lastSyncAccountLogItemModyficationDate))
+                {
+                    //  throw new Exception("what the fuck");
+                    UpdateEventInPSTable(googleCalendarEvent, this.Account);
+                    CalendarSyncBL.UpdateLogItem(item.EventGuid, googleCalendarEvent.Updated.Value);
+                }
+
+                if (PSEventIsMoreUpdatedThanGoogle(googleCalendarEvent, lastSyncAccountLogItemModyficationDate))
+                {
+                    var @event = UpdateEventInGoogleCalendar(this.Account, item, googleCalendarEvent, calendarId);
+                    CalendarSyncBL.UpdateLogItem(item.EventGuid, @event.Updated.Value);
+                }
+            }
+        }
+
+        private void MarkEventInDatabaseAsDeleted(string googleCalendarEventId)
+        {
+            CalendarSyncBL.MarkEventAsDeleted(googleCalendarEventId);
+        }
+
+        private bool GoogleEventDeleted(Google.Apis.Calendar.v3.Data.Event googleCalendarEvent)
+        {
+            if (googleCalendarEvent.Status== GoogleCalendarAPI.EventNotFound)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -112,7 +136,7 @@ namespace PSCalendarSyncGoogle.Syncs
 
         private Google.Apis.Calendar.v3.Data.Event UpdateEventInGoogleCalendar(string account, Event item, Google.Apis.Calendar.v3.Data.Event googleCalendarEvent, string calendarid)
         {
-            var r=SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id, calendarid);
+            var r = SyncGoogleCalendarAPI.UpdateEvent(account, item, googleCalendarEvent.Id, calendarid);
             return r;
         }
 
