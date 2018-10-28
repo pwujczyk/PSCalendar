@@ -78,7 +78,8 @@ namespace PSCalendar.Commands
             foreach (var item in eventsList.OrderByDescending(x => x.StartDate))
             {
                 TimeSpan ts = item.EndDate.Subtract(item.StartDate);
-                for (int i = 0; i <= ts.Days; i++)
+                int daysDifference = ts.Days + (ts.Days>0 && ts.Hours > 0 ? 1 : 0);
+                for (int i = 0; i <= daysDifference; i++)
                 {
                     DateTime dt = item.StartDate.AddDays(i);
                     if (i == 0)
@@ -126,7 +127,7 @@ namespace PSCalendar.Commands
             }
         }
 
-        private  void WriteDayNumber(List<Event> eventsList, DateTime item)
+        private void WriteDayNumber(List<Event> eventsList, DateTime item)
         {
             var @event = eventsList.Where(x => x.StartDate.Date <= item.Date && item.Date <= x.EndDate.Date).ToList();
             int color = 15;//red
@@ -144,7 +145,7 @@ namespace PSCalendar.Commands
             if (item.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
                 WriteIncolor(color, string.Concat(".", item.Day.ToString()).PadLeft(4));
-                
+
             }
             else
             {

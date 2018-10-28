@@ -9,7 +9,7 @@ using System.ServiceModel.Description;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using MasterConfiguration;
+using ProductivityTools.MasterConfiguration;
 using PSCalendarContract;
 using PSCalendarServer;
 

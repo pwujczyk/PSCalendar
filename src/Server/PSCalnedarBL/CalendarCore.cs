@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MasterConfiguration;
 using PSCalendarContract.Dto;
 using System;
 using System.Collections.Generic;
@@ -81,8 +80,9 @@ namespace PSCalendarBL
 
         public List<Event> GetActiveEvents(DateTime start, DateTime end)
         {
+            var endofDay = end.AddDays(1).AddSeconds(-1);
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
-                                                 where start <= i.StartDate && i.StartDate <= end && i.Deleted == false
+                                                 where start <= i.StartDate && i.StartDate <= endofDay && i.Deleted == false
                                                  select i).OrderBy(i => i.NiceId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
             return result;

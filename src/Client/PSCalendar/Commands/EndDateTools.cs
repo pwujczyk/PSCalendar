@@ -11,10 +11,10 @@ namespace PSCalendar.Commands
     {
         public static DateTime GetEndDate(DateTime startDate, string end, string duration)
         {
-            if (startDate.TimeOfDay.TotalSeconds==0)
-            {
-                return startDate;
-            }
+            //if (startDate.TimeOfDay.TotalSeconds==0)
+            //{
+            //    return startDate;
+            //}
             DateTime endDate = startDate.AddHours(1);
             if (end.NotEmpty())
             {

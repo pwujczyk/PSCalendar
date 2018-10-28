@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using PSCalendarTools;
 using AutoMapper;
 using System.Net;
+using ProductivityTools.MasterConfiguration;
 
 namespace SyncGmailCalendar
 {
@@ -90,7 +91,7 @@ namespace SyncGmailCalendar
             if (@event.StartDate.Date == @event.StartDate)
             {//whole day event
                 result.Start = new EventDateTime() { Date = @event.StartDate.ToString("yyyy-MM-dd") };
-                result.End = new EventDateTime() { Date = @event.EndDate.ToString("yyyy-MM-dd") };
+                result.End = new EventDateTime() { Date = @event.EndDate.AddDays(1).ToString("yyyy-MM-dd") };
             }
             else
             {
@@ -104,7 +105,7 @@ namespace SyncGmailCalendar
         private UserCredential Authenticate(string email)
         {
             UserCredential credential;
-            string credPath = MasterConfiguration.MConfiguration.Configuration["CredentialPath"];
+            string credPath = MConfiguration.Configuration["CredentialPath"];
             var clientSecretPath = Path.Combine(credPath, $".credentials/client_secret.json");
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {

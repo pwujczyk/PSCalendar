@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-  <Source>ConfigurationFile</Source>
-  <ApplicationConfiguration>
+  <Source Type="File"></Source>
+  <ApplicationConfiguration Name="PSCalendar">
     <Address>net.tcp://localhost:9007/</Address>
     <ServerName>.\sql2017</ServerName>
     <DatabaseName>PawelPT</DatabaseName>

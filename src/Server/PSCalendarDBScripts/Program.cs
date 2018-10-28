@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProductivityTools.MasterConfiguration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,8 +12,9 @@ namespace PSCalendarDBScripts
     {
         public static void Main(string[] args)
         {
-            string serverName = MasterConfiguration.MConfiguration.Configuration["ServerName"];
-            string dbName = MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
+            MConfiguration.SetConfigurationFileName("Configuration.xml");
+            string serverName = MConfiguration.Configuration["ServerName"];
+            string dbName = MConfiguration.Configuration["DatabaseName"];
 
             DBUpPT.DBUp dBUp = new DBUpPT.DBUp("gc");
             Assembly assembly = Assembly.GetExecutingAssembly();

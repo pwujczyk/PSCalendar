@@ -1,4 +1,5 @@
-﻿using PSCalendarContract;
+﻿using ProductivityTools.MasterConfiguration;
+using PSCalendarContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ namespace PSCalendar.Commands
         {
             get
             {
-                string address = MasterConfiguration.MConfiguration.Configuration["Address"];
+                MConfiguration.SetConfigurationFileName("Configuration.xml");
+                string address = MConfiguration.Configuration["Address"];
                 NetTcpBinding netTcpBinding = new NetTcpBinding();
                 netTcpBinding.CloseTimeout = TimeSpan.FromMinutes(20);
                 ChannelFactory<T> factory = new ChannelFactory<T>(netTcpBinding, new EndpointAddress(address));
