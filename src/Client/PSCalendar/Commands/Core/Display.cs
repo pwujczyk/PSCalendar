@@ -16,6 +16,7 @@ namespace PSCalendar.Commands
         private static string Spacer = "".PadLeft(4);
         private static int RedColor = 1;
         protected override bool Condition => true;
+        private DateTime Now => DateTime.Now;
 
         public Display(PSCalendarCmdlet cmdl) : base(cmdl) { }
 
@@ -78,17 +79,17 @@ namespace PSCalendar.Commands
             foreach (var item in eventsList.OrderByDescending(x => x.StartDate))
             {
                 TimeSpan ts = item.EndDate.Subtract(item.StartDate);
-                int daysDifference = ts.Days + (ts.Days>0 && ts.Hours > 0 ? 1 : 0);
+                int daysDifference = ts.Days + (ts.Days > 0 && ts.Hours > 0 ? 1 : 0);
                 for (int i = 0; i <= daysDifference; i++)
                 {
                     DateTime dt = item.StartDate.AddDays(i);
                     if (i == 0)
                     {
-                        list.Add(new ViewEvent(item.NiceId, item.Name, dt, item.Color));
+                        list.Add(new ViewEvent(item.NiceId, item.Name, dt, item.Color, item.Type));
                     }
                     else
                     {
-                        list.Add(new ViewEvent(item.NiceId, item.Name, dt.Date, item.Color));
+                        list.Add(new ViewEvent(item.NiceId, item.Name, dt.Date, item.Color, item.Type));
                     }
                 }
             }
@@ -131,7 +132,7 @@ namespace PSCalendar.Commands
         private void WriteDayNumber(List<Event> eventsList, DateTime item)
         {
             var @event = eventsList.Where(x => (x.StartDate.Date <= item.Date && item.Date <= x.EndDate.Date)
-            || (x.Type==EventType.Birthday &&( x.StartDate.Date.DayOfYear <= item.Date.DayOfYear && item.Date.DayOfYear <= x.EndDate.Date.DayOfYear))
+            || (x.Type == EventType.Birthday && (x.StartDate.Date.DayOfYear <= item.Date.DayOfYear && item.Date.DayOfYear <= x.EndDate.Date.DayOfYear))
             ).ToList();
             int color = 15;//red
             if (@event.Count > 0)
@@ -164,9 +165,16 @@ namespace PSCalendar.Commands
             if (eventsStack.Count > 0)
             {
                 ViewEvent e = eventsStack.Pop();
-                WriteIncolor(e.Color, string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd HH:mm"), e.Name.TrimText(60)));
+                string eventlist = string.Format("{0}. {1}    {2}", e.NiceId, e.Date.ToString("yyyy-MM-dd HH:mm"), e.Name.TrimText(60));
+                if (e.Type == EventType.Birthday)
+                {
+                    DateTime zeroTime = new DateTime(1, 1, 1);
+                    TimeSpan diff = Now.Subtract(e.Date);
+                    int years = (zeroTime + diff).Year - 1;
+                    eventlist += $" - Current age: {years}";
+                }
+                WriteIncolor(e.Color, eventlist);
                 Console.ResetColor();
-
             }
         }
 

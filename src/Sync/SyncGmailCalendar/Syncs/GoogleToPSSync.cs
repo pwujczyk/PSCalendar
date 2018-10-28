@@ -67,7 +67,7 @@ namespace PSCalendarSyncGoogle.Syncs
 
         private bool GoogleEventIsMoreUpdated(Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
-            var psGoogleEvent = GetGoogleEvent(googleEvent.Id);
+            var psGoogleEvent = GetGoogleEvent(googleEvent.Id, googleEvent.RecurringEventId);
             var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(psGoogleEvent.EventGuid);
             var r = googleEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds();
             return r;
@@ -75,7 +75,7 @@ namespace PSCalendarSyncGoogle.Syncs
 
         private void DeleteEvent(Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
-            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
+            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id, googleEvent.RecurringEventId);
             CalendarCoreBL.Delete(@event.EventGuid);
             CalendarSyncBL.SyncAccountEventMarkAsDeleted(@event.GoogleCalendarEventId);
 
@@ -91,7 +91,7 @@ namespace PSCalendarSyncGoogle.Syncs
 
         private void UpdateEvent(Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
-            var psGoogleEvent = GetGoogleEvent(googleEvent.Id);
+            var psGoogleEvent = GetGoogleEvent(googleEvent.Id, googleEvent.RecurringEventId);
             var lastSyncAccountLogItemModyficationDate = CalendarSyncBL.GetLastSyncAccountLogItemModyficationDate(psGoogleEvent.EventGuid);
             if (googleEvent.Updated.Value.TrimMilliseconds() > lastSyncAccountLogItemModyficationDate.TrimMilliseconds())
             {
@@ -107,20 +107,22 @@ namespace PSCalendarSyncGoogle.Syncs
             return b;
         }
 
-        private GoogleEvent GetGoogleEvent(string googleId)
+        private GoogleEvent GetGoogleEvent(string googleId, string recurringEventId)
         {
-            var r = PsEventsWithAdditionalInfo.SingleOrDefault(x => x.GoogleCalendarEventId == googleId);
+            var r = PsEventsWithAdditionalInfo.SingleOrDefault(x => x.GoogleCalendarEventId == googleId || x.GoogleCalendarEventId == recurringEventId);
             return r;
         }
 
         private bool EventExistsInPSTable(Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
-            return PsEventsWithAdditionalInfo.Any(x => x.GoogleCalendarEventId == googleEvent.Id);
+            bool birthday = PsEventsWithAdditionalInfo.Any(x => x.Type == EventType.Birthday && x.GoogleCalendarEventId == googleEvent.RecurringEventId);
+            bool exist = PsEventsWithAdditionalInfo.Any(x => x.GoogleCalendarEventId == googleEvent.Id);
+            return exist || birthday;
         }
 
         private void MoveEvent(string calendarId, EventType eventType, Google.Apis.Calendar.v3.Data.Event googleEvent)
         {
-            var psGoogleEvent = GetGoogleEvent(googleEvent.Id);
+            var psGoogleEvent = GetGoogleEvent(googleEvent.Id, googleEvent.RecurringEventId);
             CalendarSyncBL.UpdateGoogleCalendar(this.Account, psGoogleEvent.EventGuid, eventType, calendarId);
             //we are not updating date, as we want to perform update of elements
             //CalendarSyncBL.UpdateLogItem(psGoogleEvent.EventGuid, googleEvent.Updated.Value);

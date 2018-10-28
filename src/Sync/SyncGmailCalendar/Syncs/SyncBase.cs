@@ -34,7 +34,7 @@ namespace PSCalendarSyncGoogle.Syncs
 
         protected void UpdateEventInPSTable(Google.Apis.Calendar.v3.Data.Event googleEvent, string account)
         {
-            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id);
+            PSCalendarContract.Dto.GoogleEvent @event = CalendarSyncBL.GetEvent(googleEvent.Id, googleEvent.RecurringEventId);
 
             @event.Name = googleEvent.Summary;
             if (googleEvent.Start.DateTime.HasValue)

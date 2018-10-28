@@ -88,6 +88,13 @@ namespace SyncGmailCalendar
         private Event BuildEvent(PSCalendarContract.Dto.Event @event)
         {
             Event result = new Event();
+            if (@event.Type == PSCalendarContract.Dto.EventType.Birthday)
+            {
+                string rule = string.Format($"RRULE:FREQ=YEARLY;BYMONTH={@event.StartDate.Month};BYMONTHDAY={@event.StartDate.Day}");
+                result.Recurrence = new List<String>();
+                result.Recurrence.Add(rule);
+            }
+
             if (@event.StartDate.Date == @event.StartDate)
             {//whole day event
                 result.Start = new EventDateTime() { Date = @event.StartDate.ToString("yyyy-MM-dd") };
@@ -98,6 +105,8 @@ namespace SyncGmailCalendar
                 result.Start = new EventDateTime() { DateTime = @event.StartDate };
                 result.End = new EventDateTime() { DateTime = @event.EndDate };
             }
+
+
             result.Summary = @event.Name;
             return result;
         }

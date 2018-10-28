@@ -64,7 +64,7 @@ namespace PSCalendarBL
 
         public void UpdateGoogleCalendar(string account, Guid eventGuid, EventType eventType, string googleCalendarId)
         {
-            var syncAccountEvents = this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email==account);
+            var syncAccountEvents = this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email == account);
 
             syncAccountEvents.GoogleCalendarId = googleCalendarId;
 
@@ -112,20 +112,20 @@ namespace PSCalendarBL
 
         public void DeleteSyncAccountEvent(Guid eventGuid, string account)
         {
-            var toDelete=this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email == account);
+            var toDelete = this.Entities.SyncAccountEvent.Single(x => x.EventGuid == eventGuid && x.SyncAccount.Email == account);
             this.Entities.SyncAccountEvent.Remove(toDelete);
             this.Entities.SaveChanges();
         }
 
-        public GoogleEvent GetEvent(string googleId)
+        public GoogleEvent GetEvent(string googleId, string recurringEventId)
         {
-            var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId));
+            var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId || (x.GoogleCalendarEventId == recurringEventId && x.GoogleCalendarEventId !=null)));
             return r;
         }
 
         public void MarkEventAsDeleted(string googleCalendarEventId)
         {
-            var syncAccountEvent=this.Entities.SyncAccountEvent.Single(x => x.GoogleCalendarEventId == googleCalendarEventId);
+            var syncAccountEvent = this.Entities.SyncAccountEvent.Single(x => x.GoogleCalendarEventId == googleCalendarEventId);
 
             var allSyncAccountEvents = this.Entities.SyncAccountEvent.Where(x => x.EventGuid == syncAccountEvent.EventGuid);
             foreach (var item in allSyncAccountEvents)
@@ -138,7 +138,7 @@ namespace PSCalendarBL
             powershellEvent.Deleted = true;
 
             this.Entities.SaveChanges();
-            
+
         }
     }
 }

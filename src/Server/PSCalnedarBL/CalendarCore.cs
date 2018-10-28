@@ -82,13 +82,16 @@ namespace PSCalendarBL
         {
             var endofDay = end.AddDays(1).AddSeconds(-1);
             List<PSCalendarDB.Event> resultDb = (from i in Entities.Event
-                                                 where start <= i.StartDate && i.StartDate <= endofDay && i.Deleted == false
+                                                 where i.Type != EventType.Birthday.ToString()
+                                                 &&
+                                                 (start <= i.StartDate && i.StartDate <= endofDay && i.Deleted == false)
                                                  select i).OrderBy(i => i.NiceId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
 
             List<PSCalendarDB.Event> birthdays = (from i in Entities.Event
-                                                 where  i.Type==EventType.Birthday.ToString() && i.Deleted == false
-                                                 select i).OrderBy(i => i.NiceId).ToList();
+                                                  where i.Type == EventType.Birthday.ToString() && i.Deleted == false
+                                                  select i).OrderBy(i => i.NiceId).ToList()
+                                                  .Where(i => start.DayOfYear <= i.StartDate.DayOfYear && i.StartDate.DayOfYear <= endofDay.DayOfYear).ToList();
             List<Event> birtDayResult = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(birthdays);
 
             result.AddRange(birtDayResult);
