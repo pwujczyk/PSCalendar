@@ -127,9 +127,12 @@ namespace PSCalendar.Commands
             }
         }
 
+
         private void WriteDayNumber(List<Event> eventsList, DateTime item)
         {
-            var @event = eventsList.Where(x => x.StartDate.Date <= item.Date && item.Date <= x.EndDate.Date).ToList();
+            var @event = eventsList.Where(x => (x.StartDate.Date <= item.Date && item.Date <= x.EndDate.Date)
+            || (x.Type==EventType.Birthday &&( x.StartDate.Date.DayOfYear <= item.Date.DayOfYear && item.Date.DayOfYear <= x.EndDate.Date.DayOfYear))
+            ).ToList();
             int color = 15;//red
             if (@event.Count > 0)
             {

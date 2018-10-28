@@ -11,8 +11,6 @@ namespace PSCalendar.Commands
 {
     class Change : BaseCommand<ICalendar>
     {
-
-
         protected override bool Condition
         {
             get

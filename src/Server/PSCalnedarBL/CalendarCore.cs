@@ -85,6 +85,14 @@ namespace PSCalendarBL
                                                  where start <= i.StartDate && i.StartDate <= endofDay && i.Deleted == false
                                                  select i).OrderBy(i => i.NiceId).ToList();
             List<Event> result = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(resultDb);
+
+            List<PSCalendarDB.Event> birthdays = (from i in Entities.Event
+                                                 where  i.Type==EventType.Birthday.ToString() && i.Deleted == false
+                                                 select i).OrderBy(i => i.NiceId).ToList();
+            List<Event> birtDayResult = Mapper.Map<List<PSCalendarDB.Event>, List<Event>>(birthdays);
+
+            result.AddRange(birtDayResult);
+
             return result;
         }
 

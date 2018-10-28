@@ -11,23 +11,6 @@ namespace PSCalendarContract.Dto
 {
     public enum EventType
     {
-        //None = 0,
-        //[ColorAttribute(ConsoleColor.Green)]
-        //Sport = 1,
-        //[ColorAttribute(ConsoleColor.Magenta)]
-        //Family = 2,
-        //[ColorAttribute(ConsoleColor.Yellow)]
-        //Friends = 3,
-        //[ColorAttribute(ConsoleColor.Cyan)]
-        //Accenture = 4,
-        //[ColorAttribute(ConsoleColor.DarkCyan)]
-        //BRE = 5,
-        //[ColorAttribute(ConsoleColor.DarkGreen)]
-        //PawelPC=6,
-        //[ColorAttribute(ConsoleColor.DarkGray)]
-        //Gosia=7
-
-
         None = 0,
         [ColorAttribute(46)]//green
         Sport = 1,
@@ -44,7 +27,10 @@ namespace PSCalendarContract.Dto
         [ColorAttribute(240)]
         Gosia = 7,
         [ColorAttribute(214)]
-        Together = 8
+        Together = 8,
+
+        [ColorAttribute(123)]
+        Birthday =9
 
 
 
