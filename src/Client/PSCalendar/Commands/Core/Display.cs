@@ -79,7 +79,8 @@ namespace PSCalendar.Commands
             foreach (var item in eventsList.OrderByDescending(x => x.StartDate))
             {
                 TimeSpan ts = item.EndDate.Subtract(item.StartDate);
-                int daysDifference = ts.Days + (ts.Days > 0 && ts.Hours > 0 ? 1 : 0);
+                int daysDifference = ts.Days; // code below added one day to list on right leszno w pazdzierinku
+                    //+ (ts.Days > 0 && ts.Hours > 0 ? 1 : 0);
                 for (int i = 0; i <= daysDifference; i++)
                 {
                     DateTime dt = item.StartDate.AddDays(i);
