@@ -33,17 +33,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConnectionStringHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ConnectionStringHelperPT.0.0.1\lib\v4.6.1\ConnectionStringHelper.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ProductivityTools.ConnectionStringLight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ProductivityTools.ConnectionStringLight.0.0.4\lib\v4.6.1\ProductivityTools.ConnectionStringLight.dll</HintPath>
+    </Reference>
+    <Reference Include="ProductivityTools.DbUp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ProductivityTools.DbUp.0.0.2\lib\v4.6.1\ProductivityTools.DbUp.dll</HintPath>
+    </Reference>
     <Reference Include="ProductivityTools.MasterConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ProductivityTools.MasterConfiguration.0.0.2\lib\v4.6.1\ProductivityTools.MasterConfiguration.dll</HintPath>
+      <HintPath>..\..\..\packages\ProductivityTools.MasterConfiguration.1.0.2\lib\v4.6.1\ProductivityTools.MasterConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -82,9 +85,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Configuration\Configuration.csproj">
+      <Project>{794f7057-6f89-4775-a58a-d532b5c178f1}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Common\PSCalendarContract\PSCalendarContract.csproj">
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
       <Name>PSCalendarContract</Name>
@@ -93,6 +102,10 @@
       <Project>{2936af01-1ce5-43ec-8207-4bd4ccf106a1}</Project>
       <Name>PSCalendarTools</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration.xml" />
+    <Content Include="DevHelp.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

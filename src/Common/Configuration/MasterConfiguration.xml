@@ -1,0 +1,9 @@
+﻿<Configuration>
+  <Source Type="File"></Source>
+  <ApplicationConfiguration Name="PSCalendar">
+    <Config Key="Address">net.tcp://localhost:9007/</Config>
+    <Config Key="ServerName">.\sql2017</Config>
+    <Config Key="DatabaseName">PawelPT</Config>
+    <Config Key="CredentialPath">d:\tech\Pawel\PSCalendar\</Config>
+  </ApplicationConfiguration>
+</Configuration>

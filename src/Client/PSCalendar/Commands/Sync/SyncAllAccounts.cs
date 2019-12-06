@@ -24,7 +24,7 @@ namespace PSCalendar.Commands
                 now = now.AddMonths(this.Cmdlet.SyncMonth.Value);
             }
             start = now.GetFirstMonthDay();
-            end = now.GetLastMonthDay();
+            end = now.GetLastMonthDay().AddDays(1).Subtract(TimeSpan.FromSeconds(1));
 
             InvokeCall(() => this.Client.SyncAllAcounts(start, end));
         }

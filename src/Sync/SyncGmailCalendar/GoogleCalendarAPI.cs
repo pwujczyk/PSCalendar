@@ -14,6 +14,7 @@ using PSCalendarTools;
 using AutoMapper;
 using System.Net;
 using ProductivityTools.MasterConfiguration;
+using Configuration;
 
 namespace SyncGmailCalendar
 {
@@ -80,9 +81,18 @@ namespace SyncGmailCalendar
 
         public string Delete(string account, string googleEventId, string calendarId)
         {
-            var request = GetService(account).Events.Delete(calendarId, googleEventId);
-            string r = request.Execute();
-            return r;
+            try
+            {
+                var request = GetService(account).Events.Delete(calendarId, googleEventId);
+                string r = request.Execute();
+                return r;
+            }
+            catch (Exception ex)
+            {
+
+                return "Event has been deleted";
+            }
+            
         }
 
         private Event BuildEvent(PSCalendarContract.Dto.Event @event)
@@ -114,7 +124,7 @@ namespace SyncGmailCalendar
         private UserCredential Authenticate(string email)
         {
             UserCredential credential;
-            string credPath = MConfiguration.Configuration["CredentialPath"];
+            string credPath = MasterConfiguration.MConfiguration["CredentialPath"];
             var clientSecretPath = Path.Combine(credPath, $".credentials/client_secret.json");
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {

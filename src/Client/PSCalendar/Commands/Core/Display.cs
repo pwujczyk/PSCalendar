@@ -22,7 +22,6 @@ namespace PSCalendar.Commands
 
         protected override void Invoke()
         {
-
             ShowSelectedMonth(this.Cmdlet.ShowMonth.HasValue ? DateTime.Now.AddMonths(this.Cmdlet.ShowMonth.Value) : DateTime.Now);
         }
 

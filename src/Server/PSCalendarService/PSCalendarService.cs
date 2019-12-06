@@ -9,6 +9,7 @@ using System.ServiceModel.Description;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using Configuration;
 using ProductivityTools.MasterConfiguration;
 using PSCalendarContract;
 using PSCalendarServer;
@@ -35,7 +36,7 @@ namespace PSCalendarService
 
 
             var binding = new NetTcpBinding();
-            var address = MConfiguration.Configuration["Address"];
+            var address = MasterConfiguration.MConfiguration["Address"];
             host = new ServiceHost(typeof(CalendarServer));
 
             ServiceDebugBehavior debug = host.Description.Behaviors.Find<ServiceDebugBehavior>();

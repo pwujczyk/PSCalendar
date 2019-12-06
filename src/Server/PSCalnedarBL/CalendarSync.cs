@@ -43,6 +43,7 @@ namespace PSCalendarBL
             //email have to be here as we are using it to check if SyncAccountEvent exists for given account
             List<PSCalendarDB.GoogleCalendarSyncView> googleList = (from i in Entities.GoogleCalendarSyncView.AsNoTracking()
                                                                     where start <= i.StartDate && i.StartDate <= end && i.Email == email
+                                                                    // cannot be here  && i.EventDeleted==false//2019.08.16 not sure if correct
                                                                     select i).ToList();
 
 
@@ -119,7 +120,9 @@ namespace PSCalendarBL
 
         public GoogleEvent GetEvent(string googleId, string recurringEventId)
         {
-            var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x => x.GoogleCalendarEventId == googleId || (x.GoogleCalendarEventId == recurringEventId && x.GoogleCalendarEventId !=null)));
+            var r = Mapper.Map<PSCalendarDB.GoogleCalendarSyncView, GoogleEvent>(this.Entities.GoogleCalendarSyncView.Single(x =>
+            (x.GoogleCalendarEventId == googleId)
+            || (x.GoogleCalendarEventId == recurringEventId && x.GoogleCalendarEventId != null)));
             return r;
         }
 

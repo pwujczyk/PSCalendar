@@ -32,17 +32,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ConnectionStringLightPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ConnectionStringLightPT.0.0.2\lib\v4.6.1\ConnectionStringLightPT.dll</HintPath>
+    <Reference Include="dbup-core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\dbup-core.4.2.0\lib\net45\dbup-core.dll</HintPath>
     </Reference>
-    <Reference Include="DbUp, Version=3.3.5.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\dbup.3.3.5\lib\net35\DbUp.dll</HintPath>
+    <Reference Include="dbup-sqlserver, Version=4.2.0.0, Culture=neutral, PublicKeyToken=4b419c53bdfd4cbf, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\dbup-sqlserver.4.2.0\lib\net35\dbup-sqlserver.dll</HintPath>
     </Reference>
-    <Reference Include="DBUpPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\DBUpPT.0.0.1\lib\v4.6.1\DBUpPT.dll</HintPath>
+    <Reference Include="ProductivityTools.ConnectionStringLight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ProductivityTools.ConnectionStringLight.0.0.4\lib\v4.6.1\ProductivityTools.ConnectionStringLight.dll</HintPath>
+    </Reference>
+    <Reference Include="ProductivityTools.DbUp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ProductivityTools.DbUp.0.0.2\lib\v4.6.1\ProductivityTools.DbUp.dll</HintPath>
     </Reference>
     <Reference Include="ProductivityTools.MasterConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\ProductivityTools.MasterConfiguration.0.0.2\lib\v4.6.1\ProductivityTools.MasterConfiguration.dll</HintPath>
+      <HintPath>..\..\..\packages\ProductivityTools.MasterConfiguration.1.0.2\lib\v4.6.1\ProductivityTools.MasterConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,6 +87,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\008.EventNiceIdUnique.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Configuration\Configuration.csproj">
+      <Project>{794f7057-6f89-4775-a58a-d532b5c178f1}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

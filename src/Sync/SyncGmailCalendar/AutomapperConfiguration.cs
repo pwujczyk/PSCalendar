@@ -19,8 +19,8 @@ namespace SyncGmailCalendar
               {
                   cfg.CreateMap<Google.Apis.Calendar.v3.Data.Event, PSCalendarContract.Dto.Event>()
                   .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Summary))
-                  .ForMember(dst => dst.StartDate, opt => opt.ResolveUsing<DateResolver, EventDateTime>(x => x.Start))
-                  .ForMember(dst => dst.EndDate, opt => opt.ResolveUsing<DateResolver, EventDateTime>(x => x.End))
+                  .ForMember(dst => dst.StartDate, opt => opt.MapFrom<DateResolver, EventDateTime>(x => x.Start))
+                  .ForMember(dst => dst.EndDate, opt => opt.MapFrom<DateResolver, EventDateTime>(x => x.End))
                   .ForMember(dst => dst.EventGuid, opt => opt.Ignore())
                   .ForMember(dst => dst.NiceId, opt => opt.Ignore())
                   .ForMember(dst => dst.Type, opt => opt.Ignore());

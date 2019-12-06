@@ -35,31 +35,34 @@ namespace PSCalendarSyncGoogle.Syncs
             var googleCalendarEvents = SyncGoogleCalendarAPI.GetGoogleCalendarEvents(Account, Start, End, calendarId);
             foreach (var googleEvent in googleCalendarEvents.Items)
             {
-                if (EventExistsInPSTable(googleEvent))
+                if (EventStartsInCurrentMonth(googleEvent))
                 {
-                    if (GoogleEventDeleted(googleEvent))
+                    if (EventExistsInPSTable(googleEvent))
                     {
-                        DeleteEvent(googleEvent);
+                        if (GoogleEventDeleted(googleEvent))
+                        {
+                            DeleteEvent(googleEvent);
+                        }
+                        else
+                        {
+                            if (EventIsInDifferentCalendar(googleEvent, calendarId))
+                            {
+                                MoveEvent(calendarId, eventType, googleEvent);
+                            }
+
+                            if (GoogleEventIsMoreUpdated(googleEvent))
+                            {
+
+                                UpdateEvent(googleEvent);
+                            }
+                        }
                     }
                     else
                     {
-                        if (EventIsInDifferentCalendar(googleEvent, calendarId))
+                        if (GoogleEventDeleted(googleEvent) == false)
                         {
-                            MoveEvent(calendarId, eventType, googleEvent);
+                            AddGoogleEventToPSTable(calendarId, googleEvent);
                         }
-
-                        if (GoogleEventIsMoreUpdated(googleEvent))
-                        {
-
-                            UpdateEvent(googleEvent);
-                        }
-                    }
-                }
-                else
-                {
-                    if (GoogleEventDeleted(googleEvent) == false)
-                    {
-                        AddGoogleEventToPSTable(calendarId, googleEvent);
                     }
                 }
             }
@@ -111,6 +114,18 @@ namespace PSCalendarSyncGoogle.Syncs
         {
             var r = PsEventsWithAdditionalInfo.SingleOrDefault(x => x.GoogleCalendarEventId == googleId || x.GoogleCalendarEventId == recurringEventId);
             return r;
+        }
+
+        private bool EventStartsInCurrentMonth(Google.Apis.Calendar.v3.Data.Event googleEvent)
+        {
+            if (googleEvent.Start.DateTime > Start)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private bool EventExistsInPSTable(Google.Apis.Calendar.v3.Data.Event googleEvent)

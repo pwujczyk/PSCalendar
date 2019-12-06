@@ -16,14 +16,12 @@ namespace PSCalendarBL
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<dto.Event, PSCalendarDB.Event>()
-                .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeStringResolver>());
+                .ForMember(dst => dst.Type, opt => opt.MapFrom<PeriodTypeStringResolver>());
                 cfg.CreateMap<PSCalendarDB.Event, dto.Event>()
-                .ForMember(dst => dst.Type, opt => opt.ResolveUsing<PeriodTypeResolver>())
-                .ForMember(dst => dst.Color, opt => opt.ResolveUsing<ColorResolver>());
+                .ForMember(dst => dst.Type, opt => opt.MapFrom<PeriodTypeResolver>())
+                .ForMember(dst => dst.Color, opt => opt.MapFrom<ColorResolver>());
 
                 cfg.CreateMap<PSCalendarDB.GoogleCalendarSyncView, dto.GoogleEvent>();
-
-                
             });
         }
     }

@@ -1,4 +1,5 @@
-﻿using ProductivityTools.MasterConfiguration;
+﻿using Configuration;
+using ProductivityTools.MasterConfiguration;
 using PSCalendarBL;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace PSCalendarBL
         {
             get
             {
-                string serverName = MConfiguration.Configuration["ServerName"];
-                string dbName = MConfiguration.Configuration["DatabaseName"];
-                string connString = ConnectionStringHelper.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
+                string serverName = MasterConfiguration.MConfiguration["ServerName"];
+                string dbName = MasterConfiguration.MConfiguration["DatabaseName"];
+                string connString =  ProductivityTools.ConnectionString.GetSqlEntityFrameworkConnectionString(serverName, dbName, "Calendar");
                 return connString;
             }
         }
