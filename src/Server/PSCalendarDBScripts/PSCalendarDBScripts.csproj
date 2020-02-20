@@ -41,8 +41,14 @@
     <Reference Include="DBUpPT, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\DBUpPT.0.0.1\lib\v4.6.1\DBUpPT.dll</HintPath>
     </Reference>
+    <Reference Include="ProductivityTools.MasterConfiguration, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\ProductivityTools.MasterConfiguration.1.0.8\lib\net46\ProductivityTools.MasterConfiguration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlClient, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Data.SqlClient.4.6.0\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,12 +63,6 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
-      <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
-      <Name>MasterConfiguration</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\001.CreateDB.sql" />
@@ -87,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\008.EventNiceIdUnique.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="myfiles\MasterConfiguration.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

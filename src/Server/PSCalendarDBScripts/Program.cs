@@ -11,8 +11,9 @@ namespace PSCalendarDBScripts
     {
         public static void Main(string[] args)
         {
-            string serverName = MasterConfiguration.MConfiguration.Configuration["ServerName"];
-            string dbName = MasterConfiguration.MConfiguration.Configuration["DatabaseName"];
+            //pw: master configuration
+            string serverName =@".\SQL2019";
+            string dbName = "PawelPT";
 
             DBUpPT.DBUp dBUp = new DBUpPT.DBUp("gc");
             Assembly assembly = Assembly.GetExecutingAssembly();

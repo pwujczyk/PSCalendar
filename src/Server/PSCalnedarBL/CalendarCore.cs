@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MasterConfiguration;
 using PSCalendarContract.Dto;
 using System;
 using System.Collections.Generic;

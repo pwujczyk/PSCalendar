@@ -22,7 +22,8 @@ namespace PSCalendar.Commands
         {
             get
             {
-                string address = MasterConfiguration.MConfiguration.Configuration["Address"];
+                //pw: masterconfiguration
+                string address = @"net.tcp://localhost:9007";
                 NetTcpBinding netTcpBinding = new NetTcpBinding();
                 netTcpBinding.CloseTimeout = TimeSpan.FromMinutes(20);
                 ChannelFactory<T> factory = new ChannelFactory<T>(netTcpBinding, new EndpointAddress(address));

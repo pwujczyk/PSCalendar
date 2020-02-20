@@ -51,6 +51,9 @@
     <Reference Include="Google.Apis.PlatformServices, Version=1.32.1.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Google.Apis.1.32.1\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
     </Reference>
+    <Reference Include="IndexList">
+      <HintPath>..\..\..\IndexList.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -96,14 +99,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\IndexList\IndexList\IndexList.csproj">
-      <Project>{5685eed3-a7e7-4b1a-8e04-6910ae7642b8}</Project>
-      <Name>IndexList</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
-      <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
-      <Name>MasterConfiguration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Common\PSCalendarContract\PSCalendarContract.csproj">
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
       <Name>PSCalendarContract</Name>

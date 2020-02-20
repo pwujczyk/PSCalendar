@@ -1,0 +1,13 @@
+﻿<Configuration>
+  <Source Type="File"></Source>
+  <ApplicationConfiguration Name="ApplicationName1">
+    <Config Key="App11" Category="Category1">Value11</Config>
+    <Config Key="App12" Category="Category2">Value11</Config>
+    <Config Key="App13" Category="Category3">Value33</Config>
+  </ApplicationConfiguration>
+  <ApplicationConfiguration Name="ApplicationName2">
+    <Config Key="App21" Category="Category1">Value11</Config>
+    <Config Key="App22" Category="Category2">Value11</Config>
+    <Config Key="App23" Category="Category3">Value33</Config>
+  </ApplicationConfiguration>
+</Configuration>

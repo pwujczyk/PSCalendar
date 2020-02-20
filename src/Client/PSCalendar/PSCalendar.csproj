@@ -82,10 +82,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\MasterConfigurationPT\MasterConfiguration\MasterConfiguration.csproj">
-      <Project>{108cefcd-3617-4c60-bdf3-d1f77636fb62}</Project>
-      <Name>MasterConfiguration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Common\PSCalendarContract\PSCalendarContract.csproj">
       <Project>{58f8a76a-d05c-4833-b43f-099a006b62c7}</Project>
       <Name>PSCalendarContract</Name>

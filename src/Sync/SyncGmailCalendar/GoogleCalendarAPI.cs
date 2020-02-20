@@ -104,7 +104,8 @@ namespace SyncGmailCalendar
         private UserCredential Authenticate(string email)
         {
             UserCredential credential;
-            string credPath = MasterConfiguration.MConfiguration.Configuration["CredentialPath"];
+            //pw:MasterConfiguration
+            string credPath =@"d:\Tech\PSCalendar\";
             var clientSecretPath = Path.Combine(credPath, $".credentials/client_secret.json");
             using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
             {
